@@ -8,207 +8,172 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-    @laravelPWA
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    <link rel="shortcut icon" href="{{ asset('images/icons/icon-144x144.png') }}">
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="{{ URL::asset('images/icon.png')}}">
 
+    <!-- Scripts -->
+    {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
+    <link href="{{ asset('login_css/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('login_css/font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('login_css/css/animate.css') }}" rel="stylesheet">
+    <link href="{{ asset('login_css/css/style.css') }}" rel="stylesheet">
+    @yield('css')
+    <style>
+        .loader {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url("{{ asset('login_css/img/loader.gif') }}") 50% 50% no-repeat white;
+            opacity: .8;
+            background-size: 120px 120px;
+        }
+
+        .dataTables_filter {
+        float: right;
+        text-align: right;
+        }
+        .dataTables_info {
+        float: left;
+        text-align: left;
+        }
+        textarea {
+    resize: vertical;
+    }
+
+    </style>
+    <!-- Fonts -->
     <!-- Styles -->
     {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
-    <link rel="stylesheet" href="{{ asset('vendors/font-awesome/css/font-awesome.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('vendors/feather/feather.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendors/ti-icons/css/themify-icons.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendors/css/vendor.bundle.base.css') }} ">
-    
-
-    @yield('css')
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <link rel="stylesheet" href="{{ asset('css/vertical-layout-light/style.css') }}">
-    <style>
-      .loader {
-        position: fixed;
-        left: 0px;
-        top: 0px;
-        width: 100%;
-        height: 100%;
-        z-index: 9999;
-        background: url("{{ asset('images/loader.gif') }}") 50% 50% no-repeat white;
-        opacity: .8;
-        background-size: 50px 50px;
-      }
-    </style>
 </head>
 <body>
-  <div id="loader" style="display:none;" class="loader">
-	</div>
-    <div class="container-scroller">
-       
-        <!-- partial:partials/_navbar.html -->
-        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-          <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-            <a class="navbar-brand brand-logo  text-center" href="{{url('/')}}"><img src="{{ asset('company_images/wgroup.png') }}" class="me-2" alt="logo"/></a>
-            <a class="navbar-brand brand-logo-mini" href="{{url('/')}}"><img src="{{ asset('images/icon.png') }}" alt="logo"/></a>
-          </div>
-          <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-              <span class="icon-menu"></span>
-            </button>
-            <ul class="navbar-nav navbar-nav-right">
-                
-              <li class="nav-item nav-profile dropdown">
-                Welcome to {{ config('app.name', 'Laravel') }} &nbsp;
-                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-                  <img src="{{ asset('images/no_image.png') }}" alt="profile"/>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                  <a class="dropdown-item">
-                    <i class="ti-settings text-primary"></i>
-                    Settings
-                  </a>
-                  <a class="dropdown-item" href="{{ route('logout') }}" onclick="logout(); show();">
-                    <i class="ti-power-off text-primary"></i>
-                    Logout
-                  </a>
-                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    {{ csrf_field() }}
-                </form>
-                </div>
-              </li>
-            
-            </ul>
-            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-              <span class="icon-menu"></span>
-            </button>
-          </div>
-        </nav> 
-        <!-- partial -->
-        <div class="container-fluid page-body-wrapper">
-          <!-- partial:partials/_sidebar.html -->
-          <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <ul class="nav">
-                <li class="nav-item">
-                  <hr>
-                    <h5 class='text-center'>Audit Team</h5>
-                    <hr>
-                </li>
-              <li class="nav-item {{ Route::current()->getName() == "home" || "" ? "active" : "" }}"  >
-                <a class="nav-link"  href="{{url('/')}}" onclick='show()'>
-                  <i class="icon-grid menu-icon"></i>
-                  <span class="menu-title">Dashboard </span>
-                </a>
-              </li>
-              <li class="nav-item {{ Route::current()->getName() == "Audit" || "" ? "active" : "" }}"  >
-                <a class="nav-link"  href="{{url('/calendar')}}" onclick='show()'>
-                  <i class="icon-ribbon menu-icon"></i>
-                  <span class="menu-title">Audit Calendar </span>
-                </a>
-              </li>
-              <li class="nav-item {{ Route::current()->getName() == "findings" || "" ? "active" : "" }}">
-                <a class="nav-link" data-toggle="collapse" href="#findings" aria-expanded="{{ Route::current()->getName() == "findings" || "" ? "true" : "" }}" aria-controls="ui-basic">
-                    <i class="icon-contract  menu-icon"></i>
-                    <span class="menu-title">Findings</span>
-                    <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse {{ Route::current()->getName() == "findings" || "" ? "show" : "" }}" id='findings'>
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="{{ url('/engagements') }}">Engagements</a></li>
-                        
-                        <li class="nav-item"> <a class="nav-link" href="{{ url('/findings') }}">Findings</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="{{ url('/closed') }}">Closed</a></li>
-                    </ul>
-                </div>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#masterfiles" aria-expanded="false" aria-controls="ui-basic">
-                    <i class="icon-clipboard menu-icon"></i>
-                    <span class="menu-title">Action Plans</span>
-                    <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="masterfiles">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/action-plans') }}" onclick='show();'>Action Plans</a>
+    <div id="loader" style="display:none;" class="loader">
+    </div>
+    <div id="wrapper">
+        <nav class="navbar-default navbar-static-side" role="navigation" style="margin-bottom: 0">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element"> <span>
+                                <img alt="image" class="img-circle" style='width:50px;' src="{{asset('images/no_image.png')}}" />
+                            </span>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{auth()->user()->name}}</strong>
+                                    </span> <span class="text-muted text-xs block"><b
+                                            class="caret"></b></span> </span> </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a href="{{url('profile')}}">Profile</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            <img alt="image" class="img-circle" style='width:50px;' src="{{asset('images/no_image.png')}}" />
+                        </div>
+                    </li>
+                    <!-- //sidebar -->
+                        <li class="{{ Route::current()->getName() == 'home' ? 'active' : '' }}">
+                            <a href="{{url('/home')}}"><i class="fa fa-th-large"></i> <span
+                                    class="nav-label">Dashboard </span></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/closed-action-plans') }}" onclick='show();'>Closed</a>
-                        </li>
-                    </ul>
-                </div>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
-                    <i class="icon-book menu-icon"></i>
-                    <span class="menu-title">Reports</span>
-                    <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="payroll">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/payrolls') }}" onclick='show();'>Payrolls</a>
-                        </li>
-                    </ul>
-                </div>
-              </li>
-              <li class="nav-item {{ Route::current()->getName() == "Settings" || "" ? "active" : "" }}">
-                <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="{{ Route::current()->getName() == "settings" || "" ? "true" : "" }}" aria-controls="ui-basic">
-                    <i class="icon-cog  menu-icon"></i>
-                    <span class="menu-title">Settings</span>
-                    <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse {{ Route::current()->getName() == "settings" || "" ? "show" : "" }}" id='settings'>
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="{{ url('/matrices') }}">Matrices</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="{{ url('/companies') }}">Companies</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="{{ url('/departments') }}">Departments</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="{{ url('/users') }}">Users</a></li>
-                    </ul>
-                </div>
-              </li>
-
-              <li class="nav-item">
+                    <li class="{{ Route::current()->getName() == 'calendar' ? 'active' : '' }}">
+                        <a href="{{url('/calendar')}}"><i class="fa fa-calendar"></i> <span
+                                class="nav-label">Calendar </span></a>
+                    </li>
+                    <li class="{{ Route::current()->getName() == 'engagements' ? 'active' : '' }}">
+                        <a href="{{url('/engagements')}}"><i class="fa fa-paper-plane"></i> <span
+                                class="nav-label">Engagements</span></a>
+                    </li>
+                    <li class="{{ Route::current()->getName() == 'change-requests' ? 'active' : '' }}">
+                        <a href="{{url('/change-requests')}}"><i class="fa fa-eye"></i> <span
+                                class="nav-label">Findings</span></a>
+                    </li>
+                    <li class="{{ Route::current()->getName() == 'action-plans' ? 'active' : '' }}">
+                        <a href="{{url('/action-plans')}}"><i class="fa fa-check-square-o"></i> <span
+                                class="nav-label">Action Plans</span></a>
+                    </li>
+                    <li class="{{ Route::current()->getName() == 'settings' ? 'active' : '' }}">
+                        <a href="#"><i class="fa fa-gavel"></i> <span class="nav-label">Settings</span><span
+                                class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li ><a href="{{url('/companies')}}"></i>Companies</a></li>
+                            <li><a href="{{url('/departments')}}"></i>Departments</a></li>
+                            <li><a href="{{url('/users')}}"></i>Users</a></li>
+                            <li><a href="{{url('/matrices')}}"></i>Matrices</a></li>
+                            <li><a href="{{url('/engagements-config')}}"></i>Engagements</a></li>
+                        </ul>
+                    </li>
                     
-                <hr>
-                <h5 class='text-center'>Business Process</h5>
-                <hr>
-            </li>
+                    <li class="{{ Route::current()->getName() == 'reports' ? 'active' : '' }}">
+                        <a href="#"><i class="fa fa-list-ul"></i> <span class="nav-label">Reports</span><span
+                                class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            @if((auth()->user()->role == 'Administrator') || (auth()->user()->role == 'Management Representative'))
+                            <li><a href="{{url('/logs')}}"></i>Logs</a></li>
+                            @endif
+                            <li><a href="{{url('/initial-reports')}}"></i>Initial Reports</a></li>
+                            <li><a href="{{url('/status-reports')}}"></i>Status Reports</a></li>
+                            <li><a href="{{url('/summary-reports')}}"></i>Summary Reports</a></li>
+                        </ul>
+                    </li>
+                    
+                </ul>
+            </div>
+        </nav>
 
-            </ul>
-          </nav>
-          <!-- partial -->
-          @yield('content')
-          <!-- main-panel ends -->
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+                <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i
+                                class="fa fa-bars"></i> </a>
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <span class="m-r-sm text-muted welcome-message">Welcome to {{ config('app.name', 'Laravel') }}</span>
+                        </li>
+                        <li>
+                            <a href="{{ route('logout') }}" onclick="logout(); show();">
+                                <i class="fa fa-sign-out"></i> Log out
+                            </a>
+                        </li>
+                    </ul>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                    </form>
+                </nav>
+            </div>
+            
+            <div class="wrapper wrapper-content ">
+              @yield('content')
+            </div>
+            <div class="footer">
+                <div class='text-right'>
+                    WGROUP DEVELOPER &copy; {{date('Y')}}
+                </div>
+            </div>
         </div>
-        <!-- page-body-wrapper ends -->
-      </div>
-     
-      @include('sweetalert::alert')    
-    <script>
-        function logout() {
-			event.preventDefault();
-			document.getElementById('logout-form').submit();
-		}    
-    function show() {
-			document.getElementById("loader").style.display = "block";
-		}
-    </script>
-    <script src="{{ asset('vendors/js/vendor.bundle.base.js') }}"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="{{ asset('js/off-canvas.js') }}"></script>
-    <script src="{{ asset('js/hoverable-collapse.js') }}"></script>
-    <script src="{{ asset('js/template.js') }}"></script>
-    <script src="{{ asset('js/settings.js') }}"></script>
-    <script src="{{ asset('js/todolist.js') }}"></script>
-    <!-- endinject -->
+    </div>
+    @include('sweetalert::alert')
+    <script src="{{ asset('login_css/js/jquery-3.1.1.min.js')}}"></script>
+    <script src="{{ asset('login_css/js/bootstrap.min.js')}}"></script>
+    <script src="{{ asset('login_css/js/plugins/metisMenu/jquery.metisMenu.js')}}"></script>
+    <script src="{{ asset('login_css/js/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
+
+    <script src="{{ asset('login_css/js/inspinia.js')}}"></script>
+    <script src="{{ asset('login_css/js/plugins/pace/pace.min.js')}}"></script>
     @yield('js')
+    <script>
+        function show() {
+            document.getElementById("loader").style.display = "block";
+        }
+
+        function logout() {
+            event.preventDefault();
+            document.getElementById('logout-form').submit();
+        }
+
+    </script>
+
 </body>
 </html>

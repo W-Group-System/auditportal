@@ -8,4 +8,8 @@ class Department extends Model implements Auditable
 {
     //
     use \OwenIt\Auditing\Auditable;
+    public function dep_head()
+    {
+        return $this->hasOne(DepartmentHead::class);
+    }
 }
