@@ -28,13 +28,17 @@ ini_set("memory_limit", "-1");
         body{
             font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
             font-size: 9px;
+            margin-top: 65px;
+        }
+        @page {
+            margin: 80px 50px 80px 50px;
         }
         .page-break {
             page-break-after: always;
         }
         header {
             position: fixed;
-            top: -5px;
+            top: -75px;
             left: 0px;
             right: 0px;
             color: black;
@@ -45,12 +49,32 @@ ini_set("memory_limit", "-1");
         {
             text-align: right;
         }
+        footer
+        {
+            position: fixed; bottom: -60px; left: 0px; right: 0px; height: 50px; 
+        }
         .footer
         {
             position: fixed;
             top: 750px;
-            left: 500px;
-            right: 0px;
+            left: 0px;
+            right: 100px;
+            height: 50px;
+        }
+        .footer1
+        {
+            position: fixed;
+            top: 750px;
+            left: 430px;
+            right: 100px;
+            height: 50px;
+        }
+        .footer2
+        {
+            position: fixed;
+            top: 750px;
+            left: 880px;
+            /* right: 100px; */
             height: 50px;
         }
         .fixed
@@ -75,24 +99,102 @@ ini_set("memory_limit", "-1");
 </head>
 <body> 
     
-    <header>
+
+    <footer>
         <table style='width:100%;' border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td  align='center' width='100px' style='width:35%;' > 
+                <td class=' text-left"'>
+                    <span >FOR IAD USE ONLY </span>
+                </td>
+                <td class='text-center'>
+                    <i >HIGHLY CONFIDENTIAL</i>
+                </td>
+                <td class='text-right'>
+                    <span >TP-IAD-002 Rev.00 </span>
+                </td>
+            </tr>
+        </table>
+    </footer>
+    <header>
+        <table style='width:100%;' border="1" cellspacing="0" cellpadding="0">
+            <tr>
+                <td  align='center' width='100px' style='width:35%;' rowspan='2'> 
                     <img src='{{ asset('images/wgroup.png')}}' width='170px' >
                 </td>
                 <td class='text-center' colspan='3'>
-                    <span  style='font-size:8;text-align: center;'><b></b>
+                    <span  style='font-size:23;text-align: center;'><b>INTERNAL AUDIT DEPARTMENT</b>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class='text-center'>
+                    <span  style='font-size:9;text-align: center;'>{{date('M d, Y')}}
+                    </span>
+                </td>
+                <td class='text-center'>
+                    <span  style='font-size:9;text-align: center;'>
+                        {{date('F 01 - t, Y',strtotime($month))}}
+                    </span>
+                </td>
+                <td class='text-center'>
+                    <span  style='font-size:9;text-align: center;'>
+                        AUDIT PLAN
                     </span>
                 </td>
             </tr>
         </table>
     </header>
+    <table border='1'   style='width:100%;font-size:10'  cellspacing="0" cellpadding="0" >
+        <tr class='text-center'>
+            <th >No.</th>
+            <th>Audit Task</th>
+            <th>Period Cover</th>
+            <th>Company</th>
+            <th>Assigned Auditor</th>
+            <th>Deadline</th>
+        </tr>
+        @foreach($schedule_month as $key => $schedule)
+        <tr class='text-center'>
+            <td  style='width:5%;'>{{$key+1}}</td>
+            <td>{{$schedule->engagement_title}}</td>
+            <td>{{$schedule->scope}}</td>
+            <td>@foreach($schedule->companies as $company) {{$company->company->code}} /@endforeach</td>
+            <td>@foreach($schedule->auditor_data as $auditor) {{$auditor->user->name}} <br>@endforeach</td>
+            <td>{{date('M. d, Y',strtotime($schedule->audit_to))}}</td>
+        </tr>
+        @endforeach
+    </table>
     <br>
-    <p>
-        INTERNAL AUDIT DEPARTMENT
-    </p>
-
+    <br>
+    <table border='0'   style='width:100%;font-size:9;'  cellspacing="0" cellpadding="0">
+        <tr class='noBorder ' align='center'  class='' >
+        <th class='noBorder'  class='text-center' width='25%'>
+            <p>Prepared by :</p> 
+            <br>
+            <b>{{auth()->user()->name}}</b><br>
+            {{auth()->user()->position}}
+            
+        </th>
+        <th class='noBorder'  class='text-center' width='25%'>
+            <p>Reviewed by :</p> 
+            <br>
+            <b>Richsel Villaruel</b><br>
+            IA Head
+        </th>
+        <th class='noBorder'  class='text-center' width='25%'>
+            <p>Noted by :</p> 
+            <br>
+            <b>Cris Dela Cruz</b><br>
+            Chief of Staff
+        </th>
+        <th class='noBorder'  class='text-center' width='25%'>
+            <p>Approved by :</p> 
+            <br>
+            <b>Wee Lee Hiong</b><br>
+            Chairman
+        </th>
+    </tr>
+    </table>
     
     
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

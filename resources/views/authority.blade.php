@@ -29,12 +29,15 @@ ini_set("memory_limit", "-1");
             font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
             font-size: 9px;
         }
+        @page {
+            margin: 80px 50px 80px 50px;
+        }
         .page-break {
             page-break-after: always;
         }
         header {
             position: fixed;
-            top: -5px;
+            top: -75px;
             left: 0px;
             right: 0px;
             color: black;
@@ -44,6 +47,10 @@ ini_set("memory_limit", "-1");
         .text-right
         {
             text-align: right;
+        }
+        footer
+        {
+            position: fixed; bottom: -60px; left: 0px; right: 0px; height: 50px; 
         }
         .footer
         {
@@ -62,7 +69,7 @@ ini_set("memory_limit", "-1");
             height: 20px;
         }
         .page-number:after { content: counter(page); }
-        table{
+        table {
             table-layout: fixed;
             width: 390px;
         }
@@ -70,60 +77,92 @@ ini_set("memory_limit", "-1");
   text-align: justify;
   text-justify: inter-word;
 }
+.upperline {
+   -webkit-text-decoration-line: overline; /* Safari */
+   text-decoration:overline
+}
+hr {
+    margin-top: 0em;
+   margin-bottom: 0em;
+  border: none;
+  height: 2px;
+  /* Set the hr color */
+  color: #333;  /* old IE */
+  background-color: #333;  /* Modern Browsers */
+}
     </style>
     
 </head>
 <body> 
-    
+    <footer>
+        <table style='width:100%;' border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class=' text-left"'>
+                    <span >FOR IAD USE ONLY </span>
+                </td>
+                <td class='text-center'>
+                    <i >HIGHLY CONFIDENTIAL</i>
+                </td>
+                <td class='text-right'>
+                    <span >TP-IAD-003 Rev. 000 </span>
+                </td>
+            </tr>
+        </table>
+    </footer>
     <header>
         <table style='width:100%;' border="1" cellspacing="0" cellpadding="0">
-            <tr>
-                <td  align='center' width='100px' style='width:35%;' rowspan='2'> 
+            <tr style='height:90px;'>
+                <td  align='center' width='50px' style='width:30%;' rowspan='2'> 
                     <img src='{{ asset('images/wgroup.png')}}' width='170px' >
                 </td>
-                <td class='text-center' colspan='3'>
-                    <span  style='font-size:23;text-align: center;'><b>AUTHORITY TO AUDIT</b>
+                <td class='text-center' colspan='3' >
+                    <span  style='font-size:29;text-align: center;'><b>AUTHORITY TO AUDIT</b>
                     </span>
                 </td>
             </tr>
-            <tr>
-                <td class='text-center'>
-                    <span  style='font-size:9;text-align: center;'>{{date('M d, Y')}}
+            <tr  class='m-0 p-0'>
+                <td class='text-center m-0 p-0' >
+                    <span  style='font-size:9;text-align: center;'>{{date('F d, Y')}}</span>
+                </td>
+                <td class='text-center  m-0 p-0'>
+                    <span  style='font-size:9;text-align: center;'>
+                        @foreach($companies as $key => $group)
+                        {{$group->group_code}} @if($key+1 != count($companies)),@endif 
+                        @endforeach
                     </span>
                 </td>
-                <td class='text-center'>
+                <td class='text-center  m-0 p-0'>
                     <span  style='font-size:9;text-align: center;'>
-                    @foreach($engagement->companies as $key => $company)
-                    {{$company->company->code}} @if($key+1 != count($engagement->companies)),@endif 
-                    @endforeach
-                    </span>
-                </td>
-                <td class='text-center'>
-                    <span  style='font-size:9;text-align: center;'>
-                   {{$engagement->code}}
+                   {{$audit_plan->code}}
                     </span>
                 </td>
             </tr>
         </table>
     </header>
-    <br>
-    <br>
-    <br>
-    <br>
-    
     <div>
-        <p style='font-size:9;'><b>ATTENTION   :</b> {{$engagement->department->user_name->name}}, {{$engagement->department->user_name->position}}</p>
+        <p style='font-size:9;'><b>ATTENTION   :</b> @foreach($audit_plan->department as $dept){{$dept->user_name->name}} ,{{$dept->user_name->position}} <br> 
+            
+            
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @endforeach</p>
     </div>
-    <br>
-    <br>
     <div>
-        <p style='font-size:9;'><b>CC   :</b></p>
+        <p style='font-size:9;'><b>CC   :</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@foreach($audit_plan->carbon_copies as $carbon){{$carbon->user->name}} ,{{$carbon->user->position}} <br> 
+            
+            
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @endforeach</p>
     </div>
     <br>
     <br>
     <p style='font-size:9;'>Kindly allow the following auditors whose name appears below to conduct audit of your department. The general objectives of this audit is to evaluate internal controls, compliance with organization policies, procedures and guidelines and laws and regulations, if applicable.
     </p>
-    <table style='width:100%;' border="1" cellspacing="0" cellpadding="0">
+    <table style='width:100%;' border="1" cellspacing="0" cellpadding="0" class='inside'>
         <tr style='background-color:rgb(201, 201, 201);font-size:9px;'>
             <td  align='center' > 
                 <b>DATE</b>
@@ -140,27 +179,94 @@ ini_set("memory_limit", "-1");
         </tr>
         <tr style='height: 50px'>
             <td  align='center' style='height: 75px'> 
-                {{date('M d, Y',strtotime($engagement->audit_from))}} -{{date('M d, Y',strtotime($engagement->audit_to))}}
+                {{date('M d, Y',strtotime($audit_plan->audit_from))}} -{{date('M d, Y',strtotime($audit_plan->audit_to))}}
             </td>
             <td class='text-center' >
-                {{strtoupper($engagement->engagement_title)}}
+                {{strtoupper($audit_plan->engagement_title)}}
             </td>
             <td class='text-center' >
-                {{strtoupper($engagement->scope)}}
+                {{strtoupper($audit_plan->scope)}}
             </td>
             <td class='text-center' >
-                {{strtoupper($engagement->auditor_data->user->name)}}
+                @foreach($audit_plan->auditor_data as $auditor) {{strtoupper($auditor->user->name)}} <br>@endforeach
             </td>
         </tr>
     </table>
     <br>
     <p style='font-size:9;'>We may collect, use, transfer, store or otherwise process information that may be linked, but are not limited to the company’s clients, owners and employees. By acknowledging this letter of authority, you agree to provide the information being asked in connection with the performance of our engagement. The information that you have provided will be used solely for the purpose for which the information was requested and that the internal auditors will take proper and reasonable measures to ensure the confidentiality of the information in compliance with our policy PR-IA-003 or Internal Audit Information Confidentiality Policy and Republic Act 10173 or Data Privacy Act of 2012.</p>
-    <p style='font-size:9;'>In event that the engagement will be extended due to complexities of the audits performed, a notice regarding such will be communicated through e-mail. If you have any questions or concerns during the course of audit, please address it directly to {{strtoupper($engagement->auditor_data->user->name)}} (loc. {{strtoupper($engagement->auditor_data->user->tel_number)}}).</p>
+    <p style='font-size:9;'>In event that the engagement will be extended due to complexities of the audits performed, a notice regarding such will be communicated through e-mail. If you have any questions or concerns during the course of audit, please address it directly to @foreach($audit_plan->auditor_data as $key => $auditor) {{strtoupper($auditor->user->name)}} @if($key+1 != count($audit_plan->auditor_data)),@endif @endforeach loc. @foreach($audit_plan->auditor_data as $key => $auditor) {{strtoupper($auditor->user->tel_number)}} @if($key+1 != count($audit_plan->auditor_data)) / @endif @endforeach.</p>
     <p style='font-size:9;'>
 We are looking forward for your departments' cooperation and assistance in making the audit engagement a success.
 </p>
     <p style='font-size:9;'>Thank you!
 </p>
+<table border='0'   style='width:100%;font-size:8;'  cellspacing="0" cellpadding="0">
+    <tr class=' text-center' align='center'>
+        <th class=''>
+            <br><br><br><br>
+            @php
+                $length = strlen(auth()->user()->name);
+                $approved_by = str_repeat('_',$length+8);
+            @endphp
+           {{strtoupper('Richsel Villaruel')}}<br>
+            <i  class='upperline'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Internal Audit Department Head&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i>
+        </th>
+        <th class=''>
+            Noted By: <br><br><br><br>
+            {{strtoupper($audit_plan->department[0]->department_name->dep_head->user->name)}}<br>
+            <i  class='upperline' style='width: 100px'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Department Head&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i>
+        </th>
+    </tr>
+</table>
+<br>
+<br>
+<span class='text-left' style='font-size:8;'>Approved By: </span>
+<table border='0'   style='width:100%;font-size:8;'  cellspacing="0" cellpadding="0">
+    <tr class=' text-left' >
+        <th class=' text-center' style='width:25%' >
+           <br><br>
+           {{strtoupper('HBU NAME')}}<br>
+           <hr>
+            <i  class=''>POSITION</i>
+        </th>
+        <th class=' text-center' style='width:5%'>
+            &nbsp;
+        </th>
+        <th class=' text-center' style='width:25%'>
+            <br><br>
+            {{strtoupper('HBU NAME')}}<br>
+            <hr>
+            <i  class='' style='width: 100px'>POSITION</i>
+        </th>
+        <th class=' text-center' style='width:5%'>
+            &nbsp;
+        </th>
+    </tr>
+</table>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<table border='0'   style='width:100%;font-size:8;'  cellspacing="0" cellpadding="0">
+    <tr class=' text-left'>
+        <td colspan='{{count($audit_plan->department)*2}}'>Acknowledged By: &nbsp;&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+    <tr class=' text-center' >
+        @foreach($audit_plan->department as $dept)
+        <td class=' text-center' style='width:25%;' >
+           <br><br>
+           {{strtoupper($dept->user_name->name)}}<br>
+           <hr>
+            <i  class=''>{{$dept->user_name->position}}</i>
+        </td>
+        <td class=' text-center' style='width:5%;'>
+            &nbsp;
+        </td>
+        @endforeach
+    </tr>
+</table>
 
     
     

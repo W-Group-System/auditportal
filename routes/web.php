@@ -44,6 +44,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/calendar','ScheduleController@index')->name('calendar');
     Route::post('new-schedule','ScheduleController@store')->name('calendar');
     Route::get('monthly-report','ScheduleController@monthly_report')->name('calendar');
+    Route::post('upload-monthly','ScheduleController@upload')->name('calendar');
+    Route::post('edit-schedule/{id}','ScheduleController@edit')->name('calendar');
+    Route::get('view-calendar/{id}','ScheduleController@view')->name('calendar');
+    Route::get('autorithy/{id}','ScheduleController@authority')->name('calendar');
+    Route::post('carbon-copy/{id}','ScheduleController@carbon')->name('calendar');
 
     Route::get('/departments', 'DepartmentController@index')->name('settings');
     Route::post('/new-department', 'DepartmentController@store')->name('settings');
@@ -53,8 +58,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('engagements','EngagementController@index')->name('engagements');
     Route::get('view-engagement/{id}','EngagementController@show')->name('engagements');
-    Route::get('autorithy/{id}','EngagementController@authority')->name('engagements');
+    // Route::get('autorithy/{id}','EngagementController@authority')->name('engagements');
     Route::get('initial-report/{id}','EngagementController@initialReport')->name('engagements');
 
-    
+
 });

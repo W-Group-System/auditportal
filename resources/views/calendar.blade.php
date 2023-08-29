@@ -87,8 +87,14 @@
     <div class="col-lg-8">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                        <h5>Audit Plans <button class="btn btn-success "  data-target="#newSchedule" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;</button> <a href='{{url('monthly-report?month='.$month)}}' target='_blank' > <button class="btn btn-danger "  data-toggle="modal" type="button"><i class="fa fa-print"></i>&nbsp;</button></a></h5>
-                            {{-- <button class="btn btn-success "  data-target="#uploadDocument" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;New Engagement</button></h5> --}}
+                        <h5>Audit Plans 
+                            @if(count($uploads) > 0) 
+                            @else
+                            <button class="btn btn-success "  data-target="#newSchedule" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;</button>
+                            <a href='{{url('monthly-report?month='.$month)}}' target='_blank' > <button class="btn btn-danger "  data-toggle="modal" type="button"><i class="fa fa-print"></i>&nbsp;</button></a></h5>
+                          
+                            @endif
+                             {{-- <button class="btn btn-success "  data-target="#uploadDocument" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;New Engagement</button></h5> --}}
              
             </div>
             <div class="ibox-content">
@@ -107,14 +113,21 @@
                         </thead>
                     <tbody>
                         @foreach($schedule_month as $schedule)
-                        <tr>
-                            <td><button class="btn btn-sm btn-info"  title='Edit' data-target="#editSchedule{{$schedule->id}}" data-toggle="modal"><i class="fa fa-edit"></i></button></td>
-                            <td>{{$schedule->engagement_title}}</td>
-                            <td>{{$schedule->scope}}</td>
-                            <td>@foreach($schedule->companies as $company) {{$company->company->code}} /@endforeach</td>
-                            <td>@foreach($schedule->auditor_data as $auditor) {{$auditor->user->name}} <br>@endforeach</td>
-                            <td>{{date('M. d, Y',strtotime($schedule->audit_to))}}</td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    @if(count($uploads) > 0)
+                                    <a href="{{url('view-calendar/'.$schedule->id)}}" class='btn btn-sm btn-info'><i class="fa fa-eye"></i></a>
+                                    @else
+                                    <button class="btn btn-sm btn-info"  title='Edit' data-target="#editSchedule{{$schedule->id}}" data-toggle="modal"><i class="fa fa-edit"></i></button>
+                                    @endif
+                                </td>
+                                <td>{{$schedule->engagement_title}}</td>
+                                <td>{{$schedule->scope}}</td>
+                                <td>@foreach($schedule->companies as $company) {{$company->company->code}} /@endforeach</td>
+                                <td>@foreach($schedule->auditor_data as $auditor) {{$auditor->user->name}} <br>@endforeach</td>
+                                <td>{{date('M. d, Y',strtotime($schedule->audit_to))}}</td>
+                            </tr>
+                        @include('edit_schedule')
                         @endforeach
                         
                     </tbody>
@@ -127,7 +140,7 @@
     <div class="col-lg-4">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>Uploaded Signed <button class="btn btn-success "  data-target="#uploadSigned" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;Upload</button></h5>
+                <h5>Uploaded Signed <button class="btn btn-success "  data-target="#upload" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;Upload</button></h5>
             </div>
             <div class="ibox-content">
                 <table class="table table-striped table-bordered table-hover tables">
@@ -135,9 +148,18 @@
                       <tr>
                           <th>Month</th>
                           <th>File</th>
+                          <th>Uploaded By</th>
                       </tr>
                     </thead>
                     <tbody>
+                        @foreach($uploads as $upload)
+                        <tr>
+                            <td>{{date('F Y',strtotime($upload->month))}}</td>
+                            <td><a href="{{url($upload->file)}}" target='_blank'><i class='fa fa-file'></i></a></td>
+                            <td>{{$upload->user->name}}</td>
+                        </tr>
+                        @endforeach
+                        
                     </tbody>
                     
                 </table>
@@ -146,6 +168,7 @@
       </div>
 
 </div>
+@include('upload_monthly')
 {{-- <div class="row">
   <div class="col-md-9 grid-margin stretch-card">
     <div class="ibox float-e-margins">

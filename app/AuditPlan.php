@@ -29,4 +29,7 @@ class AuditPlan extends Model implements Auditable
 
         return $this->hasMany(AuditPlanAuditor::class);
     }
+    public function carbon_copies(){
+        return $this->hasMany(CarbonCopy::class);
+    }
 }
