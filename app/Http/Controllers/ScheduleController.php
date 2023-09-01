@@ -15,9 +15,15 @@ use App\AuditPlanCompany;
 use App\AuditPlanProcedure;
 use App\AuditPlanObjective;
 use App\AuditPlanDepartment;
+use App\AuditPlanObservation;
 use App\AuditPlanAuditor;
+use App\Consequence;
+use App\Likelihood;
+use App\Matrix;
 use App\CarbonCopy;
+use App\AuditPlanBusinessUnit;
 use App\UploadSign;
+use App\BusinessUnit;
 use Illuminate\Http\Request;
 
 use PDF;
@@ -39,8 +45,7 @@ class ScheduleController extends Controller
         $companies = Company::where('status',null)->get();
         $users = User::where('status',null)->get();
         $schedule_month = AuditPlan::whereYear('audit_from','=',date('Y',strtotime($month)))->whereMonth('audit_from','=',date('m',strtotime($month)))->where('status',null)->orderBy('audit_to','asc')->get();
-        // $engagements = Engagement::get();
-        // $schedule_month = Engagement::whereYear('audit_from','=',date('Y'))->whereMonth('audit_from','=',date('m'))->get();
+     
         return view('calendar',
         array(
             'departments' =>  $departments,
@@ -179,11 +184,33 @@ class ScheduleController extends Controller
     public function generate_code($date,$id)
     {
         $first_code = "IA-";
-        $year = date('Y');
-        $month = date('m');
+        $year = date('Y',strtotime($date));
+        $month = date('m',strtotime($date));
 
       
         $last_code = $id;
+        $code = $first_code.$year."-".$month."-".str_pad($last_code, 2, '0', STR_PAD_LEFT);
+
+        return $code;
+    }
+    public function generate_code_acr($date)
+    {
+        $first_code = "IA-ACR-";
+        $year = date('Y',strtotime($date));
+        $month = date('m',strtotime($date));
+
+        $last_data = AuditPlanObservation::whereYear('date_audit',$year)->whereMonth('date_audit',$month)->orderBy('code','desc')->first();
+        if($last_data == null)
+        {
+            $last_code = 1; 
+        }
+        else
+        {
+            $c = $last_data->code;
+            $c = explode("-", $c);
+            $last_code = ((int)$c[count($c)-1])+1;
+        }
+       
         $code = $first_code.$year."-".$month."-".str_pad($last_code, 2, '0', STR_PAD_LEFT);
 
         return $code;
@@ -233,17 +260,38 @@ class ScheduleController extends Controller
     public function view($id)
     {
         //
-
+        $consequences = Consequence::get();
+        $likelihoods = Likelihood::get();
+        $risks = Matrix::get();
         $audit_plan = AuditPlan::findOrfail($id);
         $users = User::where('status',null)->get();
+        $business_units = BusinessUnit::get();
         return view('audit_plan',
-        array(
-            'audit_plan' => $audit_plan,
-            'users' => $users,
-        )
-    
+            array(
+                'audit_plan' => $audit_plan,
+                'users' => $users,
+                'business_units' => $business_units,
+                'consequences' => $consequences,
+                'likelihoods' => $likelihoods,
+                'risks' => $risks,
+            )
         );
 
+    }
+    public function hbu(Request $request,$id)
+    {
+        $audit_plan = AuditPlanBusinessUnit::where('audit_plan_id',$id)->delete();
+
+        foreach($request->hbu as $hbu)
+        {
+            $cc = new AuditPlanBusinessUnit;
+            $cc->audit_plan_id = $id;
+            $cc->business_unit_id = $hbu;
+            $cc->save();
+        }
+      
+        Alert::success('Successfully updated')->persistent('Dismiss');
+        return back();
     }
     public function carbon(Request $request,$id)
     {
@@ -257,7 +305,7 @@ class ScheduleController extends Controller
             $cc->save();
         }
       
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully updated')->persistent('Dismiss');
         return back();
     }
 
@@ -273,5 +321,63 @@ class ScheduleController extends Controller
             'companies' => $companies,
         ));
         return $pdf->stream('authority_to_audit');
+    }
+
+    public function forAudit(Request $request)
+    {
+        $audits = AuditPlan::where('code','!=',null)->orderBy('audit_to','asc')->get();
+        return view('for_audit',
+        array(
+            'audits' => $audits,
+        )
+        );
+       
+    }
+    public function initialReport($id)
+    {
+        $audit_plan = AuditPlan::findOrfail($id);
+        $pdf = PDF::loadView('initial_report', array(
+            'audit_plan' => $audit_plan,
+        ));
+        return $pdf->stream('initial_report');
+    }
+    public function closingReport($id)
+    {
+        $audit_plan = AuditPlan::findOrfail($id);
+        $pdf = PDF::loadView('closing_report', array(
+            'audit_plan' => $audit_plan,
+        ));
+        return $pdf->stream('closing_report');
+    }
+
+    public function save_observation(Request $request,$id)
+    {
+        
+        $consequence = explode("-",$request->consequence);
+        $likelihood = explode("-",$request->likelihood);
+
+        $risk = $likelihood[0]*$consequence[0];
+        $risks = Matrix::where("from","<",$risk)->orderBy('id','desc')->first();
+        $auditPlanObservation = new AuditPlanObservation;
+        $auditPlanObservation->audit_plan_id = $id;
+        $auditPlanObservation->observation = $request->observation;
+        $auditPlanObservation->recommendation = $request->recommendation;
+        $auditPlanObservation->criteria = $request->audit_area;
+        $auditPlanObservation->consequence = $consequence[1];
+        $auditPlanObservation->consequence_number = $consequence[0];
+        $auditPlanObservation->likelihood = $likelihood[1];
+        $auditPlanObservation->likelihood_number = $likelihood[0];
+        $auditPlanObservation->user_id = $request->auditee;
+        $auditPlanObservation->overall_number = $risk;
+        $auditPlanObservation->overall_risk = $risks->name;
+        $auditPlanObservation->code = $this->generate_code_acr($request->audit_date);
+        $auditPlanObservation->date_audit = $request->audit_date;
+        $auditPlanObservation->target_date = $request->target_date;
+        $auditPlanObservation->status = "ON-GOING";
+        $auditPlanObservation->save();
+        
+        Alert::success('Successfully updated')->persistent('Dismiss');
+        return back();
+
     }
 }

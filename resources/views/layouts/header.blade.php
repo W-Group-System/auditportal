@@ -42,7 +42,11 @@
         textarea {
     resize: vertical;
     }
-
+    @media (min-width: 992px) {
+  .modal-lg {
+    width: 900px;
+  }
+}
     </style>
     <!-- Fonts -->
     <!-- Styles -->
@@ -80,12 +84,12 @@
                         <a href="{{url('/calendar')}}"><i class="fa fa-calendar"></i> <span
                                 class="nav-label">Calendar </span></a>
                     </li>
-                    <li class="{{ Route::current()->getName() == 'engagements' ? 'active' : '' }}">
-                        <a href="{{url('/engagements')}}"><i class="fa fa-paper-plane"></i> <span
-                                class="nav-label">Engagements</span></a>
+                    <li class="{{ Route::current()->getName() == 'for-audit' ? 'active' : '' }}">
+                        <a href="{{url('/for-audit')}}"><i class="fa fa-paper-plane"></i> <span
+                                class="nav-label">For Audit</span></a>
                     </li>
-                    <li class="{{ Route::current()->getName() == 'change-requests' ? 'active' : '' }}">
-                        <a href="{{url('/change-requests')}}"><i class="fa fa-eye"></i> <span
+                    <li class="{{ Route::current()->getName() == 'findings' ? 'active' : '' }}">
+                        <a href="{{url('/findings')}}"><i class="fa fa-eye"></i> <span
                                 class="nav-label">Findings</span></a>
                     </li>
                     <li class="{{ Route::current()->getName() == 'action-plans' ? 'active' : '' }}">

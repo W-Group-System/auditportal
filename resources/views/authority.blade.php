@@ -72,6 +72,7 @@ ini_set("memory_limit", "-1");
         table {
             table-layout: fixed;
             width: 390px;
+            page-break-inside: avoid;
         }
         p {
   text-align: justify;
@@ -158,8 +159,7 @@ hr {
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             @endforeach</p>
     </div>
-    <br>
-    <br>
+    
     <p style='font-size:9;'>Kindly allow the following auditors whose name appears below to conduct audit of your department. The general objectives of this audit is to evaluate internal controls, compliance with organization policies, procedures and guidelines and laws and regulations, if applicable.
     </p>
     <table style='width:100%;' border="1" cellspacing="0" cellpadding="0" class='inside'>
@@ -202,56 +202,49 @@ We are looking forward for your departments' cooperation and assistance in makin
 </p>
 <table border='0'   style='width:100%;font-size:8;'  cellspacing="0" cellpadding="0">
     <tr class=' text-center' align='center'>
-        <th class=''>
-            <br><br><br><br>
-            @php
-                $length = strlen(auth()->user()->name);
-                $approved_by = str_repeat('_',$length+8);
-            @endphp
-           {{strtoupper('Richsel Villaruel')}}<br>
-            <i  class='upperline'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Internal Audit Department Head&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i>
+
+        <th class=' text-center' style='width:25%' >
+            <br><br><br>
+            {{strtoupper('Richsel Villaruel')}}<br>
+            <hr>
+             <i  class=''>Internal Audit Department Head</i>
+         </th>
+         <th class=' text-center' style='width:5%'>
+            &nbsp;
         </th>
-        <th class=''>
-            Noted By: <br><br><br><br>
+        <th class='' style='width:25%'>
+            Noted By: <br><br><br>
             {{strtoupper($audit_plan->department[0]->department_name->dep_head->user->name)}}<br>
-            <i  class='upperline' style='width: 100px'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Department Head&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i>
+            <hr>
+             <i  class=''>Department Head</i>
+         </th>
+         <th class=' text-center' style='width:5%'>
+            &nbsp;
         </th>
     </tr>
 </table>
 <br>
 <br>
-<span class='text-left' style='font-size:8;'>Approved By: </span>
 <table border='0'   style='width:100%;font-size:8;'  cellspacing="0" cellpadding="0">
     <tr class=' text-left' >
+        @foreach($audit_plan->hbu as $hbu)
         <th class=' text-center' style='width:25%' >
-           <br><br>
-           {{strtoupper('HBU NAME')}}<br>
+            <b>Approved By: </b><br><br>
+           {{strtoupper($hbu->business_unit->name)}}<br>
            <hr>
-            <i  class=''>POSITION</i>
+            <i  class=''>{{strtoupper($hbu->business_unit->position)}}</i>
         </th>
         <th class=' text-center' style='width:5%'>
             &nbsp;
         </th>
-        <th class=' text-center' style='width:25%'>
-            <br><br>
-            {{strtoupper('HBU NAME')}}<br>
-            <hr>
-            <i  class='' style='width: 100px'>POSITION</i>
-        </th>
-        <th class=' text-center' style='width:5%'>
-            &nbsp;
-        </th>
+        @endforeach
     </tr>
 </table>
-<br>
-<br>
-<br>
-<br>
 <br>
 <br>
 <table border='0'   style='width:100%;font-size:8;'  cellspacing="0" cellpadding="0">
     <tr class=' text-left'>
-        <td colspan='{{count($audit_plan->department)*2}}'>Acknowledged By: &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td colspan='{{count($audit_plan->department)*2}}'><b>Acknowledged By:</b> &nbsp;&nbsp;&nbsp;&nbsp;</td>
     </tr>
     <tr class=' text-center' >
         @foreach($audit_plan->department as $dept)

@@ -1,6 +1,12 @@
 @extends('layouts.header')
 @section('css')
 <link href="{{ asset('login_css/css/plugins/chosen/bootstrap-chosen.css') }}" rel="stylesheet">
+
+<script src="https://cdn.tiny.cloud/1/yemsbvzrf507kpiivlpanbssgxsf1tatzwwtu81qli4yre3p/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>tinymce.init({
+    selector:'textarea',
+    content_style: "p { margin: 0; }",    
+    });</script>
 @endsection
 @section('content')
 
@@ -20,6 +26,7 @@
                                 <div class="m-b-md">
                                     <a href="{{url('autorithy/'.$audit_plan->id)}}" target="_blank"  class="btn btn-success btn-sm "> Authority to Audit </a>
                                     <a href="{{url('initial-report/'.$audit_plan->id)}}" target="_blank"  class="btn btn-warning btn-sm "> Initial Report </a>
+                                    <a href="{{url('closing-report/'.$audit_plan->id)}}" target="_blank"  class="btn btn-danger btn-sm "> Closing/Final Report </a>
                                 </div>
                             </div>
                         </div>
@@ -40,7 +47,7 @@
                             <div class="col-lg-6">
                                 <dl class="dl-horizontal">
                                     <dt>CC <a href='#' data-target="#carbon_copy" data-toggle="modal" title='Edit'><i class="fa fa-edit"></i></a> :</dt> <dd> <b> @foreach($audit_plan->carbon_copies as $carbon_copy){{$carbon_copy->user->name}} ,@endforeach</b></dd>
-                                    <dt>HBU <a href='#' title='Edit'><i class="fa fa-edit"></i></a>:</dt> <dd> <b> {{$audit_plan->engagement_title}} </b></dd>
+                                    <dt>HBU <a href='#' data-target="#business_unit" data-toggle="modal" title='Edit'><i class="fa fa-edit"></i></a>:</dt> <dd> <b>@foreach($audit_plan->hbu as $hbu){{$hbu->business_unit->name}} - {{$hbu->business_unit->position}} ,@endforeach</b></dd>
                                     <br>
                                     
                                 </dl>
@@ -67,7 +74,7 @@
                                     <div class="panel-body">
                                         @foreach($audit_plan->objectives as $key => $objective)
                                         {{$key+1}}. {{$objective->name}} <br>
-                                    @endforeach
+                                        @endforeach
                                     </div>
                                 </div>
                             
@@ -80,7 +87,7 @@
                             <div class="panel-heading">
                                 <div class="panel-options">
                                     <ul class="nav nav-tabs">
-                                        <li class="active"><a href="#tab-1" data-toggle="tab">Observations</a></li>
+                                        <li class="active"><a href="#tab-1" data-toggle="tab">Observations </a></li>
                                         <li class=""><a href="#tab-2" data-toggle="tab">Action Plans</a></li>
                                     </ul>
                                 </div>
@@ -93,20 +100,25 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Code</th>
+                                            <th> Code</th>
                                             <th>Criteria / Standard</th>
                                             <th>Observation</th>
                                             <th>Recommendation</th>
                                             <th>Person In Charge</th>
                                             <th>Status</th>
-                                            <th>Action Plans</th>
-                                            <th>Explnation</th>
-                                            <th>Cause</th>
-                                            <th>Action Plans</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        @foreach($audit_plan->observations as $observation)
+                                        <tr>
+                                            <td>{{$observation->code}}</td>
+                                            <td>{{$observation->criteria}}</td>
+                                            <td>{!!$observation->observation!!}</td>
+                                            <td>{!!$observation->recommendation!!}</td>
+                                            <td>{{$observation->user->name}}</td>
+                                            <td>{{$observation->status}}</td>
+                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -162,6 +174,7 @@
     </div>
 </div>
 @include('carbon_copy')
+@include('business_unit_head')
 @endsection
 @section('js')
 <script src="{{ asset('login_css/js/plugins/dataTables/datatables.min.js')}}"></script>

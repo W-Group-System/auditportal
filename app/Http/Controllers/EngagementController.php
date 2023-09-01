@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Engagement;
+use App\AuditPlanObservation;
 use Illuminate\Http\Request;
 use PDF;
 
@@ -15,12 +16,22 @@ class EngagementController extends Controller
     public function index()
     {
         //
-        $engagements = Engagement::get();
-        return view('engagements',
+        $findings = AuditPlanObservation::get();
+        return view('observations',
         array(
-            'engagements' => $engagements,
+            'observations' => $findings,
         )
     
+        );
+    }
+
+    public function view($id)
+    {
+        $finding = AuditPlanObservation::findOrfail($id);
+        return view('view_observation',
+            array(
+                'finding' => $finding,
+            )
         );
     }
 

@@ -172,7 +172,7 @@ tr.no-bottom-border td {
 
             </tr>
             <tr class='no-bottom-border'>
-                <td colspan='2'  class='text-center' ><span style='font-size:12;margin-top;0px;padding-top:0px;'><b>INITIAL REPORT </b>
+                <td colspan='2'  class='text-center' ><span style='font-size:12;margin-top;0px;padding-top:0px;'><b>CLOSING/ FINAL REPORT </b>
                 </span>
                 </td>
 
@@ -182,7 +182,8 @@ tr.no-bottom-border td {
     <main>
 <p style='font-size:12;'> 
     <b>IA Code: {{$audit_plan->code}}</b><br>
-    <b>Engagement Title: {{$audit_plan->engagement_title}}</b><br><br>
+    <b>Engagement Title: {{$audit_plan->engagement_title}}</b>
+    <b>Type of Report: &nbsp;&nbsp;&nbsp;&nbsp; Closing &nbsp;&nbsp;&nbsp;&nbsp; Final</b><br><br>
     <b>Period Covered: {{$audit_plan->scope}}</b><br>
     <b>Audit Objectives:</b><br>
     
@@ -194,39 +195,78 @@ tr.no-bottom-border td {
     @foreach($audit_plan->procedures as $key => $procedure)
     <span style='font-size:10'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$key+1}}. {{$procedure->name}}</span> <br class='objectives'>
     @endforeach
+    <br>
+    <br>
+    <b>Executive Summary:</b><br>
+    <table border='1' style='width:70%;font-size:9;' id='audit'  cellspacing="0" cellpadding="0" >
+        <tr class='text-center'>
+            <th>No. of Audit Observations
+            </th>
+            <th>Closed
+            </th>
+            <th>Delayed
+            </th>
+            <th>Not Yet Due
+            </th>
+            <th>Total
+            </th>
+            <th>%
+            </th>
+        </tr>
+        <tr class='text-center'>
+            <td>{{count($audit_plan->observations)}}
+            </td>
+            <td>{{count(($audit_plan->action_plans)->where('status','closed'))}}
+            </td>
+            <td>{{count(($audit_plan->action_plans)->where('status','!=','closed')->where('target_date','<',date('Y-m-d')))}}
+            </td>
+            <td>{{count(($audit_plan->action_plans)->where('status','!=','closed')->where('target_date','>=',date('Y-m-d')))}}
+            </td>
+            <td>{{count(($audit_plan->action_plans))}}
+            </td>
+            <td>
+                @php
+                    $closed = count(($audit_plan->action_plans)->where('status','closed'));
+                    $delayed = count(($audit_plan->action_plans)->where('status','!=','closed')->where('target_date','<',date('Y-m-d')));
+                    $total = $closed + $delayed;
+                    if($closed+$delayed == 0)
+                    {
+                        $percent = 1;
+                    }
+                    else
+                    {
+                        $percent = $closed/($closed+$delayed);
+                    }
+                    
+                @endphp
+                @if(count($audit_plan->action_plans) == 0)
+                    0.00 %
+                @else
+                    {{$percent*100}} %
+                @endif
+            </td>
+        </tr>
+    </table>
 
 
 
 </p>
-<table border='1' style='width:100%;font-size:9;' id='audit'  cellspacing="0" cellpadding="0" >
+<table border='1' style='width:100%;font-size:8;' id='audit'  cellspacing="0" cellpadding="0" >
     <tr style='background-color:#C0C0C0;'>
         <th class="text-center" style='width:5%;' >No</th>
-        <th class="text-center" style='width:15%;'>Audit Area</th>
-        <th class="text-center" style='width:80%;'>Observations and Recommendations</th>
+        <th class="text-center" style='width:50%;'>Observation</th>
+        <th class="text-center" style='width:35%;'>Agreed Action Plans</th>
+        <th class="text-center" style='width:10%;'>Remarks</th>
     </tr>
    
     @foreach($audit_plan->observations as $key => $observation)
-    <tr >
-        <td class="text-center" style='width:5%;border-bottom: none;' ></td>
-        <td class="text-center" style='width:15%;border-bottom: none;' ></td>
-        <td class="text-left" style='width:80%;border-bottom: none;'><b>Observation</b> : <br>
-            {!!$observation->observation!!}</td>
-    </tr>
-    <tr style='border:0px;' class='no-bottom-border'>
-        <td class="text-center" style='width:5%;border-bottom: none;'>{{$key+1}}</td>
-        <td class="text-center" style='width:15%;border-bottom: none;'>{{$observation->criteria}}</td>
-        <td class="text-left" style='width:80%;border-bottom: none;'><b>Recommendation </b>: <br>
-            {!! ($observation->recommendation) !!}
-        </td>
-    </tr>
-    <tr >
-        <td class="text-center" style='width:5%;border-top: none;'></td>
-        <td class="text-center" style='width:5%;border-top: none;'></td>
-        <td class="text-left" style='width:80%;border-top: none;'>
-            <b>Status</b> : {{$observation->status}} <Br>
+    <tr>
+        <th class="text-center" style='width:5%;' >{{$key+1}}</th>
+        <th class="text-left" style='width:35%;'>{!!$observation->observation!!}</th>
+        <th class="text-left" style='width:35%;'></th>
+        <th class="text-left" style='width:25%;'> <b>Status</b> : {{$observation->status}} <br>
             <b>Person in Charge</b> : {{$observation->user->name}} <br>
-            <b>Target Date</b> : {{date('M d, Y',strtotime($observation->target_date))}} <br>
-        </td>
+            <b>Target Date</b> : {{date('M d, Y',strtotime($observation->target_date))}} <br></th>
     </tr>
     {{-- <tr>
         <td class="text-center" style='width:5%;' rowspan='3' ></td>
