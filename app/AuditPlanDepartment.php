@@ -17,4 +17,8 @@ class AuditPlanDepartment extends Model implements Auditable
     {
         return $this->belongsTo(User::class,'user_id','id');
     }
+    public function audit_plan()
+    {
+        return $this->belongsTo(AuditPlan::class);
+    }
 }

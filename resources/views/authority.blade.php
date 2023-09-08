@@ -10,10 +10,10 @@ ini_set("memory_limit", "-1");
     <link rel="icon" type="image/png" href="{{ asset('/images/icon.png')}}"/>
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+    <link href="https://fonts.googleapis.com/css2?family=Century%20Gothic&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">   
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <style>
+    <style type="text/css">
         .page_break { page-break-before: always; }
         body { margin-top: 63px; }
         #first 
@@ -25,10 +25,7 @@ ini_set("memory_limit", "-1");
             border-collapse: collapse;
             margin-top: 10px;
         }
-        body{
-            font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-            font-size: 9px;
-        }
+     
         @page {
             margin: 80px 50px 80px 50px;
         }
@@ -91,6 +88,24 @@ hr {
   color: #333;  /* old IE */
   background-color: #333;  /* Modern Browsers */
 }
+@font-face {
+  font-family: 'a';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("https://fonts.gstatic.com/l/font?kit=Cn-vJt-LUxZV2ICofzrQFC41xsIma3M&skey=93c2fdf69b410576&v=v19") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+        body{
+            font-family: "sans-serif"; 
+            font-size: 9px;
+        }
+        p{
+            font-family: "Century Gothic"; 
+            text-align: justify;
+            text-justify: inter-word;
+  
+        }
     </style>
     
 </head>
@@ -128,7 +143,7 @@ hr {
                 <td class='text-center  m-0 p-0'>
                     <span  style='font-size:9;text-align: center;'>
                         @foreach($companies as $key => $group)
-                        {{$group->group_code}} @if($key+1 != count($companies)),@endif 
+                        {{$group->group_name}} @if($key+1 != count($companies)),@endif 
                         @endforeach
                     </span>
                 </td>
@@ -203,20 +218,37 @@ We are looking forward for your departments' cooperation and assistance in makin
 <table border='0'   style='width:100%;font-size:8;'  cellspacing="0" cellpadding="0">
     <tr class=' text-center' align='center'>
 
+        <th class=' text-left' style='width:25%' >
+            Prepared by:
+         </th>
+         <th class=' text-center' style='width:5%'>
+            &nbsp;
+        </th>
+        <th class='text-left' style='width:25%'>
+            Noted By:
+         </th>
+         <th class=' text-center' style='width:5%'>
+            &nbsp;
+        </th>
+    </tr>
+    <tr class=' text-center' align='center'>
+
         <th class=' text-center' style='width:25%' >
             <br><br><br>
-            {{strtoupper('Richsel Villaruel')}}<br>
+            {{strtoupper('Bea Bernardino')}}<br>
             <hr>
-             <i  class=''>Internal Audit Department Head</i>
+             <i  class=''>Assistant IA Head</i>
          </th>
          <th class=' text-center' style='width:5%'>
             &nbsp;
         </th>
         <th class='' style='width:25%'>
-            Noted By: <br><br><br>
-            {{strtoupper($audit_plan->department[0]->department_name->dep_head->user->name)}}<br>
+            <br><br><br>
+            {{-- {{strtoupper($audit_plan->department[0]->department_name->dep_head->user->name)}} --}}
+            {{strtoupper("Cris dela Cruz")}}
+            <br>
             <hr>
-             <i  class=''>Department Head</i>
+             <i  class=''>Chief of Staff</i>
          </th>
          <th class=' text-center' style='width:5%'>
             &nbsp;
@@ -226,10 +258,29 @@ We are looking forward for your departments' cooperation and assistance in makin
 <br>
 <br>
 <table border='0'   style='width:100%;font-size:8;'  cellspacing="0" cellpadding="0">
+    <tr class=' text-left' colspan='{{count($audit_plan->hbu)*2}}' >
+        <th><b>Approved By: </b>
+        </th>
+    </tr>
+    @if(count($audit_plan->hbu) ==1)
+    <tr class=' text-left' >
+        @foreach($audit_plan->hbu as $hbu)
+        <th class=' text-center' style='width:40%' >
+            <br><br>
+           {{strtoupper($hbu->business_unit->name)}}<br>
+           <hr>
+            <i  class=''>{{strtoupper($hbu->business_unit->position)}}</i>
+        </th>
+        <th class=' text-center' style='width:60%'>
+            &nbsp;
+        </th>
+        @endforeach
+    </tr>
+    @else
     <tr class=' text-left' >
         @foreach($audit_plan->hbu as $hbu)
         <th class=' text-center' style='width:25%' >
-            <b>Approved By: </b><br><br>
+            <br><br>
            {{strtoupper($hbu->business_unit->name)}}<br>
            <hr>
             <i  class=''>{{strtoupper($hbu->business_unit->position)}}</i>
@@ -239,26 +290,44 @@ We are looking forward for your departments' cooperation and assistance in makin
         </th>
         @endforeach
     </tr>
+    @endif
+    
 </table>
 <br>
 <br>
 <table border='0'   style='width:100%;font-size:8;'  cellspacing="0" cellpadding="0">
     <tr class=' text-left'>
-        <td colspan='{{count($audit_plan->department)*2}}'><b>Acknowledged By:</b> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <th colspan='{{count($audit_plan->department)*2}}'><b>Acknowledged By:</b> &nbsp;&nbsp;&nbsp;&nbsp;</th>
     </tr>
+    @if(count($audit_plan->department) == 1)
     <tr class=' text-center' >
         @foreach($audit_plan->department as $dept)
-        <td class=' text-center' style='width:25%;' >
+        <th class=' text-center' style='width:40%;' >
            <br><br>
            {{strtoupper($dept->user_name->name)}}<br>
            <hr>
             <i  class=''>{{$dept->user_name->position}}</i>
-        </td>
-        <td class=' text-center' style='width:5%;'>
+        </th>
+        <th class=' text-center' style='width:60%;'>
             &nbsp;
-        </td>
+        </th>
         @endforeach
     </tr>
+    @else
+    <tr class=' text-center' >
+        @foreach($audit_plan->department as $dept)
+        <th class=' text-center' style='width:25%;' >
+           <br><br>
+           {{strtoupper($dept->user_name->name)}}<br>
+           <hr>
+            <i  class=''>{{$dept->user_name->position}}</i>
+        </th>
+        <th class=' text-center' style='width:5%;'>
+            &nbsp;
+        </th>
+        @endforeach
+    </tr>
+    @endif
 </table>
 
     

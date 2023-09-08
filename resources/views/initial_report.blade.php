@@ -30,7 +30,7 @@ ini_set("memory_limit", "-1");
             margin-top: 10px;
         }
         body{
-            font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+            font-family:  sans-serif;
             font-size: 9px;
         }
         @page {
@@ -95,6 +95,9 @@ hr {
   /* Set the hr color */
   color: #333;  /* old IE */
   background-color: #333;  /* Modern Browsers */
+}
+br {
+    margin: 0em;
 }
 hr.soft {
     margin-top: 0em;
@@ -182,7 +185,7 @@ tr.no-bottom-border td {
     <main>
 <p style='font-size:12;'> 
     <b>IA Code: {{$audit_plan->code}}</b><br>
-    <b>Engagement Title: {{$audit_plan->engagement_title}}</b><br><br>
+    <b>Engagement Title: {{$audit_plan->engagement_title}}</b><br>
     <b>Period Covered: {{$audit_plan->scope}}</b><br>
     <b>Audit Objectives:</b><br>
     
@@ -205,7 +208,7 @@ tr.no-bottom-border td {
         <th class="text-center" style='width:80%;'>Observations and Recommendations</th>
     </tr>
    
-    @foreach($audit_plan->observations as $key => $observation)
+    @foreach(($audit_plan->observations)->where('findings','!=',null) as $key => $observation)
     <tr >
         <td class="text-center" style='width:5%;border-bottom: none;' ></td>
         <td class="text-center" style='width:15%;border-bottom: none;' ></td>

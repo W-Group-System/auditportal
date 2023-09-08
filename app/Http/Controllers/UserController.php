@@ -40,6 +40,7 @@ class UserController extends Controller
         $new_account->company_id = $request->company;
         $new_account->department_id = $request->department;
         $new_account->position = $request->position;
+        $new_account->tel_number = $request->tel_number;
         $new_account->role = $request->role;
         $new_account->password = bcrypt($request->password);
         $new_account->save();
@@ -87,6 +88,7 @@ class UserController extends Controller
         $account->email = $request->email;
         $account->company_id = $request->company;
         $account->position = $request->position;
+        $account->tel_number = $request->tel_number;
         $account->department_id = $request->department;
         $account->role = $request->role;
         $account->save();
@@ -99,7 +101,8 @@ class UserController extends Controller
         $roles = [
             'Auditee' => 'Auditee',
             'Auditor' => 'Auditor',
-            'Auditor Head' => 'Auditor Head',
+            'IAD Approver' => 'IAD Approver',
+            'Department Head' => 'Department Head',
             'Administrator' => 'Administrator',
         ];
 

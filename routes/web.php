@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('new-schedule','ScheduleController@store')->name('calendar');
     Route::get('monthly-report','ScheduleController@monthly_report')->name('calendar');
     Route::post('upload-monthly','ScheduleController@upload')->name('calendar');
+    Route::post('upload-attachment/{id}','ScheduleController@attachment')->name('calendar');
     Route::post('edit-schedule/{id}','ScheduleController@edit')->name('calendar');
     Route::get('view-calendar/{id}','ScheduleController@view');
     Route::get('autorithy/{id}','ScheduleController@authority')->name('calendar');
@@ -48,6 +49,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('initial-report/{id}','ScheduleController@initialReport')->name('engagements');
     Route::get('closing-report/{id}','ScheduleController@closingReport')->name('engagements');
     Route::post('observation/{id}','ScheduleController@save_observation')->name('for_audit');
+    Route::get('new-observation/{id}','ScheduleController@new')->name('for_audit');
+    Route::post('move-observation','ScheduleController@move');
+    
+    Route::get('for-approval-iad','EngagementController@forapproval')->name('for-approval-iad');
+    Route::post('action-acr/{id}','EngagementController@action')->name('for-approval-iad');
 
     Route::get('findings','EngagementController@index')->name('findings');
     Route::get('view-observation/{id}','EngagementController@view')->name('findings');
@@ -62,6 +68,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('engagements','EngagementController@index')->name('engagements');
     Route::get('view-engagement/{id}','EngagementController@show')->name('engagements');
+    Route::get('acr','EngagementController@acr')->name('acr');
+
+
+    Route::get('for-explanation','EngagementController@forExplanation')->name('for-explanation');
+    Route::get('for-review','EngagementController@forReview')->name('for-review');
+    
     // Route::get('autorithy/{id}','EngagementController@authority')->name('engagements');
     // Route::get('initial-report/{id}','EngagementController@initialReport')->name('engagements');
 

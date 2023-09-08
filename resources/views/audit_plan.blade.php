@@ -2,11 +2,8 @@
 @section('css')
 <link href="{{ asset('login_css/css/plugins/chosen/bootstrap-chosen.css') }}" rel="stylesheet">
 
-<script src="https://cdn.tiny.cloud/1/yemsbvzrf507kpiivlpanbssgxsf1tatzwwtu81qli4yre3p/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-<script>tinymce.init({
-    selector:'textarea',
-    content_style: "p { margin: 0; }",    
-    });</script>
+<link href="{{ asset('login_css/css/plugins/sweetalert/sweetalert.css') }}" rel="stylesheet">
+
 @endsection
 @section('content')
 
@@ -41,7 +38,6 @@
                                     <dt>Period Covered / Scope:</dt> <dd> {!! nl2br(e($audit_plan->scope))!!}</dd>
                                     <dt>Activity:</dt> <dd>  {!! nl2br(e($audit_plan->activity))!!}</dd>
                                     <br>
-                                    
                                 </dl>
                             </div>
                             <div class="col-lg-6">
@@ -50,11 +46,39 @@
                                     <dt>HBU <a href='#' data-target="#business_unit" data-toggle="modal" title='Edit'><i class="fa fa-edit"></i></a>:</dt> <dd> <b>@foreach($audit_plan->hbu as $hbu){{$hbu->business_unit->name}} - {{$hbu->business_unit->position}} ,@endforeach</b></dd>
                                     <br>
                                     
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading">
+                                        Attachments <button class="btn btn-success "  data-target="#upload" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;Upload</button>
+                                    </div>
+                                    <div class="panel-body">
+                                        <table class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                              <tr>
+                                                  <th>Type</th>
+                                                  <th>File</th>
+                                                  <th>Uploaded By</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($audit_plan->attachments as $attachment)
+                                                <tr>
+                                                    <td>{{$attachment->type}}</td>
+                                                    <td><a href="{{url($attachment->file)}}" target='_blank'><i class='fa fa-file'></i></a></td>
+                                                    <td>{{$attachment->user->name}}</td>
+                                                </tr>
+                                                @endforeach
+                                                
+                                            </tbody>
+                                            
+                                        </table>
+                                       
+                                    </div>
+                                </div>
                                 </dl>
                             </div>
                         </div>
                         <div class='row '>
-                            <div class='col-md-6 '>
+                            <div class='col-md-6'>
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
                                         Procedures
@@ -77,8 +101,11 @@
                                         @endforeach
                                     </div>
                                 </div>
-                            
-                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a href="{{url('new-observation/'.$audit_plan->id)}}" class='btn-sm btn-success' ><i class='fa fa-plus' title='New Observation'></i> New Observation</a>
                             </div>
                         </div>
                         <div class="row m-t-sm">
@@ -100,23 +127,58 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th> Code</th>
+                                            <th>Action</th>
+                                            <th>Code</th>
                                             <th>Criteria / Standard</th>
                                             <th>Observation</th>
-                                            <th>Recommendation</th>
-                                            <th>Person In Charge</th>
-                                            <th>Status</th>
+                                            <th>Person In Charge<br><small>Status</small></th>
+                                            <th>IAD<br>Approval</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($audit_plan->observations as $observation)
                                         <tr>
-                                            <td>{{$observation->code}}</td>
-                                            <td>{{$observation->criteria}}</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><i class="fa fa-ellipsis-v"></i> </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a title='View' href="#view{{$observation->id}}" data-toggle="modal" >View</a></li>
+                                                        @if($observation->status == "For Approval")
+                                                        <li><a title='Edit' href="#edit{{$observation->id}}" data-toggle="modal" >Edit</a></li>
+                                                        @endif
+                                                        <li>
+                                                            <a title='Move to Findings' onclick='move_to("{{$observation->findings ? "yes" : "no"}}",{{$observation->id}})' data-toggle="modal" >Move to {{$observation->findings ? "Observations" : "Findings"}}</a></li>
+                                                      </ul>
+                                                </div>
+
+                                            </td>
+                                            <td>{{$observation->code}}
+                                                <br>
+                                                @if($observation->status == "On-going")
+                                                    @if($observation->explanation == null)
+                                                        <span class='label label-warning'>No Explanation Submitted</span>
+                                                    @else
+                                                        <span class='label label-primary'>Explanation Submitted</span>
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td>{{$observation->criteria}} <br>
+                                                @if($observation->findings == null)<span class='label label-info'>Observation</span>@else<span class='label label-danger'>Findings</span>@endif
+                                            </td>
                                             <td>{!!$observation->observation!!}</td>
-                                            <td>{!!$observation->recommendation!!}</td>
-                                            <td>{{$observation->user->name}}</td>
-                                            <td>{{$observation->status}}</td>
+                                            <td>{{$observation->user->name}} 
+                                                <br>
+                                                <span class='label label-warning'>{{$observation->status}}</span>
+                                                <br>
+                                               
+                                            </td>
+                                            <td>
+                                                @if($observation->status == "For Approval")
+                                                    <span class='label label-warning'>{{$observation->status}}</span>
+                                                @else
+                                                    <span class='label label-info'>APPROVED</span>
+                                                @endif
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -173,13 +235,60 @@
         </div>
     </div>
 </div>
+
+@foreach($audit_plan->observations as $observation)
+    @include('view_observ')
+@endforeach
+@include('upload_attachment')
 @include('carbon_copy')
 @include('business_unit_head')
 @endsection
 @section('js')
+
 <script src="{{ asset('login_css/js/plugins/dataTables/datatables.min.js')}}"></script>
 <script src="{{ asset('login_css/js/plugins/chosen/chosen.jquery.js') }}"></script>
+<script src="{{ asset('login_css/js/plugins/sweetalert/sweetalert.min.js') }}"></script>
 <script>
+        function move_to(info,id)
+    {
+        if(info == "yes")
+        {
+            comment = "Observation";
+        }
+        else
+        {
+            comment = "Findings";
+        }
+        var id = id;
+            swal({
+                title: "Are you sure?",
+                text: "This ACR will be moved to "+comment,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, move it!",
+                closeOnConfirm: false
+            }, function (){
+                $.ajax({
+                    dataType: 'json',
+                    type:'POST',
+                    url:  '{{url("move-observation")}}',
+                    data:{id:id,
+                    info : info},
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                }).done(function(data){
+                    console.log(data);
+                    swal("Moved!", "Your ACR now moved.", "success");
+                    location.reload();
+                }).fail(function(data)
+                {
+                    
+                    swal("Moved!", "Your ACR now moved.", "success");
+                location.reload();
+                });
+            });
+    
+    }
     $(document).ready(function(){
         
 

@@ -48,6 +48,10 @@
                             Position :
                             <input type="text" class="form-control-sm form-control "  value="{{$user->position}}"  name="position" required/>
                          </div>
+                         <div class='col-md-12'>
+                            Tel Number :
+                            <input type="text" class="form-control-sm form-control "  value="{{$user->tel_number}}"  name="tel_number" required/>
+                         </div>
                         <div class='col-md-12'>
                             Role :
                             <select name='role' class='form-control-sm form-control cat' required>

@@ -103,7 +103,7 @@
                                 <td>{{$audit->engagement_title}}</td>
                                 <td><small>@foreach($audit->department as $dept) {{$dept->department_name->code}} - {{$dept->user_name->name}} <br> @endforeach</small></td>
                                 <td>@foreach($audit->auditor_data as $auditor) {{$auditor->user->name}} <br>@endforeach</td>
-                                <td>{{count(($audit->observations))}}</td>
+                                <td>{{count(($audit->observations)->where('findings',null))}}</td>
                                 <td>{{count(($audit->action_plans)->where('status','!=','closed')->where('target_date','<',date('Y-m-d')))}}</td>
                                 <td>{{count(($audit->action_plans)->where('status','!=','closed')->where('target_date','>=',date('Y-m-d')))}}</td>
                                 <td>{{count(($audit->action_plans)->where('status','!=','closed')->where('target_date','>=',date('Y-m-d')))}}</td>
@@ -152,7 +152,7 @@
 
         $('.cat').chosen({width: "100%"});
         $('.tables').DataTable({
-            pageLength: 25,
+            pageLength: 10,
             responsive: true,
             dom: '<"html5buttons"B>lTfgitp',
             buttons: [

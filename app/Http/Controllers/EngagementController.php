@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 use App\Engagement;
 use App\AuditPlanObservation;
+use App\AuditPlan;
+use App\Department;
+use App\AuditPlanObservationHistory;
 use Illuminate\Http\Request;
 use PDF;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class EngagementController extends Controller
 {
@@ -16,12 +20,36 @@ class EngagementController extends Controller
     public function index()
     {
         //
-        $findings = AuditPlanObservation::get();
-        return view('observations',
+        $audits = AuditPlan::where('code','!=',null)->orderBy('audit_to','asc')->get();
+        return view('engagements',
         array(
-            'observations' => $findings,
+            'audits' => $audits,
         )
     
+        );
+    }
+    public function acr(Request $request)
+    {
+        //
+        
+        $reports = AuditPlanObservation::get();
+        return view('acr',
+        array(
+            'reports' => $reports,
+        )
+    
+        );
+    }
+
+    public function forExplanation()
+    {
+        $departments = Department::where('id','!=',auth()->user()->department_id)->get();
+        $observations = AuditPlanObservation::doesntHave('explanation')->where('status','On-going')->get();
+        return view('for_explanation',
+            array(
+                'observations' => $observations,
+                'departments' => $departments,
+            )
         );
     }
 
@@ -76,6 +104,39 @@ class EngagementController extends Controller
         );
 
     }
+    public function forapproval()
+    {
+        $observations = AuditPlanObservation::where('status','For Approval')->get();
+        return view('for_approval_iad',
+        array(
+        'observations' => $observations,
+        ));
+    }
+    public function action(Request $request, $id)
+    {
+        $observation = AuditPlanObservation::findOrfail($id);
+        if($request->action == "Approved")
+        {
+            $observation->status = "On-going";
+        }
+        else
+        {
+            $observation->status = "Declined";
+        }
+        $observation->save();
+
+        $newHistory = new AuditPlanObservationHistory;
+        $newHistory->audit_plan_observation_id = $id;
+        $newHistory->action = "IAD ".$request->action;
+        $newHistory->user_id = auth()->user()->id;
+        $newHistory->remarks = $request->remarks;
+        $newHistory->save();
+        
+        
+        
+        Alert::success('Successfully Submitted')->persistent('Dismiss');
+        return back();
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -115,7 +176,7 @@ class EngagementController extends Controller
         $engagement = Engagement::findOrfail($id);
         $pdf = PDF::loadView('authority', array(
             'engagement' => $engagement,
-        ));
+        ))->set_option('isFontSubsettingEnabled', true);
         return $pdf->stream('authority_to_audit');
     }
     public function initialReport($id)

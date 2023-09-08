@@ -63,7 +63,7 @@
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>Bar Chart Example</h5>
+                <h5>Findings Report</h5>
             </div>
             <div class="ibox-content">
                 <div>
@@ -95,13 +95,21 @@
                   <tr>
                       <th>Department</th>
                       <th>Findings</th>
-                      <th>Action Plans</th>
-                      <th>Closed Action Plans</th>
+                      <th>Avg. Risk</th>
                   </tr>
                 </thead>
                 <tbody>
+                   {{-- {{dd($departmentResults)}} --}}
+                   @foreach($departmentResults as $key => $result)
+                   @if($key != 0)
+                    <tr>
+                        @foreach($departmentResults as $result)
+                        <td>{{$result[$key]}}</td>
+                        @endforeach
+                    </tr>
+                    @endif
+                    @endforeach
                 </tbody>
-                
             </table>
         </div>
     </div>
@@ -114,7 +122,7 @@
 <script src="{{ asset('login_css/js/plugins/chosen/chosen.jquery.js') }}"></script>
 <script src="{{ asset('login_css/js/plugins/chartJs/Chart.min.js') }}"></script>
 <script>
-    var audit_plans = [];
+    var audit_plans = {!! json_encode(($departmentResults)) !!};
 </script>  
 
 <script src="{{ asset('login_css/js/plugins/morris/raphael-2.1.0.min.js') }}"></script>
@@ -127,10 +135,10 @@
       c3.generate({
                 bindto: '#slineChart',
                 data: {
-        columns: [
-            ['Findings', 30, 20, 50, 40, 60, 50],
-            ['Avg. Risk', 12, 1, 3, 5, 7, 10],
-        ],
+                    
+                x : 'x',
+                columns: audit_plans,
+       
         type: 'bar',
         types: {
             "Avg. Risk": 'spline',
@@ -138,7 +146,14 @@
         // groups: [
         //     ['data1','data2']
         // ]
-    }
+    },
+    axis: {
+        x: {
+            show: true,
+            type: 'categorized', // this is needed to load string x value
+        },
+
+        },
             });
         });
    Morris.Bar({

@@ -25,6 +25,12 @@
                     {{ csrf_field() }}
                     <div class='row'>
                         <div class='col-md-12'>
+                           Code:<b> {{$audit_plan->code}} </b><br>
+                           Title: <b> {{$audit_plan->engagement_title}} </b>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='col-md-6'>
                             Audit Area:
                             <select name='audit_area' class='form-control-sm form-control cat'  required>
                                 <option value=""></option>
@@ -34,6 +40,10 @@
                                 <option value="Valuation">Valuation</option>
                                 <option value="Existence">Existence</option>
                             </select>
+                        </div>
+                        <div class='col-md-6'>
+                            Risk Implication:
+                            <input name='risk_implication' type='text' class='form-control-sm form-control'  required>
                         </div>
                     </div>
                     <div class='row'>

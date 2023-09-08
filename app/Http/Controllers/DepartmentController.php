@@ -5,6 +5,7 @@ use App\Department;
 use App\DepartmentHead;
 use App\User;
 use Illuminate\Http\Request;
+use Alert;
 
 class DepartmentController extends Controller
 {

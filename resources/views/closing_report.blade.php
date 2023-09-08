@@ -30,7 +30,7 @@ ini_set("memory_limit", "-1");
             margin-top: 10px;
         }
         body{
-            font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+            /* font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; */
             font-size: 9px;
         }
         @page {
@@ -182,7 +182,7 @@ tr.no-bottom-border td {
     <main>
 <p style='font-size:12;'> 
     <b>IA Code: {{$audit_plan->code}}</b><br>
-    <b>Engagement Title: {{$audit_plan->engagement_title}}</b>
+    <b>Engagement Title: {{$audit_plan->engagement_title}}</b> <br>
     <b>Type of Report: &nbsp;&nbsp;&nbsp;&nbsp; Closing &nbsp;&nbsp;&nbsp;&nbsp; Final</b><br><br>
     <b>Period Covered: {{$audit_plan->scope}}</b><br>
     <b>Audit Objectives:</b><br>

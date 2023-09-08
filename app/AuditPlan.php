@@ -9,6 +9,11 @@ class AuditPlan extends Model implements Auditable
 {
     //
     use \OwenIt\Auditing\Auditable;
+
+    public function attachments()
+    {
+        return $this->hasMany(AuditPlanAttachment::class);
+    }
     public function procedures()
     {
         return $this->hasMany(AuditPlanProcedure::class);
@@ -42,4 +47,5 @@ class AuditPlan extends Model implements Auditable
     {
         return $this->hasMany(ActionPlan::class);
     }
+   
 }
