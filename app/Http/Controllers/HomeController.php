@@ -25,9 +25,11 @@ class HomeController extends Controller
     {
        
         $results = $this->get_risks();
+        $departments = Department::get();
         return view('home',
         array(
             'departmentResults' => $results,
+            'departments' => $departments,
         ));
     }
 

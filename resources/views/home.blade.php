@@ -92,16 +92,44 @@
             <div class="ibox-content">
                 <table class="table table-striped table-bordered table-hover tables">
                     <thead>
-                    <tr>
-                        <th>Department</th>
-                        <th>Closed</th>
-                        <th>Delayed</th>
-                        <th>Not yet Due</th>
-                        <th>Total</th>
-                        <th>%</th>
-                    </tr>
+                        <tr>
+                            <th>Department</th>
+                            <th>Closed</th>
+                            <th>Delayed</th>
+                            <th>Not yet Due</th>
+                            <th>Total</th>
+                            <th>%</th>
+                        </tr>
                     </thead>
                     <tbody>
+                        @foreach($departments as $department)
+                        <tr>
+                            <td>{{$department->code}}</td>
+                            <td>{{count(($department->action_plans)->where('status','Closed'))}}</td>
+                            <td>{{count(($department->action_plans)->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')))}}</td>
+                            <td>{{count(($department->action_plans)->where('status','!=','Closed')->where('target_date','>=',date('Y-m-d')))}}</td>
+                            <td>{{count($department->action_plans)}}</td>
+                            <td>@php
+                                $closed = count(($department->action_plans)->where('status','Closed'));
+                                $delayed = count(($department->action_plans)->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')));
+                                $total = $closed + $delayed;
+                                if($closed+$delayed == 0)
+                                {
+                                    $percent = 1;
+                                }
+                                else
+                                {
+                                    $percent = $closed/($closed+$delayed);
+                                }
+                                
+                            @endphp
+                            @if(count($department->action_plans) == 0)
+                            0.00 %
+                            @else
+                                {{number_format($percent*100,2)}} %
+                            @endif</td>
+                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

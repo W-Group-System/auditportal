@@ -16,4 +16,8 @@ class Department extends Model implements Auditable
     {
         return $this->hasMany(AuditPlanDepartment::class);
     }
+    public function action_plans()
+    {
+        return $this->hasMany(ActionPlan::class);
+    }
 }
