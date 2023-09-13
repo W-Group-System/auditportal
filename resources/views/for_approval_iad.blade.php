@@ -24,7 +24,6 @@
                                     <th>Code</th>
                                     <th>Engagement Title</th>
                                     <th>Criteria</th>
-                                    <th>Observation</th>
                                     <th>Prepared By</th>
                                 </tr>
                             </thead>
@@ -35,7 +34,6 @@
                                     <td>{{$observation->code}}</td>
                                     <td>{{$observation->audit_plan->engagement_title}}</td>
                                     <td>{{$observation->criteria}}</td>
-                                    <td>{!!$observation->observation!!}</td>
                                     <td>{{$observation->created_by_user->name}}</td>
                                 </tr>
                             @endforeach

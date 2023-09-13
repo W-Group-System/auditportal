@@ -83,7 +83,7 @@
                                     <th>Team Involved</th>
                                     
                                     <th>Auditor</th>
-                                    <th>Status</th>
+                                    {{-- <th>Status</th> --}}
                                     <th>No. of Observations</th>
                                     <th>No. of Findings</th>
                                     
@@ -105,7 +105,7 @@
                                 <td>{{$audit->engagement_title}}</td>
                                 <td><small>@foreach($audit->department as $dept) {{$dept->department_name->code}} - {{$dept->user_name->name}} <br> @endforeach</small></td>
                                 <td>@foreach($audit->auditor_data as $auditor) {{$auditor->user->name}} <br>@endforeach</td>
-                                <td>
+                                {{-- <td>
                                     @if($audit->status == null)
                                     <label class='label label-primary'>For Audit</label>
                                     @else
@@ -114,11 +114,12 @@
                                     @endif
 
                                 
-                                </td>
+                                </td> --}}
                                 <td>{{count(($audit->observations)->where('findings',null))}}</td>
                                 <td>{{count(($audit->observations)->where('findings','!=',null))}}</td>
+                                
+                                <td>{{count(($audit->action_plans)->where('status','=','closed'))}}</td>
                                 <td>{{count(($audit->action_plans)->where('status','!=','closed')->where('target_date','<',date('Y-m-d')))}}</td>
-                                <td>{{count(($audit->action_plans)->where('status','!=','closed')->where('target_date','>=',date('Y-m-d')))}}</td>
                                 <td>{{count(($audit->action_plans)->where('status','!=','closed')->where('target_date','>=',date('Y-m-d')))}}</td>
                                 <td>{{count(($audit->action_plans))}}</td>
                                 <td>@php

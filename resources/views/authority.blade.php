@@ -101,7 +101,7 @@ hr {
             font-size: 9px;
         }
         p{
-            font-family: "Century Gothic"; 
+            /* font-family: "Century Gothic";  */
             text-align: justify;
             text-justify: inter-word;
   
@@ -156,10 +156,7 @@ hr {
         </table>
     </header>
     <div>
-        <p style='font-size:9;'><b>ATTENTION   :</b> @foreach($audit_plan->department as $dept){{$dept->user_name->name}} ,{{$dept->user_name->position}} <br> 
-            
-            
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <p style='font-size:9;'><b>ATTENTION   :</b> @foreach($audit_plan->department as $dept){{$dept->user_name->name}} ,{{$dept->user_name->position}} <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             @endforeach</p>
@@ -234,7 +231,7 @@ We are looking forward for your departments' cooperation and assistance in makin
     <tr class=' text-center' align='center'>
 
         <th class=' text-center' style='width:25%' >
-            <br><br><br>
+            <br><br>
             {{strtoupper('Bea Bernardino')}}<br>
             <hr>
              <i  class=''>Assistant IA Head</i>
@@ -243,7 +240,7 @@ We are looking forward for your departments' cooperation and assistance in makin
             &nbsp;
         </th>
         <th class='' style='width:25%'>
-            <br><br><br>
+            <br><br>
             {{-- {{strtoupper($audit_plan->department[0]->department_name->dep_head->user->name)}} --}}
             {{strtoupper("Cris dela Cruz")}}
             <br>

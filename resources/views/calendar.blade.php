@@ -89,6 +89,7 @@
             <div class="ibox-title">
                         <h5>Audit Plans 
                             @if(count($uploads) > 0) 
+                            <button class="btn btn-success "  data-target="#newScheduleSpecial" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;</button>
                             @else
                             <button class="btn btn-success "  data-target="#newSchedule" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;</button>
                             <a href='{{url('monthly-report?month='.$month)}}' target='_blank' > <button class="btn btn-danger "  data-toggle="modal" type="button"><i class="fa fa-print"></i>&nbsp;</button></a></h5>
@@ -211,6 +212,7 @@
   </div>
 </div> --}}
 @include('new_audit')
+@include('new_audit_special')
 @endsection
 
 @section('js')

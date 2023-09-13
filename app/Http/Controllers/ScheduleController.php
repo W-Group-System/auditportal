@@ -181,6 +181,69 @@ class ScheduleController extends Controller
         return back();
         
     }
+    public function storeSpecial (Request $request)
+    {
+        // dd($request->all());
+        $audit_plans = AuditPlan::where('code','like', '%' .date('Y-m',strtotime($request->audit_start)). '%')->orderBy('code','desc')->first();
+        $c = $audit_plans->code;
+        $c = explode("-", $c);
+        $last_code = ((int)$c[count($c)-1])+1;
+        $audit_plan = new AuditPlan;
+        $audit_plan->code = $this->generate_code(date('Y-m',strtotime($request->audit_start)), $last_code);
+        $audit_plan->engagement_title = $request->engagement_title;
+        $audit_plan->scope = $request->scope;
+        $audit_plan->activity = $request->activity;
+        $audit_plan->audit_from = $request->audit_start;
+        $audit_plan->audit_to = $request->audit_end;
+        // $audit_plan->code = $this->generate_code($request->audit_end);
+        $audit_plan->save();
+
+        foreach($request->company as $company)
+        {
+            $auditplanCompany = new AuditPlanCompany;
+            $auditplanCompany->audit_plan_id = $audit_plan->id;
+            $auditplanCompany->company_id = $company;
+            $auditplanCompany->save();
+        }
+        $procedures = preg_split('/\r\n|[\r\n]/',$request->procedures);
+        $objectives = preg_split('/\r\n|[\r\n]/',$request->objectives);
+        foreach($procedures as $procedure)
+        {
+            $auditplanProcedure = new AuditPlanProcedure;
+            $auditplanProcedure->audit_plan_id = $audit_plan->id;
+            $auditplanProcedure->name = $procedure;
+            $auditplanProcedure->save();
+        }
+        foreach($objectives as $objective)
+        {
+            $auditplanObjective = new AuditPlanObjective;
+            $auditplanObjective->audit_plan_id = $audit_plan->id;
+            $auditplanObjective->name = $objective;
+            $auditplanObjective->save();
+        }
+        foreach($request->auditee as $department)
+        {
+            $user = User::where('id',$department)->first();
+            $auditplanDepartment = new AuditPlanDepartment;
+            $auditplanDepartment->user_id  = $department;
+            $auditplanDepartment->department_id  = $user->department_id;
+            $auditplanDepartment->audit_plan_id  = $audit_plan->id;
+            $auditplanDepartment->save();
+    
+        }
+        foreach($request->auditor as $auditor)
+        {
+            $auditplanAuditor = new AuditPlanAuditor;
+            $auditplanAuditor->user_id  = $auditor;
+            $auditplanAuditor->audit_plan_id  = $audit_plan->id;
+            $auditplanAuditor->save();
+    
+        }
+
+        Alert::success('Successfully Store')->persistent('Dismiss');
+        return back();
+        
+    }
     public function attachment(Request $request,$id)
     {
         if($request->has('file'))

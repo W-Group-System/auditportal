@@ -4,7 +4,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title" >ACR <label class='label label-danger'>{{$observation->status}}</span></h5>
                     </div>
-                    <form method='post' action='{{url('explanation/'.$observation->id)}}' onsubmit='show();' class="form-horizontal"  enctype="multipart/form-data" >
+                    <form method='post' action='{{url('for-review/'.$observation->id)}}' onsubmit='show();' class="form-horizontal"  enctype="multipart/form-data" >
                     <div class="modal-body">             
                         @csrf
                         <div class="row">
@@ -94,24 +94,25 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='explanation' required></textarea></td>
-                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='cause' required></textarea></td>
+                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='explanation' required>{{nl2br(e($observation->explanation->explanation))}}</textarea></td>
+                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='cause' required>{{nl2br(e($observation->explanation->cause))}}</textarea></td>
                                         </tr>
                                         <tr>
                                             <th colspan='2'>Correction or Immediate Action<br><small><i>(Immediate response to temporarily address the cause of observation within
                                                 24 hours turn-around time)</i></small></th>
                                         </tr>
+                                        @foreach(($observation->action_plans)->where('immediate','!=',null) as $key => $action_plan)
                                         <tr>
                                             <td>
-                                                <textarea class='form-control' name='immediate_action'  rows="6" cols="100" required placeholder="Correction or Immediate Action"></textarea> </td>
+                                                <textarea class='form-control' name='immediate_action[{{$action_plan->id}}]'  rows="6" cols="100" required placeholder="Correction or Immediate Action">{{nl2br(e($action_plan->action_plan))}}</textarea> </td>
                                                 <td>
                                                 <div class='form-group'>
                                                     <label class='col-sm-6 control-label text-left'>Other Party(ies) Involved :</label>
                                                     <div class="col-sm-6">
-                                                        <select name='other_parties_immediate_action[]' data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
+                                                        <select name='other_parties_immediate_action[{{$action_plan->id}}][]' data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
                                                             <option value=''></option>
                                                             @foreach($departments as $department)
-                                                                <option value='{{$department->id}}'>{{$department->code}}</option>
+                                                                <option value='{{$department->id}}' @if(count(($action_plan->teams)->where('department_id',$department->id)) == 1) selected @endif>{{$department->code}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -119,34 +120,41 @@
                                                  <div class='form-group text-left'>
                                                     <label class='col-sm-6 control-label text-left'>Upload Proof <i>(optional)</i>:</label>
                                                     <div class="col-sm-6">
-                                                        <input name='supporting_documents_immediate_action' class='form-control form-control-sm' type='file' >
+                                                        @if($action_plan->attachment == null)
+                                                        <span class='text-danger'>No Proof</span>
+                                                        @else
+                                                        <a href='{{url($action_plan->attachment)}}' target='_blank'><i class='fa fa-file-pdf-o'> Proof</i></a>
+                                                        @endif
+                                                        <input name='supporting_documents_immediate_action[{{$action_plan->id}}]' class='form-control form-control-sm' type='file' >
                                                     </div>
                                                 </div>
                                                  <div class='form-group text-left'>
                                                     <label class='col-sm-6 control-label text-left'>Date Completed :</label>
                                                     <div class="col-sm-6">
-                                                        <input name='date_completed' class='form-control form-control-sm' max='{{date('Y-m-d',strtotime("+7 day", strtotime(date("Y-m-d"))))}}' type='date' required >
+                                                        <input name='date_completed[{{$action_plan->id}}]' class='form-control form-control-sm' value='{{$action_plan->date_completed}}' max='{{date('Y-m-d',strtotime("+7 day", strtotime($action_plan->created_at)))}}' type='date' required >
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
+                                        @endforeach
                                         <tr>
                                             <th colspan='2'>Corrective Action Plan<br>
                                                 <small><i>(Controls that, if will be in place, may prevent the occurrence of the
                                                     same observation)</i></small></th>
                                         </tr>
+                                        @foreach(($observation->action_plans)->where('immediate',null) as $action_plan)
                                         <tr>
                                             
                                             <td>
-                                                <textarea class='form-control' name='action_plan'  rows="6" cols="100" required placeholder='Corrective Action Plan'></textarea> </td>
+                                                <textarea class='form-control' name='action_plan[{{$action_plan->id}}]'  rows="6" cols="100" required placeholder='Corrective Action Plan'>{{nl2br(e($action_plan->action_plan))}}</textarea> </td>
                                                 <td>
                                                 <div class='form-group text-left'>
                                                     <label class='col-sm-6 control-label text-left'>Other Party(ies) Involved :</label>
                                                     <div class="col-sm-6">
-                                                        <select name='other_parties_action_plan[]' data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
+                                                        <select name='other_parties_action_plan[{{$action_plan->id}}][]' data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
                                                             <option value=''></option>
                                                             @foreach($departments as $department)
-                                                                <option value='{{$department->id}}'>{{$department->code}}</option>
+                                                                <option value='{{$department->id}}' @if(count(($action_plan->teams)->where('department_id',$department->id)) == 1) selected @endif>{{$department->code}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -154,28 +162,50 @@
                                                 <div class='form-group text-left'>
                                                     <label class='col-sm-6 control-label text-left'>Upload Proof <i>(optional)</i></label>
                                                     <div class="col-sm-6">
-                                                        <input name='supporting_documents' class='form-control form-control-sm' type='file' >
+                                                        @if($action_plan->attachment == null)
+                                                        <span class='text-danger'>No Proof</span>
+                                                        @else
+                                                        <a href='{{url($action_plan->attachment)}}' target='_blank'><i class='fa fa-file-pdf-o'>Proof</i></a>
+                                                        @endif
+                                                        <input name='supporting_documents[{{$action_plan->id}}]' class='form-control form-control-sm' type='file' >
                                                     </div>
                                                 </div>
                                                 <div class='form-group text-left'>
                                                     <label class='col-sm-6 control-label text-left'>Target Completion :</label>
                                                     <div class="col-sm-6">
-                                                        <input name='date_complete' class='form-control form-control-sm' max='{{date('Y-m-d',strtotime("+1 month", strtotime(date("Y-m-d"))))}}' type='date' required >
+                                                        <input name='date_complete[{{$action_plan->id}}]' class='form-control form-control-sm' value='{{$action_plan->target_date}}' max='{{date('Y-m-d',strtotime("+1 month", strtotime(date($action_plan->created_at))))}}' type='date' required >
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                             <hr>
                           
                         </div>
+                        <div class="row">
+                            <div class='col-md-12'>
+                                <b>Prepared By : {{$observation->explanation->user->name}}</b>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md-4'>
+                                Action :
+                                <select name='action' class='form-control-sm form-control cat' required>
+                                    <option value="" ></option>
+                                    <option value="Approve" >Approve</option>
+                                </select>
+                            </div>
+                            <div class='col-md-8'>
+                                Remarks :
+                                <textarea name='remarks' class='form-control-sm form-control' required></textarea>
+                            </div>
+                        </div>
                     </div> 
                     <div class="modal-footer">
-                        @if(Route::current()->getName() == 'for-explanation')
                         <button type='submit'  class="btn btn-primary">Submit</button>
-                        @endif
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                     </form>

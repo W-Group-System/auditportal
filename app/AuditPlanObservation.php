@@ -24,7 +24,7 @@ class AuditPlanObservation extends Model implements Auditable
     }
     public function action_plans()
     {
-        return $this->hasMany(ActionPlan::class,'observation_id','id');
+        return $this->hasMany(ActionPlan::class);
     }
     public function histories()
     {

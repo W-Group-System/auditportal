@@ -96,7 +96,7 @@
                             </div>
                         </div>
                         @endif
-                        @if($observation->status == "On-going")
+                        @if($observation->explanation == null)
                         <div class='row'>
                             <div class='col-md-12'>
                                 <div class="panel panel-danger">
@@ -104,6 +104,27 @@
                                         No Explanation Submitted
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        @else
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style='width:50%'>Explanation:</th>
+                                            <th style='width:50%'>Cause:</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='explanation' readonly>{{nl2br(e($observation->explanation->explanation))}}</textarea></td>
+                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='cause' readonly>{{nl2br(e($observation->explanation->cause))}}</textarea></td>
+                                        </tr>
+                                    
+                                    
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         @endif

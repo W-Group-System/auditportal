@@ -5,35 +5,46 @@
 @section('content')
 
 <div class="wrapper wrapper-content">
-    @include('error')
     <div class='row'>
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>For Explanation </div>
+                    <h5>Audit Logs </h5>
+                  
+                </div>
                 <div class="ibox-content">
 
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover tables" >
-                            <thead>
+                        <thead>
                                 <tr>
-                                    <th>Action</th>
-                                    <th>Code</th>
-                                    <th>Engagement Title</th>
-                                    <th>Criteria</th>
-                                    <th>Prepared By</th>
+                                    
+                                    <th>Created Date</th>
+                                    <th>Model</th>
+                                    <th>User</th>
+                                    <th>Event</th>
+                                    <th>Auditable Id</th>
+                                    <th>Old Values</th>
+                                    <th>New Values</th>
+                                    <th>Ip Address</th>
+                                    <th>Agent</th>
                                 </tr>
-                            </thead>
+                        </thead>
                         <tbody>
-                            @foreach($observations as $observation)
-                            <tr>
-                                <td><a href="#view{{$observation->id}}" data-toggle="modal"  class='btn btn-sm btn-info'><i class="fa fa-eye"></i></a></td>
-                                <td>{{$observation->code}}</td>
-                                <td>{{$observation->audit_plan->engagement_title}}</td>
-                                <td>{{$observation->criteria}}</td>
-                                <td>{{$observation->created_by_user->name}}</td>
-                            </tr>
-                        @endforeach
+                            @foreach($audits as $audit)
+                                <tr>
+                                    
+                                    <td>{{date('Y-m-d h:i:s',strtotime($audit->created_at))}}</td>
+                                    <td>{{$audit->auditable_type}}</td>
+                                    <td>{{$audit->user->name}}</td>
+                                    <td>{{$audit->event}}</td>
+                                    <td>{{$audit->auditable_id}}</td>
+                                    <td title='{{$audit->old_values}}'>{{substr($audit->old_values,0,10)}}</td>
+                                    <td title='{{$audit->new_values}}'>{{substr($audit->new_values,0,10)}}</td>
+                                    <td>{{$audit->ip_address}}</td>
+                                    <td>{{$audit->user_agent}}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                         </table>
                     </div>
@@ -44,9 +55,7 @@
 
     </div>
 </div>
-@foreach($observations as $observation)
-    @include('view_explanation')
-@endforeach
+{{-- @include('properties.create') --}}
 @endsection
 @section('js')
 <script src="{{ asset('login_css/js/plugins/dataTables/datatables.min.js')}}"></script>
@@ -55,9 +64,9 @@
     $(document).ready(function(){
         
 
-        $('.cat').chosen({width: "100%"});
+        $('.locations').chosen({width: "100%"});
         $('.tables').DataTable({
-            pageLength: 25,
+            pageLength: 10,
             responsive: true,
             dom: '<"html5buttons"B>lTfgitp',
             buttons: [

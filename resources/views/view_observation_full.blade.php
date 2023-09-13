@@ -110,7 +110,7 @@
                             </div>
                         </div>
                         @endif
-                        @if($observation->status == "On-going")
+                        @if($observation->observation == null)
                         <div class='row'>
                             <div class='col-md-12'>
                                 <div class="panel panel-danger">
@@ -120,6 +120,8 @@
                                 </div>
                             </div>
                         </div>
+                        @else
+                        
                         @endif
                     </div> 
                     <div class="modal-footer">

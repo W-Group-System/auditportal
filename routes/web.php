@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/calendar','ScheduleController@index')->name('calendar');
     Route::post('new-schedule','ScheduleController@store')->name('calendar');
+    Route::post('new-schedule-special','ScheduleController@storeSpecial')->name('calendar');
     Route::get('monthly-report','ScheduleController@monthly_report')->name('calendar');
     Route::post('upload-monthly','ScheduleController@upload')->name('calendar');
     Route::post('upload-attachment/{id}','ScheduleController@attachment')->name('calendar');
@@ -73,9 +74,22 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('for-explanation','EngagementController@forExplanation')->name('for-explanation');
     Route::get('for-review','EngagementController@forReview')->name('for-review');
+    Route::get('for-verification-acr','EngagementController@forVerication')->name('for-verification-acr');
+    Route::post('for-verification-acr/{id}','EngagementController@verified')->name('for-verification-acr');
+    Route::post('explanation/{id}','EngagementController@store');
+    Route::post('for-review/{id}','EngagementController@reviewed')->name('reviewed');
+
+    Route::get('action-plans','ActionPlanController@index')->name('action-plans');
+    Route::post('save-action-plan/{id}','ActionPlanController@upload_proof')->name('action-plans');
+    Route::post('change-target-plan/{id}','ActionPlanController@change_target_date')->name('action-plans');
+    Route::post('return-action-plan/{id}','ActionPlanController@return_action_plan')->name('action-plans');
+    Route::post('close-action-plan/{id}','ActionPlanController@close_action_plan')->name('action-plans');
+    Route::get('close-action-plans','ActionPlanController@close_action_plans')->name('reports');
     
     // Route::get('autorithy/{id}','EngagementController@authority')->name('engagements');
     // Route::get('initial-report/{id}','EngagementController@initialReport')->name('engagements');
+
+    Route::get('/logs', 'AuditController@index')->name('reports');
 
 
 });

@@ -30,7 +30,8 @@
                                 <option value=''></option>
                                 <option value='Authority to Audit'>Authority to Audit</option>
                                 <option value='Initial Report'>Initial Report</option>
-                                <option value='Closing/Final Report'>Closing/Final Report</option>
+                                <option value='Closing Report'>Closing Report</option>
+                                <option value='Final Report'>Final Report</option>
                             </select>
                         </div>
                     </div>

@@ -52,12 +52,12 @@
                             <textarea name='observation' class='observation' id='observation' placeholder="Please encode here your observation" ></textarea>
                         </div>
                     </div>
-                    <div class='row'>
+                    {{-- <div class='row'>
                         <div class='col-md-12'>
                             <Br>
                             <textarea name='recommendation' class='recommendation' id='recommendation' placeholder="Please encode here your recommendation" ></textarea>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class='row'>
                         <div class='col-md-12'>
                             Auditee:

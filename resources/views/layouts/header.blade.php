@@ -111,14 +111,18 @@
                         <a href="{{url('/for-review')}}"><i class="fa fa-eye"></i> <span
                                 class="nav-label">For Review</span></a>
                     </li>
-                    <li class="{{ Route::current()->getName() == 'findings' ? 'active' : '' }}">
-                        <a href="{{url('/findings')}}"><i class="fa fa-eye"></i> <span
-                                class="nav-label">Findings</span></a>
+                    <li class="{{ Route::current()->getName() == 'for-verification-acr' ? 'active' : '' }}">
+                        <a href="{{url('/for-verification-acr')}}"><i class="fa fa-eye"></i> <span
+                                class="nav-label">Verification ACR</span></a>
                     </li>
                     <li class="{{ Route::current()->getName() == 'action-plans' ? 'active' : '' }}">
                         <a href="{{url('/action-plans')}}"><i class="fa fa-check-square-o"></i> <span
                                 class="nav-label">Action Plans</span></a>
                     </li>
+                    {{-- <li class="{{ Route::current()->getName() == 'findings' ? 'active' : '' }}">
+                        <a href="{{url('/findings')}}"><i class="fa fa-eye"></i> <span
+                                class="nav-label">Findings</span></a>
+                    </li> --}}
                     <li class="{{ Route::current()->getName() == 'settings' ? 'active' : '' }}">
                         <a href="#"><i class="fa fa-gavel"></i> <span class="nav-label">Settings</span><span
                                 class="fa arrow"></span></a>
@@ -126,21 +130,20 @@
                             <li ><a href="{{url('/companies')}}"></i>Companies</a></li>
                             <li><a href="{{url('/departments')}}"></i>Departments</a></li>
                             <li><a href="{{url('/users')}}"></i>Users</a></li>
-                            <li><a href="{{url('/matrices')}}"></i>Matrices</a></li>
-                            <li><a href="{{url('/engagements-config')}}"></i>Engagements</a></li>
+                            {{-- <li><a href="{{url('/matrices')}}"></i>Matrices</a></li>
+                            <li><a href="{{url('/engagements-config')}}"></i>Engagements</a></li> --}}
                         </ul>
                     </li>
-                    
                     <li class="{{ Route::current()->getName() == 'reports' ? 'active' : '' }}">
                         <a href="#"><i class="fa fa-list-ul"></i> <span class="nav-label">Reports</span><span
                                 class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            @if((auth()->user()->role == 'Administrator') || (auth()->user()->role == 'Management Representative'))
+                            @if((auth()->user()->role == 'Administrator'))
                             <li><a href="{{url('/logs')}}"></i>Logs</a></li>
                             @endif
-                            <li><a href="{{url('/initial-reports')}}"></i>Initial Reports</a></li>
-                            <li><a href="{{url('/status-reports')}}"></i>Status Reports</a></li>
-                            <li><a href="{{url('/summary-reports')}}"></i>Summary Reports</a></li>
+                            <li><a href="{{url('/close-action-plans')}}"></i>Closed Action Plans</a></li>
+                            {{-- <li><a href="{{url('/status-reports')}}"></i>Status Reports</a></li>
+                            <li><a href="{{url('/summary-reports')}}"></i>Summary Reports</a></li> --}}
                         </ul>
                     </li>
                     

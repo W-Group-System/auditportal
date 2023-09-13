@@ -130,9 +130,9 @@
                                             <th>Action</th>
                                             <th>Code</th>
                                             <th>Criteria / Standard</th>
-                                            <th>Observation</th>
                                             <th>Person In Charge<br><small>Status</small></th>
                                             <th>IAD<br>Approval</th>
+                                            <th>Type</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -162,10 +162,7 @@
                                                     @endif
                                                 @endif
                                             </td>
-                                            <td>{{$observation->criteria}} <br>
-                                                @if($observation->findings == null)<span class='label label-info'>Observation</span>@else<span class='label label-danger'>Findings</span>@endif
-                                            </td>
-                                            <td>{!!$observation->observation!!}</td>
+                                            <td>{{$observation->criteria}}</td>
                                             <td>{{$observation->user->name}} 
                                                 <br>
                                                 <span class='label label-warning'>{{$observation->status}}</span>
@@ -178,6 +175,10 @@
                                                 @else
                                                     <span class='label label-info'>APPROVED</span>
                                                 @endif
+                                            </td>
+                                            <td>
+                                                @if($observation->findings == null)<span class='label label-info'>Observation</span>@else<span class='label label-danger'>Findings</span>@endif
+                                         
                                             </td>
                                         </tr>
                                         @endforeach

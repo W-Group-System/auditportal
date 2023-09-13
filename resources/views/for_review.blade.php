@@ -10,7 +10,7 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>For Explanation </div>
+                    <h5>For Review </div>
                 <div class="ibox-content">
 
                     <div class="table-responsive">
@@ -21,12 +21,21 @@
                                     <th>Code</th>
                                     <th>Engagement Title</th>
                                     <th>Criteria</th>
-                                    <th>Observation</th>
+                                    <th>Auditor</th>
                                     <th>Prepared By</th>
                                 </tr>
                             </thead>
                         <tbody>
-                        
+                            @foreach($observations as $observation)
+                            <tr>
+                                <td><a href="#view{{$observation->id}}" data-toggle="modal"  class='btn btn-sm btn-info'><i class="fa fa-eye"></i></a></td>
+                                <td>{{$observation->code}}</td>
+                                <td>{{$observation->audit_plan->engagement_title}}</td>
+                                <td>{{$observation->criteria}}</td>
+                                <td>{{$observation->created_by_user->name}}</td>
+                                <td>{{$observation->explanation->user->name}}</td>
+                            </tr>
+                        @endforeach
                         </tbody>
                         </table>
                     </div>
@@ -38,7 +47,7 @@
     </div>
 </div>
 @foreach($observations as $observation)
-    @include('view_observ')
+    @include('view_for_review')
 @endforeach
 @endsection
 @section('js')

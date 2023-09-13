@@ -74,7 +74,7 @@
     </div>
 </div>
 <div class="row">
-  <div class="col-md-7 grid-margin stretch-card">
+  {{-- <div class="col-md-5 grid-margin stretch-card">
     <div class="ibox float-e-margins">
       <div class="ibox-title">
           <h5>Action Plans Report </h5>
@@ -83,37 +83,60 @@
           <div id="morris-bar-chart"></div>
       </div>
     </div>
-  </div>
-  <div class="col-lg-5">
-    <div class="ibox float-e-margins">
-        <div class="ibox-title">
-            <h5>Latest Update</h5>
-        </div>
-        <div class="ibox-content">
-            <table class="table table-striped table-bordered table-hover tables">
-                <thead>
-                  <tr>
-                      <th>Department</th>
-                      <th>Findings</th>
-                      <th>Avg. Risk</th>
-                  </tr>
-                </thead>
-                <tbody>
-                   {{-- {{dd($departmentResults)}} --}}
-                   @foreach($departmentResults as $key => $result)
-                   @if($key != 0)
+  </div> --}}
+    <div class="col-lg-5">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Action Plans as of ({{date('F d, Y')}})</h5>
+            </div>
+            <div class="ibox-content">
+                <table class="table table-striped table-bordered table-hover tables">
+                    <thead>
                     <tr>
-                        @foreach($departmentResults as $result)
-                        <td>{{$result[$key]}}</td>
-                        @endforeach
+                        <th>Department</th>
+                        <th>Closed</th>
+                        <th>Delayed</th>
+                        <th>Not yet Due</th>
+                        <th>Total</th>
+                        <th>%</th>
                     </tr>
-                    @endif
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+    <div class="col-lg-5">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Latest Update</h5>
+            </div>
+            <div class="ibox-content">
+                <table class="table table-striped table-bordered table-hover tables">
+                    <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Findings</th>
+                        <th>Avg. Risk</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{-- {{dd($departmentResults)}} --}}
+                    @foreach($departmentResults as $key => $result)
+                    @if($key != 0)
+                        <tr>
+                            @foreach($departmentResults as $result)
+                            <td>{{$result[$key]}}</td>
+                            @endforeach
+                        </tr>
+                        @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
