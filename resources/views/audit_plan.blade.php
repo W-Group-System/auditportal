@@ -133,6 +133,8 @@
                                             <th>Person In Charge<br><small>Status</small></th>
                                             <th>IAD<br>Approval</th>
                                             <th>Type</th>
+                                            <th>Explanation</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -153,25 +155,17 @@
 
                                             </td>
                                             <td>{{$observation->code}}
-                                                <br>
-                                                @if($observation->status == "On-going")
-                                                    @if($observation->explanation == null)
-                                                        <span class='label label-warning'>No Explanation Submitted</span>
-                                                    @else
-                                                        <span class='label label-primary'>Explanation Submitted</span>
-                                                    @endif
-                                                @endif
+                                                
                                             </td>
                                             <td>{{$observation->criteria}}</td>
                                             <td>{{$observation->user->name}} 
-                                                <br>
-                                                <span class='label label-warning'>{{$observation->status}}</span>
-                                                <br>
                                                
                                             </td>
                                             <td>
                                                 @if($observation->status == "For Approval")
                                                     <span class='label label-warning'>{{$observation->status}}</span>
+                                                @elseif($observation->status == "Declined")
+                                                <span class='label label-danger'>DECLINED</span>
                                                 @else
                                                     <span class='label label-info'>APPROVED</span>
                                                 @endif
@@ -179,6 +173,19 @@
                                             <td>
                                                 @if($observation->findings == null)<span class='label label-info'>Observation</span>@else<span class='label label-danger'>Findings</span>@endif
                                          
+                                            </td>
+                                            <td>
+                                                @if(($observation->status == "On-going") || ($observation->status == "Closed"))
+                                                    @if($observation->explanation == null)
+                                                        <span class='label label-warning'>No Explanation Submitted</span>
+                                                    @else
+                                                        <span class='label label-primary'>Explanation Submitted</span>
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td>
+                                                
+                                                <span class='label label-warning'>{{$observation->status}}</span>
                                             </td>
                                         </tr>
                                         @endforeach
