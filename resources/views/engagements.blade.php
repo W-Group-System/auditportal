@@ -63,8 +63,12 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Engagements
-                        {{-- <button class="btn btn-success "  data-target="#uploadDocument" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;New Engagement</button></h5> --}}
-                        
+                        <a title='SUMMARY OF AUDIT STATUS' href='{{url("engagements_reports")}}' target="_blank"><button type="button"  class="btn btn-danger btn-icon btn-sm">
+                            <i class="fa fa-file-pdf-o"></i>
+                            </button></a>
+                        <a title='STATUS REPORT' href='{{url("engagements_each")}}' target="_blank"><button type="button"  class="btn btn-info btn-icon btn-sm">
+                            <i class="fa fa-file-pdf-o"></i>
+                            </button></a>
                     </div>
                 <div class="ibox-content">
 
@@ -142,7 +146,7 @@
                                         {{$percent*100}} %
                                     @endif
                                 </td>
-                                <th>{{count(($audit->observations)->where('overall_risk','HIGH')->where('status','ON-GOING'))}}</th>
+                                <td>{{count(($audit->observations)->where('overall_risk','HIGH')->where('status','ON-GOING'))}}</td>
                             </tr>
                         @endforeach
                             

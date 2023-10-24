@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 use App\Engagement;
 use App\AuditPlanObservation;
 use App\AuditPlan;
+use App\SummaryReport;
 use App\Department;
 use App\Explanation;
 use App\ActionPlanRemark;
 use App\ActionPlan;
 use App\ActionPlanInvolve;
 use App\ExplanationHistory;
+use App\User;
 use App\AuditPlanObservationHistory;
+use App\Notifications\ACRApproved;
 use Illuminate\Http\Request;
 use PDF;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -44,6 +47,31 @@ class EngagementController extends Controller
         )
     
         );
+    }
+    public function report(Request $request)
+    {
+        $audits = AuditPlan::where('code','!=',null)->orderBy('audit_to','asc')->get();
+        $previous_audits = SummaryReport::where('date_needed',date("Y-m-01", strtotime("-1 months")))->get();
+        $pdf = PDF::loadView('summary', array(
+            'audits' => $audits,
+            'previous_audits' => $previous_audits,
+        ))->setPaper('legal', 'landscape');
+
+        
+        return $pdf->stream('initial_report');
+    }
+    public function report_each(Request $request)
+    {
+        $audits = AuditPlan::where('code','!=',null)->orderBy('audit_to','asc')->get();
+        
+        $previous_audits = SummaryReport::where('date_needed',date("Y-m-01", strtotime("-1 months")))->get();
+        $pdf = PDF::loadView('summary_each', array(
+            'audits' => $audits,
+            'previous_audits' => $previous_audits,
+        ))->setPaper('legal', 'landscape');
+
+        
+        return $pdf->stream('initial_report');
     }
 
     public function forExplanation()
@@ -441,6 +469,8 @@ class EngagementController extends Controller
         $observation = AuditPlanObservation::findOrfail($id);
         if($request->action == "Approved")
         {
+            $user = User::findOrfail($observation->user_id);
+            $user->notify(new ACRApproved($observation));
             $observation->status = "On-going";
         }
         else

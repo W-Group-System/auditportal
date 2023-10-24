@@ -35,6 +35,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/edit-user/{id}', 'UserController@edit_user')->name('settings');
     Route::post('deactivate-user', 'UserController@deactivate_user')->name('settings');
     Route::post('activate-user', 'UserController@activate_user')->name('settings');
+    Route::post('share/{id}','AttachmentUserController@store');
 
     Route::get('/calendar','ScheduleController@index')->name('calendar');
     Route::post('new-schedule','ScheduleController@store')->name('calendar');
@@ -70,6 +71,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('engagements','EngagementController@index')->name('engagements');
     Route::get('view-engagement/{id}','EngagementController@show')->name('engagements');
     Route::get('acr','EngagementController@acr')->name('acr');
+    Route::get('engagements_reports','EngagementController@report')->name('engagements');
+    Route::get('engagements_each','EngagementController@report_each')->name('engagements');
 
 
     Route::get('for-explanation','EngagementController@forExplanation')->name('for-explanation');

@@ -10,6 +10,9 @@ class ActionPlanInvolve extends Model implements Auditable
     //
     use \OwenIt\Auditing\Auditable;
 
-    
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
 
 }

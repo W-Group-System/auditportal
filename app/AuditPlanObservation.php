@@ -20,7 +20,7 @@ class AuditPlanObservation extends Model implements Auditable
     }
     public function audit_plan()
     {
-        return $this->belongsTo(AuditPlan::class);
+    return $this->belongsTo(AuditPlan::class);
     }
     public function action_plans()
     {

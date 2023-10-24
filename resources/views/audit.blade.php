@@ -36,7 +36,7 @@
                                     
                                     <td>{{date('Y-m-d h:i:s',strtotime($audit->created_at))}}</td>
                                     <td>{{$audit->auditable_type}}</td>
-                                    <td>{{$audit->user->name}}</td>
+                                    <td>@if($audit->user){{$audit->user->name}}@endif</td>
                                     <td>{{$audit->event}}</td>
                                     <td>{{$audit->auditable_id}}</td>
                                     <td title='{{$audit->old_values}}'>{{substr($audit->old_values,0,10)}}</td>

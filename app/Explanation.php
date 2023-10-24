@@ -15,6 +15,10 @@ class Explanation extends Model implements Auditable
     {
         return $this->belongsTo(User::class);
     }
+    public function reviewed()
+    {
+        return $this->belongsTo(User::class,'reviewed_by','id');
+    }
     public function remarks()
     {
         return $this->hasMany(ExplanationHistory::class);

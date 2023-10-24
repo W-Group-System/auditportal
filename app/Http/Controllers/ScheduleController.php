@@ -26,7 +26,7 @@ use App\AuditPlanAttachment;
 use App\UploadSign;
 use App\BusinessUnit;
 use Illuminate\Http\Request;
-
+use App\Notifications\ACRApproval;
 use PDF;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -479,7 +479,6 @@ class ScheduleController extends Controller
     }
     public function save_observation(Request $request,$id)
     {
-
         $consequence = explode("-",$request->consequence);
         $likelihood = explode("-",$request->likelihood);
 
@@ -507,6 +506,13 @@ class ScheduleController extends Controller
         $auditPlanObservation->status = "For Approval";
         $auditPlanObservation->save();
         
+
+        $users = User::where('role','IAD Approver')->where('status',null)->get();
+        foreach($users as $user)
+        {
+            $user->notify(new ACRApproval($auditPlanObservation));
+        }
+              
         Alert::success('Successfully updated')->persistent('Dismiss');
         return redirect('view-calendar/'.$id);
 

@@ -46,10 +46,6 @@
                         </a>
                     </div>
                 </div>
-        
-
-                
-                
             </form>
 
             <div class="login100-more" style="background-image: url('../login_design/images/bg-01.jpg')">

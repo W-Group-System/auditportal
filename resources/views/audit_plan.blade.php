@@ -57,6 +57,7 @@
                                                   <th>Type</th>
                                                   <th>File</th>
                                                   <th>Uploaded By</th>
+                                                  <th>Share</th>
                                               </tr>
                                             </thead>
                                             <tbody>
@@ -65,7 +66,9 @@
                                                     <td>{{$attachment->type}}</td>
                                                     <td><a href="{{url($attachment->file)}}" target='_blank'><i class='fa fa-file'></i></a></td>
                                                     <td>{{$attachment->user->name}}</td>
+                                                    <td><a href='#' data-target="#share{{$attachment->id}}" data-toggle="modal" title='Share'><i class="fa fa-edit"></i></a> @foreach($attachment->share as $share){{$share->user->name}} ,@endforeach</td>
                                                 </tr>
+                                                @include('share')
                                                 @endforeach
                                                 
                                             </tbody>

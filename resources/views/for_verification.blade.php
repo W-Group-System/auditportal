@@ -35,7 +35,7 @@
                                 <td>{{$observation->criteria}}</td>
                                 <td>{{$observation->created_by_user->name}}</td>
                                 <td>{{$observation->explanation->user->name}}</td>
-                                <td>{{$observation->explanation->user->name}}</td>
+                                <td>{{$observation->explanation->reviewed->name}}</td>
                             </tr>
                         @endforeach
                         </tbody>
