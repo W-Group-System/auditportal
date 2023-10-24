@@ -23,7 +23,7 @@
                     <h5>Observations</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins"></h1>
+                    <h1 class="no-margins">{{count($reports->where('findings',null))}}</h1>
                 </div>
             </div>
         </div>
@@ -33,7 +33,7 @@
                     <h5>Findings</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins"></h1>
+                    <h1 class="no-margins">{{count($reports->where('findings','!-',null))}}</h1>
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
                     <h5>Findings No Action Plan</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins"></h1>
+                    <h1 class="no-margins">{{count($reports->where('findings','!-',null)->where('explanation',null))}}</h1>
                 </div>
             </div>
         </div>

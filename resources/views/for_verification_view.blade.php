@@ -190,7 +190,7 @@
                                 <b>Prepared By : {{$observation->explanation->user->name}}</b>
                             </div>
                             <div class='col-md-6'>
-                                <b>Reviewed By : {{$observation->explanation->user->name}}</b>
+                                <b>Reviewed By : {{$observation->explanation->reviewed->name}}</b>
                             </div>
                         </div>
                         <hr>

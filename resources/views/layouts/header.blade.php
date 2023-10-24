@@ -81,18 +81,25 @@
                         <a href="{{url('/home')}}"><i class="fa fa-th-large"></i> <span
                                 class="nav-label">Dashboard </span></a>
                     </li>
+                    @if((auth()->user()->role == "Administrator") ||(auth()->user()->role == "IAD Approver"))
                     <li class="{{ Route::current()->getName() == 'calendar' ? 'active' : '' }}">
                         <a href="{{url('/calendar')}}"><i class="fa fa-calendar"></i> <span
                                 class="nav-label">Calendar </span></a>
                     </li>
+                    @endif
+                    @if((auth()->user()->role == "Administrator") ||(auth()->user()->role == "IAD Approver"))
                     <li class="{{ Route::current()->getName() == 'engagements' ? 'active' : '' }}">
                         <a href="{{url('/engagements')}}"><i class="fa fa-list-ol"></i> <span
                                 class="nav-label">Engagements</span></a>
                     </li>
+                    @endif
+                    @if((auth()->user()->role == "Administrator") ||(auth()->user()->role == "IAD Approver") || (auth()->user()->role == "Auditor")) 
                     <li class="{{ Route::current()->getName() == 'for-audit' ? 'active' : '' }}">
                         <a href="{{url('/for-audit')}}"><i class="fa fa-paper-plane"></i> <span
                                 class="nav-label">For Audit</span></a>
                     </li>
+                    @endif
+                    
                     <li class="{{ Route::current()->getName() == 'acr' ? 'active' : '' }}">
                         <a href="{{url('/acr')}}"><i class="fa fa-dot-circle-o"></i> <span
                                 class="nav-label">ACR</span></a>
@@ -107,14 +114,18 @@
                         <a href="{{url('/for-explanation')}}"><i class="fa fa-stack-exchange"></i> <span
                                 class="nav-label">For Explanation</span></a>
                     </li>
+                    @if((auth()->user()->role == "Administrator") || (auth()->user()->role == "IAD Approver")||(auth()->user()->role == "Auditor"))
                     <li class="{{ Route::current()->getName() == 'for-review' ? 'active' : '' }}">
                         <a href="{{url('/for-review')}}"><i class="fa fa-eye"></i> <span
                                 class="nav-label">For Review</span></a>
                     </li>
+                    @endif
+                    @if((auth()->user()->role == "Administrator") ||(auth()->user()->role == "IAD Approver"))
                     <li class="{{ Route::current()->getName() == 'for-verification-acr' ? 'active' : '' }}">
                         <a href="{{url('/for-verification-acr')}}"><i class="fa fa-eye"></i> <span
                                 class="nav-label">Verification ACR</span></a>
                     </li>
+                    @endif
                     <li class="{{ Route::current()->getName() == 'action-plans' ? 'active' : '' }}">
                         <a href="{{url('/action-plans')}}"><i class="fa fa-check-square-o"></i> <span
                                 class="nav-label">Action Plans</span></a>
@@ -123,6 +134,7 @@
                         <a href="{{url('/findings')}}"><i class="fa fa-eye"></i> <span
                                 class="nav-label">Findings</span></a>
                     </li> --}}
+                    @if((auth()->user()->role == "Administrator") ||(auth()->user()->role == "IAD Approver"))
                     <li class="{{ Route::current()->getName() == 'settings' ? 'active' : '' }}">
                         <a href="#"><i class="fa fa-gavel"></i> <span class="nav-label">Settings</span><span
                                 class="fa arrow"></span></a>
@@ -146,6 +158,7 @@
                             <li><a href="{{url('/summary-reports')}}"></i>Summary Reports</a></li> --}}
                         </ul>
                     </li>
+                    @endif
                     
                 </ul>
             </div>

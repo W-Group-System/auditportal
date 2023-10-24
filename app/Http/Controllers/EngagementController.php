@@ -41,6 +41,10 @@ class EngagementController extends Controller
         //
         
         $reports = AuditPlanObservation::get();
+        if(auth()->user()->role == 'Auditee')
+        {
+            $reports = AuditPlanObservation::where('user_id',auth()->user()->id)->get();
+        }
         return view('acr',
         array(
             'reports' => $reports,
@@ -78,6 +82,10 @@ class EngagementController extends Controller
     {
         $departments = Department::where('id','!=',auth()->user()->department_id)->get();
         $observations = AuditPlanObservation::doesntHave('explanation')->where('status','On-going')->get();
+        if(auth()->user()->role == 'Auditee')
+        {
+            $observations = AuditPlanObservation::doesntHave('explanation')->where('user_id',auth()->user()->id)->where('status','On-going')->get(); 
+        }
         return view('for_explanation',
             array(
                 'observations' => $observations,
