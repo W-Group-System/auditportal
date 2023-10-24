@@ -16,6 +16,12 @@ class ActionPlanController extends Controller
     public function index()
     {
         $action_plans = ActionPlan::where('status','Verified')->get();
+        if(auth()->user()->role == "Auditee")
+        {
+            $action_plans = ActionPlan::whereHas('observation',function( $query ){
+                $query->where('user_id',auth()->user()->id);
+            })->where('status','Verified')->get();
+        }
         return view('action_plans',
             array(
                 'action_plans' => $action_plans,
