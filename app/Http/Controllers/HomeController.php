@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Department;
+use App\AuditPlan;
+use App\ActionPlan;
+use App\AuditPlanObservation;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,13 +26,18 @@ class HomeController extends Controller
      */
     public function index()
     {
-       
+        $audits = AuditPlan::where('code','!=',null)->orderBy('audit_to','asc')->get();
+        $action_plans = ActionPlan::where('status','Verified')->get();
+        $reports = AuditPlanObservation::get();
         $results = $this->get_risks();
         $departments = Department::get();
         return view('home',
         array(
             'departmentResults' => $results,
             'departments' => $departments,
+            'audits' => $audits,
+            'reports' => $reports,
+            'action_plans' => $action_plans,
         ));
     }
 

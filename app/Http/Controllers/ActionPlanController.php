@@ -35,8 +35,9 @@ class ActionPlanController extends Controller
 
         $history = new ActionPlanRemark;
         $history->user_id = auth()->user()->id;
+        $history->action_plan_id = $id;
         $history->action = "Upload Proof";
-        $history->remarks = "Upload Proof by ".auth()->user()->name;
+        $history->remarks = "Upload Proof by ".auth()->user()->name." Remarks : ".$request->remarks;
         $history->save();
 
         Alert::success('Successfully Uploaded')->persistent('Dismiss');

@@ -94,8 +94,8 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='explanation' required>{{nl2br(e($observation->explanation->explanation))}}</textarea></td>
-                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='cause' required>{{nl2br(e($observation->explanation->cause))}}</textarea></td>
+                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='explanation' readonly required>{{$observation->explanation->explanation}}</textarea></td>
+                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='cause' readonly required>{{$observation->explanation->cause}}</textarea></td>
                                         </tr>
                                         <tr>
                                             <th colspan='2'>Correction or Immediate Action<br><small><i>(Immediate response to temporarily address the cause of observation within
@@ -104,7 +104,7 @@
                                         @foreach(($observation->action_plans)->where('immediate','!=',null) as $key => $action_plan)
                                         <tr>
                                             <td>
-                                                <textarea class='form-control' name='immediate_action[{{$action_plan->id}}]'  rows="6" cols="100" required placeholder="Correction or Immediate Action">{{nl2br(e($action_plan->action_plan))}}</textarea> </td>
+                                                <textarea class='form-control' name='immediate_action[{{$action_plan->id}}]'  rows="6" cols="100" required placeholder="Correction or Immediate Action">{{$action_plan->action_plan}}</textarea> </td>
                                                 <td>
                                                 <div class='form-group'>
                                                     <label class='col-sm-6 control-label text-left'>Other Party(ies) Involved :</label>
@@ -146,7 +146,7 @@
                                         <tr>
                                             
                                             <td>
-                                                <textarea class='form-control' name='action_plan[{{$action_plan->id}}]'  rows="6" cols="100" required placeholder='Corrective Action Plan'>{{nl2br(e($action_plan->action_plan))}}</textarea> </td>
+                                                <textarea class='form-control' name='action_plan[{{$action_plan->id}}]'  rows="6" cols="100" required placeholder='Corrective Action Plan'>{{$action_plan->action_plan}}</textarea> </td>
                                                 <td>
                                                 <div class='form-group text-left'>
                                                     <label class='col-sm-6 control-label text-left'>Other Party(ies) Involved :</label>

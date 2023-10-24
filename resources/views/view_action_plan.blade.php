@@ -24,6 +24,12 @@
                         </div>
                         <div class='row'>
                             <div class='col-md-12'>
+                                Remarks:
+                                <textarea name='remarks' class='form-control form-control-sm' required></textarea>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md-12'>
                                 Date Completed :
                                 <input name='date_completed' value='{{$action_plan->date_completed}}' class='form-control form-control-sm' type='date' required>
                             </div>

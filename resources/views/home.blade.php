@@ -10,10 +10,10 @@
       <div class="ibox float-e-margins">
           <div class="ibox-title">
               <span class="label label-success pull-right">as of Today</span>
-              <h5>Open Engagements</h5>
+              <h5>Total Engagements</h5>
           </div>
           <div class="ibox-content">
-              <h1 class="no-margins">0</h1>
+              <h1 class="no-margins">{{count($audits)}}</h1>
               {{-- <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div> --}}
               <small>&nbsp;</small>
           </div>
@@ -26,7 +26,7 @@
               <h5>Open Findings</h5>
           </div>
           <div class="ibox-content">
-              <h1 class="no-margins">0</h1>
+              <h1 class="no-margins">{{count($reports->where('findings','!=',null)->where('status','On-going'))}}</h1>
               {{-- <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div> --}}
               <small>&nbsp;</small>
           </div>
@@ -36,10 +36,10 @@
       <div class="ibox float-e-margins">
           <div class="ibox-title">
               <span class="label label-success pull-right">as of Today</span>
-              <h5>Action Plans not Due</h5>
+              <h5>Action Plans Due</h5>
           </div>
           <div class="ibox-content">
-              <h1 class="no-margins">0</h1>
+              <h1 class="no-margins">{{count($action_plans->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')))}}</h1>
               {{-- <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div> --}}
               <small>&nbsp;</small>
           </div>
@@ -49,10 +49,10 @@
       <div class="ibox float-e-margins">
           <div class="ibox-title">
               <span class="label label-success pull-right">as of this Month ({{date('M. Y')}})</span>
-              <h5>Action Plans Due</h5>
+              <h5>Action Plans not Due</h5>
           </div>
           <div class="ibox-content">
-              <h1 class="no-margins">0</h1>
+              <h1 class="no-margins">{{count($action_plans->where('status','!=','Closed')->where('target_date','>=',date('Y-m-d')))}}</h1>
               {{-- <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div> --}}
               <small>&nbsp;</small>
           </div>
@@ -106,12 +106,12 @@
                         <tr>
                             <td>{{$department->code}}</td>
                             <td>{{count(($department->action_plans)->where('status','Closed'))}}</td>
-                            <td>{{count(($department->action_plans)->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')))}}</td>
-                            <td>{{count(($department->action_plans)->where('status','!=','Closed')->where('target_date','>=',date('Y-m-d')))}}</td>
-                            <td>{{count($department->action_plans)}}</td>
+                            <td>{{count(($department->action_plans)->where('status','Verified')->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')))}}</td>
+                            <td>{{count(($department->action_plans)->where('status','Verified')->where('status','!=','Closed')->where('target_date','>=',date('Y-m-d')))}}</td>
+                            <td>{{count($department->action_plans->where('status','Verified'))}}</td>
                             <td>@php
                                 $closed = count(($department->action_plans)->where('status','Closed'));
-                                $delayed = count(($department->action_plans)->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')));
+                                $delayed = count(($department->action_plans)->where('status','Verified')->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')));
                                 $total = $closed + $delayed;
                                 if($closed+$delayed == 0)
                                 {
@@ -124,7 +124,7 @@
                                 
                             @endphp
                             @if(count($department->action_plans) == 0)
-                            0.00 %
+                            100.00 %
                             @else
                                 {{number_format($percent*100,2)}} %
                             @endif</td>
