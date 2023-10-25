@@ -94,8 +94,8 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='explanation' readonly>{{nl2br(e($observation->explanation->explanation))}}</textarea></td>
-                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='cause' readonly>{{nl2br(e($observation->explanation->cause))}}</textarea></td>
+                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='explanation' readonly>{{$observation->explanation->explanation}}</textarea></td>
+                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='cause' readonly>{{$observation->explanation->cause}}</textarea></td>
                                         </tr>
                                         <tr>
                                             <th colspan='2'>Correction or Immediate Action<br><small><i>(Immediate response to temporarily address the cause of observation within
