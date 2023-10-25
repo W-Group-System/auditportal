@@ -149,7 +149,7 @@
                         <a href="#"><i class="fa fa-list-ul"></i> <span class="nav-label">Reports</span><span
                                 class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            @if((auth()->user()->role == 'Administrator'))
+                            @if((auth()->user()->role == 'Administrator') || (auth()->user()->role == "IAD Approver"))
                             <li><a href="{{url('/logs')}}"></i>Logs</a></li>
                             @endif
                             <li><a href="{{url('/close-action-plans')}}"></i>Closed Action Plans</a></li>
