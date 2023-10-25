@@ -107,7 +107,7 @@
                             <td>{{$department->code}}</td>
                             <td>{{count(($department->action_plans)->where('status','Closed'))}}</td>
                             <td>{{count(($department->action_plans)->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')))}}</td>
-                            <td>{{count(($department->action_plans)>where('status','!=','Closed')->where('target_date','>=',date('Y-m-d')))}}</td>
+                            <td>{{count(($department->action_plans)->where('status','!=','Closed')->where('target_date','>=',date('Y-m-d')))}}</td>
                             <td>{{count($department->action_plans)}}</td>
                             <td>@php
                                 $closed = count(($department->action_plans)->where('status','Closed'));
