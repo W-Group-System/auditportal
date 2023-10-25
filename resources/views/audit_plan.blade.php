@@ -118,7 +118,7 @@
                                 <div class="panel-options">
                                     <ul class="nav nav-tabs">
                                         <li class="active"><a href="#tab-1" data-toggle="tab">Observations </a></li>
-                                        <li class=""><a href="#tab-2" data-toggle="tab">Action Plans</a></li>
+                                        {{-- <li class=""><a href="#tab-2" data-toggle="tab">Action Plans</a></li> --}}
                                     </ul>
                                 </div>
                             </div>
