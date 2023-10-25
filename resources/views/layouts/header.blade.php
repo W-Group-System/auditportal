@@ -65,11 +65,10 @@
                             </span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{auth()->user()->name}}</strong>
-                                    </span> <span class="text-muted text-xs block"><b
-                                            class="caret"></b></span> </span> </a>
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a href="{{url('profile')}}">Profile</a></li>
-                            </ul>
+                                 </span> <span class="text-muted text-xs block">{{auth()->user()->role}} <b class="caret"></b></span> </span> </a>
+                            {{-- <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a href="{{url('change-password')}}">Change Password</a></li>
+                            </ul> --}}
                         </div>
                         <div class="logo-element">
                             <img alt="image" class="img-circle" style='width:50px;' src="{{asset('images/no_image.png')}}" />

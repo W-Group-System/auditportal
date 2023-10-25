@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ACRApproved extends Notification
+class ForVerification extends Notification
 {
     use Queueable;
 
@@ -16,13 +16,9 @@ class ACRApproved extends Notification
      *
      * @return void
      */
-
-    protected $observation;
-    public function __construct($observation)
+    public function __construct()
     {
         //
-        $this->observation = $observation;
-
     }
 
     /**
@@ -45,14 +41,9 @@ class ACRApproved extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-        ->greeting('Good Day!')
-        ->subject($this->observation->code)
-        ->line('Kindly fill out Explanation, Cause, Agreed action plan (Corrective and Correction), Responsible party, and Target date.')
-        ->line('ACR Code : '.$this->observation->code)
-        ->line('Please click the button provided for faster transaction')
-        ->action('ACR', url('/for-explanation'))
-        ->line('An Explanation must be submitted within twenty-four (24) hours from the date of issuance. Failure to submit within the said period shall be deemed a waiver of your opportunity to explain and leave the auditors with no recourse but to submit our report based on available documents.')
-        ->line('Thank you for using our application!');
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', url('/'))
+                    ->line('Thank you for using our application!');
     }
 
     /**

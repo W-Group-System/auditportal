@@ -158,7 +158,7 @@ ini_set("memory_limit", "-1");
             <td  style='width:5%;'>{{$key+1}}</td>
             <td>{{$schedule->engagement_title}}</td>
             <td>{{$schedule->scope}}</td>
-            <td>@foreach($schedule->companies as $company) {{$company->company->code}} /@endforeach</td>
+            <td>@foreach($schedule->companies  as $key_s => $company) {{$company->company->code}} @if($key_s != 0)/@endif @endforeach</td>
             <td>@foreach($schedule->auditor_data as $auditor) {{$auditor->user->name}} <br>@endforeach</td>
             <td>{{date('M. d, Y',strtotime($schedule->audit_to))}}</td>
         </tr>
