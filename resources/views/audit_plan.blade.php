@@ -155,9 +155,12 @@
                                                         <li><a title='View' href="#view{{$observation->id}}" data-toggle="modal" >View</a></li>
                                                         @if(($observation->status == "For Approval") || ($observation->status == "Returned"))
                                                         <li><a title='Edit' href="{{url('edit-observation/'.$observation->id)}}" data-toggle="modal" >Edit</a></li>
+                                                        
                                                         @endif
-                                                        <li>
-                                                            <a title='Move to Findings' onclick='move_to("{{$observation->findings ? "yes" : "no"}}",{{$observation->id}})' data-toggle="modal" >Move to {{$observation->findings ? "Observations" : "Findings"}}</a></li>
+                                                        @if($observation->status == "On-going")
+                                                        <li><a title='Move to Findings' onclick='move_to("{{$observation->findings ? "yes" : "no"}}",{{$observation->id}})' data-toggle="modal" >Move to {{$observation->findings ? "Observations" : "Findings"}}</a></li>
+                                                      
+                                                        @endif
                                                       </ul>
                                                 </div>
 
