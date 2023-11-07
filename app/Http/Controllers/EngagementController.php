@@ -497,11 +497,14 @@ class EngagementController extends Controller
             $user->notify(new ACRApproved($observation));
             $observation->status = "On-going";
         }
-        else
+        elseif($request->action == "Returned")
         {
             $user = User::findOrfail($observation->created_by);
             $user->notify(new ACRReturned($observation,$request->remarks));
             $observation->status = "Returned";
+        }
+        else{
+            $observation->status = "Declined";
         }
         $observation->save();
 
