@@ -109,10 +109,12 @@
                                
                             >
                                 <td><a href="{{url('view-calendar/'.$audit->id)}}"  class='btn btn-sm btn-info'><i class="fa fa-eye"></i></a></td>
-                                <td @if(($audit->attachments)->where('type','=','Closing Report')->first() == null)
+                                <td @if(($audit->attachments)->where('type','Closing Report')->first() != null)
                                     class='bg-info text-dark'
-                                    @elseif(($audit->attachments)->where('type','=','Initial Report')->first() == null)
+                                    @elseif(($audit->attachments)->where('type','=','Initial Report')->first() != null)
                                     class='bg-warning text-dark'
+                                    @else
+
                                     @endif>{{$audit->code}}</td>
                                 <td>{{$audit->engagement_title}}</td>
                                 <td><small>@foreach($audit->department as $dept) {{$dept->department_name->code}} - {{$dept->user_name->name}} <br> @endforeach</small></td>
