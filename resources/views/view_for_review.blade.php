@@ -110,7 +110,7 @@
                                                     <label class='col-sm-6 control-label text-left'>Other Party(ies) Involved :</label>
                                                     <div class="col-sm-6">
                                                        
-                                                        <select name='other_parties_immediate_action[{{$action_plan->id}}][]' disabled data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm' multiple >
+                                                        <select name='other_parties_immediate_action[{{$action_plan->id}}][]' disabled data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
                                                             <option value=''></option>
                                                             @foreach($departments as $department)
                                                                 <option value='{{$department->id}}' @if(count(($action_plan->teams)->where('department_id',$department->id)) == 1) selected @endif>{{$department->code}}</option>
@@ -153,7 +153,7 @@
                                                     <label class='col-sm-6 control-label text-left'>Other Party(ies) Involved :</label>
                                                     <div class="col-sm-6">
                                                         
-                                                        <select name='other_parties_action_plan[{{$action_plan->id}}][]' disabled data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm ' multiple >
+                                                        <select name='other_parties_action_plan[{{$action_plan->id}}][]' disabled data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
                                                             <option value=''></option>
                                                             @foreach($departments as $department)
                                                                 <option value='{{$department->id}}' @if(count(($action_plan->teams)->where('department_id',$department->id)) == 1) selected @endif>{{$department->code}}</option>
