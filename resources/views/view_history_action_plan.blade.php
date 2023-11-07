@@ -32,7 +32,7 @@
                                 {{$history->remarks}}
                             </div>
                             <div class='col-md-3 border border-primary border-top-bottom border-left-right'>
-                                {{date('M. d, Y h:i:a',strtotime($history->created_at))}}
+                                {{date('M. d, Y h:i:a',strtotime('+8 hours',strtotime($history->created_at)))}}
                             </div>
                         </div>
                         @endforeach
