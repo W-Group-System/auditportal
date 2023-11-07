@@ -27,7 +27,7 @@ class HomeController extends Controller
     public function index()
     {
         $audits = AuditPlan::where('code','!=',null)->orderBy('audit_to','asc')->get();
-        $action_plans = ActionPlan::where('status','Verified')->get();
+        $action_plans = ActionPlan::where('status','Verified')->where('action_plan','!=',"N/A")->get();
         $reports = AuditPlanObservation::get();
         $results = $this->get_risks();
         $departments = Department::get();
