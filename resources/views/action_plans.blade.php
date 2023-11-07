@@ -48,9 +48,13 @@
                                                     <li><a title='Update' href="#view{{$action_plan->id}}" data-toggle="modal" >Upload</a></li>
                                                     <li><a title='Change Target Date' href="#change{{$action_plan->id}}" data-toggle="modal" >Change Target Date</a></li>
                                                     <li><a title='Return Action Plan' href="#return{{$action_plan->id}}" data-toggle="modal" >Return Action Plan</a></li>
-                                                    @if($action_plan->attachment != null)
+                                                    @if($action_plan->attachment == null)  For Auditee Uploading </span>
+                                                    @elseif($action_plan->iad_status == "Returned")
+                                                    @else
                                                     <li><a title='Closed Action Plan' href="#closed{{$action_plan->id}}" data-toggle="modal" >Close Action Plan</a></li>
                                                     @endif
+                                                    
+                                                   
                                                     <li><a title='View History' href="#view_history{{$action_plan->id}}" data-toggle="modal" >View History</a></li>
                                                 @endif
                                             </ul>
