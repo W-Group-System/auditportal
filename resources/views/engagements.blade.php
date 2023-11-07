@@ -106,14 +106,14 @@
                            
                             <tr 
 
-                                @if(($audit->attachments)->where('Closing Report')->first() == null)
-                                class='text-success'
-                                @elseif(($audit->attachments)->where('Initial Report')->first() == null)
-                                class='text-warning'
-                                @endif
+                               
                             >
                                 <td><a href="{{url('view-calendar/'.$audit->id)}}"  class='btn btn-sm btn-info'><i class="fa fa-eye"></i></a></td>
-                                <td>{{$audit->code}}</td>
+                                <td  @if(($audit->attachments)->where('Closing Report')->first() == null)
+                                    class='bg-info text-dark'
+                                    @elseif(($audit->attachments)->where('Initial Report')->first() == null)
+                                    class='bg-warning text-dark'
+                                    @endif>{{$audit->code}}</td>
                                 <td>{{$audit->engagement_title}}</td>
                                 <td><small>@foreach($audit->department as $dept) {{$dept->department_name->code}} - {{$dept->user_name->name}} <br> @endforeach</small></td>
                                 <td>@foreach($audit->auditor_data as $auditor) {{$auditor->user->name}} <br>@endforeach</td>
