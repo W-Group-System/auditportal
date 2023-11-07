@@ -20,7 +20,7 @@
                     <strong>{{$errors->first()}}</strong>
                 </div>
             @endif
-                <div class="wrap-input100 validate-input" >
+                <div class="wrap-input100 " >
                     <input  type="email" class="input100" name="email" value="" required >
                     <span class="focus-input100"></span>
                     <span class="label-input100">Email</span>
