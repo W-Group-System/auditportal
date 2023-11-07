@@ -107,9 +107,9 @@
                             <tr 
 
                                 @if(($audit->attachments)->where('Closing Report')->first() == null)
-                                class='bg-success'
+                                class='bg-info text-dark'
                                 @elseif(($audit->attachments)->where('Initial Report')->first() == null)
-                                class='bg-warning'
+                                class='bg-warning text-dark'
                                 @endif
                             >
                                 <td><a href="{{url('view-calendar/'.$audit->id)}}"  class='btn btn-sm btn-info'><i class="fa fa-eye"></i></a></td>
