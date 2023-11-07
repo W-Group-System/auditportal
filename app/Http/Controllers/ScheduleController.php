@@ -560,7 +560,6 @@ class ScheduleController extends Controller
         $auditPlanObservation->created_by = auth()->user()->id;
         $auditPlanObservation->overall_number = $risk;
         $auditPlanObservation->overall_risk = $risks->name;
-        $auditPlanObservation->code = $this->generate_code_acr($request->audit_date);
         $auditPlanObservation->date_audit = $request->audit_date;
         $auditPlanObservation->target_date = $request->target_date;
         $auditPlanObservation->department_id = $user->department_id;
