@@ -67,7 +67,11 @@ class HomeController extends Controller
                 $observation = $a + $observation;
                 if($observation != 0)
                 {
-                $risk = (($audit_plan)->where('findings','!=',null)->sum('overall_number')) + $risk;
+                    if($audit_plan->findings != null)
+                    {
+
+                        $risk = $audit_plan->overall_number + $risk;
+                    }
                 }
                 else
                 {
@@ -77,6 +81,7 @@ class HomeController extends Controller
             array_push($deptFindings,$observation);
             if($observation != 0)
             {
+                dd($risk);
             array_push($deptRisk,round($risk/$observation,2));
             }
             else
