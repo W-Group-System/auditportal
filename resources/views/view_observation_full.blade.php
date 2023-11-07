@@ -83,7 +83,7 @@
                             </div>
                             <div class='col-md-6'>
                                 @php
-                                    $approver = ($observation->histories)->where('action','IAD Approved')->first();
+                                    $approver = ($observation->histories)->where('action','like','%Approved%')->first();
                                     $approver_declined = ($observation->histories)->where('action','IAD Declined')->first();
                                 @endphp
                                 @if($observation->status == "Declined")
