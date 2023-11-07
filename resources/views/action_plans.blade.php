@@ -58,7 +58,7 @@
                                     <td>{{$action_plan->observation->audit_plan->engagement_title}}</td>
                                     <td>{{$action_plan->observation->created_by_user->name}}</td>
                                     <td>{{$action_plan->observation->user->name}}</td>
-                                    <td>{{nl2br(e($action_plan->action_plan))}}</td>
+                                    <td>{{$action_plan->action_plan}}</td>
                                     <td>{{$action_plan->target_date}}</td>
                                     <td>{{$action_plan->date_completed}}</td>
                                     <td>@if($action_plan->immediate == 1) Correction or Immediate Action @else Corrective Action Plan @endif</td>
