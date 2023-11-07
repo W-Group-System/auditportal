@@ -48,7 +48,7 @@ class Verified extends Notification
         ->subject('Action Plan has been verified')
         ->line('ACR Code : '.$this->observation->code)
         ->line('Please click the button provided for faster transaction')
-        ->action('Action Plans', url('/action-plan'))
+        ->action('Action Plans', url('/action-plans'))
         ->line('Thank you for using our application!');
     }
 
