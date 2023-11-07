@@ -539,6 +539,13 @@ class ScheduleController extends Controller
         return redirect('view-calendar/'.$id);
 
     }
+    public function remove_attachment($id)
+    {
+        $attachment = AuditPlanAttachment::findOrfail($id)->delete();
+        Alert::success('Successfully deleted')->persistent('Dismiss');
+        return back();
+
+    }
     public function save_edit(Request $request,$id)
     {
         $consequence = explode("-",$request->consequence);

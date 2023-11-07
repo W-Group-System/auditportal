@@ -66,7 +66,10 @@
                                                     <td>{{$attachment->type}}</td>
                                                     <td><a href="{{url($attachment->file)}}" target='_blank'><i class='fa fa-file'></i></a></td>
                                                     <td>{{$attachment->user->name}}</td>
-                                                    <td><a href='#' data-target="#share{{$attachment->id}}" data-toggle="modal" title='Share'><i class="fa fa-edit"></i></a> @foreach($attachment->share as $share){{$share->user->name}} ,@endforeach</td>
+                                                    <td>
+                                                        <a href='#' data-target="#share{{$attachment->id}}" data-toggle="modal" title='Share'><i class="fa fa-edit"></i></a> @foreach($attachment->share as $share){{$share->user->name}} ,@endforeach
+                                                        <a href='{{url("/remove-attachment/".$attachment->id)}}' onclick="return confirm('Are you sure you want to delete this?')">Delete</a>
+                                                    </td>
                                                 </tr>
                                                 @include('share')
                                                 @endforeach

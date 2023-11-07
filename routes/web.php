@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('monthly-report','ScheduleController@monthly_report')->name('calendar');
     Route::post('upload-monthly','ScheduleController@upload')->name('calendar');
     Route::post('upload-attachment/{id}','ScheduleController@attachment')->name('calendar');
+    Route::get('remove-attachment/{id}','ScheduleController@remove_attachment')->name('calendar');
     Route::post('edit-schedule/{id}','ScheduleController@edit')->name('calendar');
     Route::get('view-calendar/{id}','ScheduleController@view');
     Route::get('autorithy/{id}','ScheduleController@authority')->name('calendar');
