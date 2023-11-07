@@ -235,7 +235,7 @@ hr {
             <td class="text-center" >{!!html_entity_decode($action_plan->action_plan)!!}</td>
             <td class="text-center" >
                 @php
-                    $title = explode( '</p>',$action_plan->observation->observation)
+                    $title = explode('</p>',$action_plan->observation->observation)
                 @endphp
                 {!!html_entity_decode($title[0])!!}</td>
             <td class="text-center">
@@ -252,7 +252,10 @@ hr {
                 @endif
             </td>
             <td class="text-center">{{$action_plan->target_date}}</td>
-            <td class="text-center" >@foreach($action_plan->teams as $ke => $team){{$team->department->code}} @if(count($action_plan->teams) != $ke+1),@endif @endforeach</td>
+            <td class="text-center" >
+                {{$action_plan->department->code}}
+                {{-- @foreach($action_plan->teams as $ke => $team){{$team->department->code}} @if(count($action_plan->teams) != $ke+1),@endif @endforeach --}}
+            </td>
             <td class="text-center" >@if($action_plan->status == "Closed") <span style="color:green;"> Closed </span> @else<span class='label label-warning' @if($action_plan->target_date > date('Y-m-d'))style="color:blue;" @else style="color:red;" @endif> Open </span> @endif</td>
         </tr>
         @endif

@@ -23,4 +23,8 @@ class ActionPlan extends Model implements Auditable
     {
         return $this->hasMany(ActionPlanRemark::class)->orderBy('created_at','desc');
     }
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
 }
