@@ -89,6 +89,7 @@ class ActionPlanController extends Controller
     {
         $action_plan = ActionPlan::findOrfail($id);
         $action_plan->iad_status = "Returned";
+        $action_plan->status = "Verified";
         $action_plan->save();
 
         $history = new ActionPlanRemark;
