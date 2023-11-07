@@ -40,7 +40,10 @@
                                             <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><i class="fa fa-ellipsis-v"></i> </button>
                                             <ul class="dropdown-menu">
                                                  <li><a title='View History' href="#view_history{{$action_plan->id}}" data-toggle="modal" >View History</a></li>
-                                               </ul>
+                                                 @if((auth()->user()->role == "IAD Approver") || (auth()->user()->role == "Administrator"))
+                                                 <li><a title='Return Action Plan' href="#return_action{{$action_plan->id}}" data-toggle="modal" >Re-open Action Plan</a></li>
+                                                @endif
+                                            </ul>
                                         </div>
 
                                     </td>
@@ -75,6 +78,7 @@
 </div>
 @foreach($action_plans as $action_plan)
     @include('view_history_action_plan')
+    @include('return_action_plan')
 @endforeach
 @endsection
 @section('js')
