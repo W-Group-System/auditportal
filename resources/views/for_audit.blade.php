@@ -112,13 +112,13 @@
                                 <td><small>@foreach($audit->department as $dept) {{$dept->department_name->code}} - {{$dept->user_name->name}} <br> @endforeach</small></td>
                                 <td>@foreach($audit->auditor_data as $auditor) {{$auditor->user->name}} <br>@endforeach</td>
                                 <td>{{count(($audit->observations)->where('findings',null))}}</td>
-                                <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','=','closed'))}}</td>
-                                <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','closed')->where('target_date','>',date('Y-m-d')))}}</td>
-                                <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','closed')->where('target_date','>=',date('Y-m-d')))}}</td>
+                                <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','=','Closed'))}}</td>
+                                <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','Closed')->where('target_date','>',date('Y-m-d')))}}</td>
+                                <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','Closed')->where('target_date','>=',date('Y-m-d')))}}</td>
                                 <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A"))}}</td>
                                 <td>@php
-                                        $closed = count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','closed'));
-                                        $delayed = count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','closed')->where('target_date','<',date('Y-m-d')));
+                                        $closed = count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'));
+                                        $delayed = count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')));
                                         $total = $closed + $delayed;
                                         if($closed+$delayed == 0)
                                         {
