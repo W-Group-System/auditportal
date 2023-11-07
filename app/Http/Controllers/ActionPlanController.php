@@ -41,6 +41,7 @@ class ActionPlanController extends Controller
         $attachment->move(public_path() . '/action_plan_attachments/', $name);
         $file_name = '/action_plan_attachments/' . $name;
         $action_plan->attachment = $file_name;
+        $action_plan->iad_status = null;
         $action_plan->date_completed = $request->date_completed;
         $action_plan->save();
 
