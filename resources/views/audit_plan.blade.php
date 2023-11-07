@@ -118,7 +118,7 @@
                                 <div class="panel-options">
                                     <ul class="nav nav-tabs">
                                         <li class="active"><a href="#tab-1" data-toggle="tab">Observations </a></li>
-                                        {{-- <li class=""><a href="#tab-2" data-toggle="tab">Action Plans</a></li> --}}
+                                        <li class=""><a href="#tab-2" data-toggle="tab">Action Plans</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -148,8 +148,8 @@
                                                     <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><i class="fa fa-ellipsis-v"></i> </button>
                                                     <ul class="dropdown-menu">
                                                         <li><a title='View' href="#view{{$observation->id}}" data-toggle="modal" >View</a></li>
-                                                        @if($observation->status == "For Approval")
-                                                        <li><a title='Edit' href="#edit{{$observation->id}}" data-toggle="modal" >Edit</a></li>
+                                                        @if(($observation->status == "For Approval") || ($observation->status == "Returned"))
+                                                        <li><a title='Edit' href="{{url('edit-observation/'.$observation->id)}}" data-toggle="modal" >Edit</a></li>
                                                         @endif
                                                         <li>
                                                             <a title='Move to Findings' onclick='move_to("{{$observation->findings ? "yes" : "no"}}",{{$observation->id}})' data-toggle="modal" >Move to {{$observation->findings ? "Observations" : "Findings"}}</a></li>
@@ -165,7 +165,7 @@
                                                
                                             </td>
                                             <td>
-                                                @if($observation->status == "For Approval")
+                                                @if(($observation->status == "For Approval") || ($observation->status == "Returned"))
                                                     <span class='label label-warning'>{{$observation->status}}</span>
                                                 @elseif($observation->status == "Declined")
                                                 <span class='label label-danger'>DECLINED</span>
@@ -199,19 +199,32 @@
 
                                 <table class="table table-striped">
                                     <thead>
-                                        <tr>
-                                            
                                             <tr>
                                                 <th>ACR CODE</th>
-                                                <th>Observation</th>
-                                                <th>Action Plan</th>
-                                                <th>Other Part(ies) Involved</th>
+                                                <th>Agreed Action Plan</th>
+                                                <th>Auditee</th>
                                                 <th>Status</th>
                                                 <th>Target Date</th>
                                             </tr>
-                                        </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach($audit_plan->observations as $observation)
+                                            @foreach($observation->action_plans as $action_plan)
+                                                <tr>
+                                                    <td>{{$observation->code}}</td>
+                                                    <td>{{nl2br(e($action_plan->action_plan))}}</td>
+                                                    <td>{{$action_plan->observation->user->name}}</td>
+                                                    <td> 
+                                                        @if($action_plan->attachment == null) For Auditee Uploading 
+                                                        @elseif($action_plan->iad_status == "Returned")
+                                                            Returned Action Plan
+                                                        @else For IAD Checking 
+                                                        @endif</td>
+                                                    <td>{{$action_plan->target_date}}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endforeach
+                                    </tbody>
                                        
                                 </table>
 

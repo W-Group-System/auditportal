@@ -16,9 +16,12 @@ class ForVerification extends Notification
      *
      * @return void
      */
-    public function __construct()
+    protected $observation;
+    public function __construct($observation)
     {
         //
+        $this->observation = $observation;
+
     }
 
     /**
@@ -41,9 +44,12 @@ class ForVerification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        ->greeting('Good Day!')
+        ->subject('For Verification')
+        ->line('ACR Code : '.$this->observation->code)
+        ->line('Please click the button provided for faster transaction')
+        ->action('ACR For Verification', url('/for-verification-acr'))
+        ->line('Thank you for using our application!');
     }
 
     /**

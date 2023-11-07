@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class SubmitProof extends Notification
+class ACRReturned extends Notification
 {
     use Queueable;
 
@@ -17,10 +17,12 @@ class SubmitProof extends Notification
      * @return void
      */
     protected $observation;
-    public function __construct($observation)
+    protected $remarks;
+    public function __construct($observation,$remarks)
     {
         //
         $this->observation = $observation;
+        $this->remarks = $remarks;
 
     }
 
@@ -45,11 +47,12 @@ class SubmitProof extends Notification
     {
         return (new MailMessage)
         ->greeting('Good Day!')
-        ->subject('Action Plan')
-        ->line('Proof has been submitted')
+        ->subject($this->observation->code)
+        ->line('Your new ACR has been returned. Kindly edit and resubmit it.')
         ->line('ACR Code : '.$this->observation->code)
+        ->line('Remarks : '.$this->remarks)
         ->line('Please click the button provided for faster transaction')
-        ->action('Action Plans', url('/action-plan'))
+        ->action('ACR', url('/edit-observation/'.$this->observation->id))
         ->line('Thank you for using our application!');
     }
 

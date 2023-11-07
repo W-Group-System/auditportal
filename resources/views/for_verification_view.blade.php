@@ -104,12 +104,12 @@
                                         @foreach(($observation->action_plans)->where('immediate','!=',null) as $key => $action_plan)
                                         <tr>
                                             <td>
-                                                <textarea class='form-control' name='immediate_action[{{$action_plan->id}}]' readonly  rows="6" cols="100" required placeholder="Correction or Immediate Action">{{$action_plan->action_plan}}</textarea> </td>
+                                                <textarea class='form-control' name='immediate_action[{{$action_plan->id}}]'  rows="6" cols="100" required placeholder="Correction or Immediate Action">{{$action_plan->action_plan}}</textarea> </td>
                                                 <td>
                                                 <div class='form-group'>
                                                     <label class='col-sm-6 control-label text-left'>Other Party(ies) Involved :</label>
                                                     <div class="col-sm-6">
-                                                        <select name='other_parties_immediate_action[{{$action_plan->id}}][]' readonly data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
+                                                        <select name='other_parties_immediate_action[{{$action_plan->id}}][]' data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
                                                             <option value=''></option>
                                                             @foreach($departments as $department)
                                                                 <option value='{{$department->id}}' @if(count(($action_plan->teams)->where('department_id',$department->id)) == 1) selected @endif>{{$department->code}}</option>
@@ -146,12 +146,12 @@
                                         <tr>
                                             
                                             <td>
-                                                <textarea class='form-control' name='action_plan[{{$action_plan->id}}]' readonly  rows="6" cols="100" required placeholder='Corrective Action Plan'>{{$action_plan->action_plan}}</textarea> </td>
+                                                <textarea class='form-control' name='action_plan[{{$action_plan->id}}]'  rows="6" cols="100" required placeholder='Corrective Action Plan'>{{$action_plan->action_plan}}</textarea> </td>
                                                 <td>
                                                 <div class='form-group text-left'>
                                                     <label class='col-sm-6 control-label text-left'>Other Party(ies) Involved :</label>
                                                     <div class="col-sm-6">
-                                                        <select name='other_parties_action_plan[{{$action_plan->id}}][]' readonly data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
+                                                        <select name='other_parties_action_plan[{{$action_plan->id}}][]' data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
                                                             <option value=''></option>
                                                             @foreach($departments as $department)
                                                                 <option value='{{$department->id}}' @if(count(($action_plan->teams)->where('department_id',$department->id)) == 1) selected @endif>{{$department->code}}</option>

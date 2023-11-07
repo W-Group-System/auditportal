@@ -14,6 +14,10 @@ use App\ExplanationHistory;
 use App\User;
 use App\AuditPlanObservationHistory;
 use App\Notifications\ACRApproved;
+use App\Notifications\ACRReturned;
+use App\Notifications\ForVerification;
+use App\Notifications\Verified;
+use App\Notifications\Reply;
 use Illuminate\Http\Request;
 use PDF;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -196,7 +200,8 @@ class EngagementController extends Controller
                 $involve->save();
             }
         }
-
+        $user = User::findOrfail($audit_plan->created_by);
+        $user->notify(new Reply($audit_plan));
         Alert::success('Successfully Submitted')->persistent('Dismiss');
         return back();
 
@@ -296,13 +301,18 @@ class EngagementController extends Controller
         $history->remarks = $request->remarks;
         $history->user_id = auth()->user()->id;
         $history->save();
-
+        $user = User::findOrfail($audit_plan_observation->user_id);
+        $user->notify(new Verified($audit_plan_observation));
+        $userd = User::findOrfail($audit_plan_observation->created_by);
+        $userd->notify(new Verified($audit_plan_observation));
+        
         Alert::success('Successfully Verified')->persistent('Dismiss');
         return back();
 
     }
     public function reviewed(Request $request,$id)
     {
+        $observation = AuditPlanObservation::findOrfail($id);
         $new_explanation = Explanation::where('audit_plan_observation_id',$id)->first();
         $new_explanation->explanation = $request->explanation;
         $new_explanation->cause = $request->cause;
@@ -311,105 +321,109 @@ class EngagementController extends Controller
         $new_explanation->save();
 
      
-        foreach($request->immediate_action as $key => $action_plan)
-        {
-            $new_action_plan = ActionPlan::findOrfail($key);
-            $new_action_plan->action_plan = $action_plan;
-            $new_action_plan->date_completed = $request->date_completed[$key];
-            $new_action_plan->target_date = $request->date_completed[$key];
-            $new_action_plan->reviewed_by = auth()->user()->id;
-            $new_action_plan->status = "For Verification";
+        // foreach($request->immediate_action as $key => $action_plan)
+        // {
+        //     $new_action_plan = ActionPlan::findOrfail($key);
+        //     $new_action_plan->action_plan = $action_plan;
+        //     $new_action_plan->date_completed = $request->date_completed[$key];
+        //     $new_action_plan->target_date = $request->date_completed[$key];
+        //     $new_action_plan->reviewed_by = auth()->user()->id;
+        //     $new_action_plan->status = "For Verification";
             
-            if($request->has('supporting_documents_immediate_action'))
-            {
-                if(array_key_exists($key,$request->file('supporting_documents_immediate_action')))
-                {
-                    $attachment = $request->file('supporting_documents_immediate_action')[$key];
-                    $name = time() . '_' . $attachment->getClientOriginalName();
-                    $attachment->move(public_path() . '/action_plan_attachments/', $name);
-                    $file_name = '/action_plan_attachments/' . $name;
-                    $new_action_plan->attachment = $file_name;
-                }
+        //     if($request->has('supporting_documents_immediate_action'))
+        //     {
+        //         if(array_key_exists($key,$request->file('supporting_documents_immediate_action')))
+        //         {
+        //             $attachment = $request->file('supporting_documents_immediate_action')[$key];
+        //             $name = time() . '_' . $attachment->getClientOriginalName();
+        //             $attachment->move(public_path() . '/action_plan_attachments/', $name);
+        //             $file_name = '/action_plan_attachments/' . $name;
+        //             $new_action_plan->attachment = $file_name;
+        //         }
                
-            }
-            $new_action_plan->save();
-            ActionPlanInvolve::where('action_plan_id',$key)->delete();
-            if($request->other_parties_immediate_action != null)
-            {
-                if(array_key_exists($key,$request->other_parties_immediate_action))
-                {
-                    foreach($request->other_parties_immediate_action[$key] as $party)
-                    {
-                        $involve = new ActionPlanInvolve;
-                        $involve->action_plan_id = $new_action_plan->id;
-                        $involve->department_id =$party;
-                        $involve->save();
-                    }
-                }
+        //     }
+        //     $new_action_plan->save();
+        //     ActionPlanInvolve::where('action_plan_id',$key)->delete();
+        //     if($request->other_parties_immediate_action != null)
+        //     {
+        //         if(array_key_exists($key,$request->other_parties_immediate_action))
+        //         {
+        //             foreach($request->other_parties_immediate_action[$key] as $party)
+        //             {
+        //                 $involve = new ActionPlanInvolve;
+        //                 $involve->action_plan_id = $new_action_plan->id;
+        //                 $involve->department_id =$party;
+        //                 $involve->save();
+        //             }
+        //         }
                 
-            }
+        //     }
 
-            $history = new ActionPlanRemark;
-            $history->action_plan_id = $key;
-            $history->action = $request->action;
-            $history->remarks = $request->remarks;
-            $history->user_id = auth()->user()->id;
-            $history->save();
+        //     $history = new ActionPlanRemark;
+        //     $history->action_plan_id = $key;
+        //     $history->action = $request->action;
+        //     $history->remarks = $request->remarks;
+        //     $history->user_id = auth()->user()->id;
+        //     $history->save();
           
-        }
-        foreach($request->action_plan as $key => $action_plan)
-        {
-            $new_action_plan_second = ActionPlan::findOrfail($key);
-            $new_action_plan_second->action_plan = $action_plan;
-            $new_action_plan_second->target_date = $request->date_complete[$key];
-            $new_action_plan_second->reviewed_by = auth()->user()->id;
-            $new_action_plan_second->status = "For Verification";
+        // }
+        // foreach($request->action_plan as $key => $action_plan)
+        // {
+        //     $new_action_plan_second = ActionPlan::findOrfail($key);
+        //     $new_action_plan_second->action_plan = $action_plan;
+        //     $new_action_plan_second->target_date = $request->date_complete[$key];
+        //     $new_action_plan_second->reviewed_by = auth()->user()->id;
+        //     $new_action_plan_second->status = "For Verification";
             
-            if($request->has('supporting_documents'))
-            {
-                if(array_key_exists($key,$request->file('supporting_documents')))
-                {
-                    $attachment = $request->file('supporting_documents')[$key];
-                    $name = time() . '_' . $attachment->getClientOriginalName();
-                    $attachment->move(public_path() . '/action_plan_attachments/', $name);
-                    $file_name = '/action_plan_attachments/' . $name;
-                    $new_action_plan_second->attachment = $file_name;
-                }
+        //     if($request->has('supporting_documents'))
+        //     {
+        //         if(array_key_exists($key,$request->file('supporting_documents')))
+        //         {
+        //             $attachment = $request->file('supporting_documents')[$key];
+        //             $name = time() . '_' . $attachment->getClientOriginalName();
+        //             $attachment->move(public_path() . '/action_plan_attachments/', $name);
+        //             $file_name = '/action_plan_attachments/' . $name;
+        //             $new_action_plan_second->attachment = $file_name;
+        //         }
                
-            }
+        //     }
 
-            $new_action_plan_second->save();
-            ActionPlanInvolve::where('action_plan_id',$key)->delete();
-            if($request->other_parties_action_plan != null)
-            {
-                if(array_key_exists($key,$request->other_parties_action_plan))
-                {
-                    foreach($request->other_parties_action_plan[$key] as $party)
-                    {
-                        $involve = new ActionPlanInvolve;
-                        $involve->action_plan_id = $new_action_plan->id;
-                        $involve->department_id =$party;
-                        $involve->save();
-                    }
-                }
+        //     $new_action_plan_second->save();
+        //     ActionPlanInvolve::where('action_plan_id',$key)->delete();
+        //     if($request->other_parties_action_plan != null)
+        //     {
+        //         if(array_key_exists($key,$request->other_parties_action_plan))
+        //         {
+        //             foreach($request->other_parties_action_plan[$key] as $party)
+        //             {
+        //                 $involve = new ActionPlanInvolve;
+        //                 $involve->action_plan_id = $new_action_plan->id;
+        //                 $involve->department_id =$party;
+        //                 $involve->save();
+        //             }
+        //         }
                 
-            }
+        //     }
 
-            $history = new ActionPlanRemark;
-            $history->action_plan_id = $key;
-            $history->action = $request->action;
-            $history->remarks = $request->remarks;
-            $history->user_id = auth()->user()->id;
-            $history->save();
+        //     $history = new ActionPlanRemark;
+        //     $history->action_plan_id = $key;
+        //     $history->action = $request->action;
+        //     $history->remarks = $request->remarks;
+        //     $history->user_id = auth()->user()->id;
+        //     $history->save();
           
-        }
+        // }
         $history = new ExplanationHistory;
         $history->explanation_id = $new_explanation->id;
         $history->action = $request->action;
         $history->remarks = $request->remarks;
         $history->user_id = auth()->user()->id;
         $history->save();
-
+        $users = User::where('role','IAD Approver')->where('status',null)->get();
+        foreach($users as $user)
+        {
+            $user->notify(new ForVerification($observation));
+        }
         Alert::success('Successfully Reviewed')->persistent('Dismiss');
         return back();
 
@@ -483,18 +497,18 @@ class EngagementController extends Controller
         }
         else
         {
-            $observation->status = "Declined";
+            $user = User::findOrfail($observation->created_by);
+            $user->notify(new ACRReturned($observation,$request->remarks));
+            $observation->status = "Returned";
         }
         $observation->save();
 
         $newHistory = new AuditPlanObservationHistory;
         $newHistory->audit_plan_observation_id = $id;
-        $newHistory->action = "IAD ".$request->action;
+        $newHistory->action = "IAD  -".$request->action;
         $newHistory->user_id = auth()->user()->id;
         $newHistory->remarks = $request->remarks;
         $newHistory->save();
-        
-        
         
         Alert::success('Successfully Submitted')->persistent('Dismiss');
         return back();

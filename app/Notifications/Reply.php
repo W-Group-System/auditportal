@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class SubmitProof extends Notification
+class Reply extends Notification
 {
     use Queueable;
 
@@ -45,11 +45,11 @@ class SubmitProof extends Notification
     {
         return (new MailMessage)
         ->greeting('Good Day!')
-        ->subject('Action Plan')
-        ->line('Proof has been submitted')
+        ->subject('For Review')
+        ->line('Explanation has been submitted')
         ->line('ACR Code : '.$this->observation->code)
         ->line('Please click the button provided for faster transaction')
-        ->action('Action Plans', url('/action-plan'))
+        ->action('ACR For Review', url('/for-review'))
         ->line('Thank you for using our application!');
     }
 

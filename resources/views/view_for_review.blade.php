@@ -109,7 +109,13 @@
                                                 <div class='form-group'>
                                                     <label class='col-sm-6 control-label text-left'>Other Party(ies) Involved :</label>
                                                     <div class="col-sm-6">
-                                                        <select name='other_parties_immediate_action[{{$action_plan->id}}][]' data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' readonly multiple >
+                                                        <select name='other_parties_immediate_action_view[{{$action_plan->id}}][]' disabled disable data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
+                                                            <option value=''></option>
+                                                            @foreach($departments as $department)
+                                                                <option value='{{$department->id}}' @if(count(($action_plan->teams)->where('department_id',$department->id)) == 1) selected @endif>{{$department->code}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <select name='other_parties_immediate_action[{{$action_plan->id}}][]' style='display :none;' data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm' multiple >
                                                             <option value=''></option>
                                                             @foreach($departments as $department)
                                                                 <option value='{{$department->id}}' @if(count(($action_plan->teams)->where('department_id',$department->id)) == 1) selected @endif>{{$department->code}}</option>
@@ -151,7 +157,13 @@
                                                 <div class='form-group text-left'>
                                                     <label class='col-sm-6 control-label text-left'>Other Party(ies) Involved :</label>
                                                     <div class="col-sm-6">
-                                                        <select name='other_parties_action_plan[{{$action_plan->id}}][]' readonly data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
+                                                        <select name='other_parties_action_plan_view[{{$action_plan->id}}][]' disabled  data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
+                                                            <option value=''></option>
+                                                            @foreach($departments as $department)
+                                                                <option value='{{$department->id}}' @if(count(($action_plan->teams)->where('department_id',$department->id)) == 1) selected @endif>{{$department->code}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <select name='other_parties_action_plan[{{$action_plan->id}}][]' style='display:none;'  data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm ' multiple >
                                                             <option value=''></option>
                                                             @foreach($departments as $department)
                                                                 <option value='{{$department->id}}' @if(count(($action_plan->teams)->where('department_id',$department->id)) == 1) selected @endif>{{$department->code}}</option>

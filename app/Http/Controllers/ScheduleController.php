@@ -25,6 +25,7 @@ use App\AuditPlanBusinessUnit;
 use App\AuditPlanAttachment;
 use App\UploadSign;
 use App\BusinessUnit;
+use App\AuditPlanObservationHistory;
 use Illuminate\Http\Request;
 use App\Notifications\ACRApproval;
 use PDF;
@@ -477,6 +478,27 @@ class ScheduleController extends Controller
             )
         );
     }
+    public function edit_observation(Request $request,$id)
+    {
+        $observation = AuditPlanObservation::findOrfail($id);
+        $consequences = Consequence::get();
+        $likelihoods = Likelihood::get();
+        $risks = Matrix::get();
+        $audit_plan = AuditPlan::findOrfail($observation->audit_plan_id);
+        $users = User::where('status',null)->get();
+        $business_units = BusinessUnit::get();
+        return view('edit_observation',
+            array(
+                'audit_plan' => $audit_plan,
+                'observation' => $observation,
+                'users' => $users,
+                'business_units' => $business_units,
+                'consequences' => $consequences,
+                'likelihoods' => $likelihoods,
+                'risks' => $risks,
+            )
+        );
+    }
     public function save_observation(Request $request,$id)
     {
         $consequence = explode("-",$request->consequence);
@@ -515,6 +537,51 @@ class ScheduleController extends Controller
               
         Alert::success('Successfully updated')->persistent('Dismiss');
         return redirect('view-calendar/'.$id);
+
+    }
+    public function save_edit(Request $request,$id)
+    {
+        $consequence = explode("-",$request->consequence);
+        $likelihood = explode("-",$request->likelihood);
+
+        $risk = $likelihood[0]*$consequence[0];
+        $risks = Matrix::where("from","<",$risk)->orderBy('id','desc')->first();
+        $user = User::findOrfail($request->auditee);
+        $auditPlanObservation = AuditPlanObservation::findOrfail($id);
+        $auditPlanObservation->observation = $request->observation;
+        $auditPlanObservation->recommendation = $request->recommendation;
+        $auditPlanObservation->risk_implication = $request->risk_implication;
+        $auditPlanObservation->criteria = $request->audit_area;
+        $auditPlanObservation->consequence = $consequence[1];
+        $auditPlanObservation->consequence_number = $consequence[0];
+        $auditPlanObservation->likelihood = $likelihood[1];
+        $auditPlanObservation->likelihood_number = $likelihood[0];
+        $auditPlanObservation->user_id = $request->auditee;
+        $auditPlanObservation->created_by = auth()->user()->id;
+        $auditPlanObservation->overall_number = $risk;
+        $auditPlanObservation->overall_risk = $risks->name;
+        $auditPlanObservation->code = $this->generate_code_acr($request->audit_date);
+        $auditPlanObservation->date_audit = $request->audit_date;
+        $auditPlanObservation->target_date = $request->target_date;
+        $auditPlanObservation->department_id = $user->department_id;
+        $auditPlanObservation->status = "For Approval";
+        $auditPlanObservation->save();
+        
+
+        $users = User::where('role','IAD Approver')->where('status',null)->get();
+        foreach($users as $user)
+        {
+            $user->notify(new ACRApproval($auditPlanObservation));
+        }
+
+        $newHistory = new AuditPlanObservationHistory;
+        $newHistory->audit_plan_observation_id = $id;
+        $newHistory->action = "For Approval (return)";
+        $newHistory->user_id = auth()->user()->id;
+        $newHistory->save();
+              
+        Alert::success('Successfully updated')->persistent('Dismiss');
+        return redirect('view-calendar/'.$auditPlanObservation->audit_plan_id);
 
     }
     public function move(Request $request)

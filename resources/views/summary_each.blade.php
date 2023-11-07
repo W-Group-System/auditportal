@@ -225,7 +225,7 @@ hr {
             <th class="text-center" >Open Findings</th>
             <th class="text-center">Original Target Date</th>
             <th class="text-center">Revised Target Date</th>
-            <th class="text-center" >Responsible Party</th>
+            <th class="text-center" >Parties Involved</th>
             <th class="text-center" >Status</th>
         </tr>
         @foreach($audit->action_plans as $y => $action_plan)

@@ -22,6 +22,7 @@
                                 <tr>
                                     <th>Action</th>
                                     <th>Code</th>
+                                    <th>Title</th>
                                     <th>Auditor</th>
                                     <th>Auditee</th>
                                     <th>Agreed Action Plan</th>
@@ -54,6 +55,7 @@
 
                                     </td>
                                     <td>{{$action_plan->observation->code}}</td>
+                                    <td>{{$action_plan->observation->audit_plan->engagement_title}}</td>
                                     <td>{{$action_plan->observation->created_by_user->name}}</td>
                                     <td>{{$action_plan->observation->user->name}}</td>
                                     <td>{{nl2br(e($action_plan->action_plan))}}</td>

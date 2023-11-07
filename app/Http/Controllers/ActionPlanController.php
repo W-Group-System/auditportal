@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 use App\ActionPlan;
+use App\User;
 use App\ActionPlanRemark;
 use App\AuditPlanObservation;
+use App\Notifications\SubmitProof;
+use App\Notifications\ChangeTargetDate;
+use App\Notifications\ReturnActionPlan;
+use App\Notifications\CloseActionPlan;
 use Illuminate\Http\Request;
 
 use RealRashid\SweetAlert\Facades\Alert;
@@ -46,6 +51,10 @@ class ActionPlanController extends Controller
         $history->remarks = "Upload Proof by ".auth()->user()->name." Remarks : ".$request->remarks;
         $history->save();
 
+        $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
+        $user = User::findOrfail($observation->created_by);
+        $user->notify(new SubmitProof($observation));
+
         Alert::success('Successfully Uploaded')->persistent('Dismiss');
         return back();
 
@@ -66,6 +75,10 @@ class ActionPlanController extends Controller
         $action_plan->target_date = $request->target_date;
         $action_plan->save();
 
+        $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
+        $user = User::findOrfail($observation->user_id);
+        $user->notify(new ChangeTargetDate($observation,$history->remarks));
+
         Alert::success('Successfully Change')->persistent('Dismiss');
         return back();
 
@@ -84,8 +97,9 @@ class ActionPlanController extends Controller
         $history->remarks = $request->remarks;
         $history->save();
 
-  
-
+        $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
+        $user = User::findOrfail($observation->user_id);
+        $user->notify(new ReturnActionPlan($observation,$history->remarks));
         Alert::success('Successfully Returned')->persistent('Dismiss');
         return back();
     }
@@ -107,6 +121,7 @@ class ActionPlanController extends Controller
             $observation->save();
 
         }
+        
 
         $history = new ActionPlanRemark;
         $history->user_id = auth()->user()->id;
@@ -114,6 +129,16 @@ class ActionPlanController extends Controller
         $history->action = "Closed Action Plan";
         $history->remarks = $request->remarks;
         $history->save();  
+        $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
+        $user = User::findOrfail($observation->user_id);
+        $user->notify(new CloseActionPlan($observation,$history->remarks));
+        $usera = User::findOrfail($observation->created_by);
+        $usera->notify(new CloseActionPlan($observation,$history->remarks));
+        $users = User::where('role','IAD Approver')->where('status',null)->get();
+        foreach($users as $userd)
+        {
+            $userd->notify(new CloseActionPlan($observation,$history->remarks));
+        }
 
         Alert::success('Successfully Closed')->persistent('Dismiss');
         return back();

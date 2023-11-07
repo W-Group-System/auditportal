@@ -80,6 +80,37 @@
                             </div>
                         </div>
                         <hr>
+                        <div class='row text-center'>
+                            <div class='col-md-3 border  border-primary border-top-bottom border-left-right'>
+                            Action By
+                            </div>
+                            <div class='col-md-3 border  border-primary border-top-bottom border-left-right'>
+                            Action
+                            </div>
+                            <div class='col-md-3 border  border-primary border-top-bottom border-left-right'>
+                            Remarks
+                            </div>
+                            <div class='col-md-3 border  border-primary border-top-bottom border-left-right'>
+                            Date
+                            </div>
+                        </div>
+                        @foreach(($observation->histories) as $history)
+                        <div class='row text-center'>
+                            <div class='col-md-3 border border-primary border-top-bottom border-left-right'>
+                            {{$history->user->name}} &nbsp;
+                            </div>
+                            <div class='col-md-3 border border-primary border-top-bottom border-left-right'>
+                                {{$history->action}} &nbsp;
+                            </div>
+                            <div class='col-md-3 border border-primary border-top-bottom border-left-right'>
+                                &nbsp;{{$history->remarks}}
+                            </div>
+                            <div class='col-md-3 border border-primary border-top-bottom border-left-right'>
+                                {{date('M. d, Y',strtotime($history->created_at))}}
+                            </div>
+                        </div>
+                        @endforeach
+                        <hr>
                         @if(Route::current()->getName() == 'for-approval-iad')
                         <div class='row'>
                             <div class='col-md-4'>
@@ -87,7 +118,8 @@
                                 <select name='action' class='form-control-sm form-control cat' required>
                                     <option value=""></option>
                                     <option value="Approved" >Approve</option>
-                                    <option value="Declined" >Decline</option>
+                                    <option value="Returned" >Return</option>
+                                    {{-- <option value="Declined" >Decline</option> --}}
                                 </select>
                             </div>
                             <div class='col-md-8'>
@@ -96,6 +128,7 @@
                             </div>
                         </div>
                         @endif
+                      <hr>
                         @if($observation->explanation == null)
                         <div class='row'>
                             <div class='col-md-12'>

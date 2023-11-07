@@ -5,6 +5,7 @@
 <link href="{{ asset('login_css/css/plugins/morris/morris-0.4.3.min.css') }}" rel="stylesheet">
 @endsection
 @section('content')
+@if(auth()->user()->role != "Auditee")
 <div class="row">
   <div class="col-lg-3">
       <div class="ibox float-e-margins">
@@ -73,6 +74,7 @@
         </div>
     </div>
 </div>
+@endif
 <div class="row">
   {{-- <div class="col-md-5 grid-margin stretch-card">
     <div class="ibox float-e-margins">
@@ -135,6 +137,7 @@
             </div>
         </div>
     </div>
+    @if(auth()->user()->role != "Auditee")
     <div class="col-lg-5">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
@@ -165,6 +168,7 @@
             </div>
         </div>
     </div>
+    @endif
 </div>
 @endsection
 
