@@ -115,7 +115,7 @@
                                 <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','closed')->where('target_date','<',date('Y-m-d')))}}</td>
                                 <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','closed')->where('target_date','>=',date('Y-m-d')))}}</td>
                                 <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','closed')->where('target_date','>=',date('Y-m-d')))}}</td>
-                                <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A"))}}</td>
+                                <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','closed'))}}</td>
                                 <td>@php
                                         $closed = count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','closed'));
                                         $delayed = count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','closed')->where('target_date','<',date('Y-m-d')));
