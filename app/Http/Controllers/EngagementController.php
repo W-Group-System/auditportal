@@ -47,7 +47,7 @@ class EngagementController extends Controller
         $reports = AuditPlanObservation::get();
         if(auth()->user()->role == 'Auditee')
         {
-            $reports = AuditPlanObservation::where('user_id',auth()->user()->id)->get();
+            $reports = AuditPlanObservation::where('user_id',auth()->user()->id)->where('status','On-going')->get();
         }
         return view('acr',
         array(
