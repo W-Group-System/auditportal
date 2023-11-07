@@ -136,7 +136,7 @@
                                         {{$percent*100}} %
                                     @endif
                                 </td>
-                                <th>{{count(($audit->observations)->where('overall_risk','HIGH')->where('status','ON-GOING'))}}</th>
+                                <th>{{count(($audit->observations)->where('action_plan','!=',"N/A")->where('overall_risk','HIGH')->where('status','ON-GOING'))}}</th>
                             </tr>
                         @endforeach
                             
