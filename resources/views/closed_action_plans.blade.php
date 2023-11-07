@@ -41,7 +41,7 @@
                                             <ul class="dropdown-menu">
                                                  <li><a title='View History' href="#view_history{{$action_plan->id}}" data-toggle="modal" >View History</a></li>
                                                  @if((auth()->user()->role == "IAD Approver") || (auth()->user()->role == "Administrator"))
-                                                 <li><a title='Return Action Plan' href="#return_action{{$action_plan->id}}" data-toggle="modal" >Re-open Action Plan</a></li>
+                                                 <li><a title='Return Action Plan' href="#return{{$action_plan->id}}" data-toggle="modal" >Re-open Action Plan</a></li>
                                                 @endif
                                             </ul>
                                         </div>
