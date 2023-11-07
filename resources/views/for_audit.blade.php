@@ -130,7 +130,7 @@
                                         }
                                         
                                     @endphp
-                                    @if(count($audit->action_plans) == 0)
+                                    @if(count(($audit->action_plans)->where('action_plan','!=',"N/A")) == 0)
                                     0.00 %
                                     @else
                                         {{$percent*100}} %
