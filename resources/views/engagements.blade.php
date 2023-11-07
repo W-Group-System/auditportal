@@ -103,7 +103,15 @@
                             </thead>
                         <tbody>
                             @foreach($audits as $audit)
-                            <tr>
+                           
+                            <tr 
+
+                                @if(($audit->attachments)->where('Closing Report')->first() == null)
+                                class='bg-success'
+                                @elseif(($audit->attachments)->where('Initial Report')->first() == null)
+                                class='bg-warning'
+                                @endif
+                            >
                                 <td><a href="{{url('view-calendar/'.$audit->id)}}"  class='btn btn-sm btn-info'><i class="fa fa-eye"></i></a></td>
                                 <td>{{$audit->code}}</td>
                                 <td>{{$audit->engagement_title}}</td>
