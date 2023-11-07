@@ -232,12 +232,12 @@ hr {
         @if($action_plan->action_plan != "N/A")
         <tr>
             <td class="text-center" >{{$y+1}}</td>
-            <td class="text-center" >{{$action_plan->action_plan}}</td>
+            <td class="text-center" >{!!html_entity_decode($action_plan->action_plan)!!}</td>
             <td class="text-center" >
                 @php
-                    $title = explode( '</br>',$action_plan->observation->observation)
+                    $title = explode( '</p>',$action_plan->observation->observation)
                 @endphp
-                {{$title[0]}}</td>
+                {!!html_entity_decode($title[0])!!}</td>
             <td class="text-center">
                 @if(($action_plan->histories)->where('action','Change Target Date')->first() != null)
 
