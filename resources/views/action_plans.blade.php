@@ -60,7 +60,7 @@
                                     <td>{{$action_plan->observation->created_by_user->name}}</td>
                                     <td>{{$action_plan->observation->user->name}}</td>
                                     <td>{{$action_plan->action_plan}}</td>
-                                    <td>{{$action_plan->target_date}}</td>
+                                    <td @if($action_plan->target_date < date('Y-m-d')) class='bg-danger' @endif>{{$action_plan->target_date}}</td>
                                     <td>{{$action_plan->date_completed}}</td>
                                     <td>@if($action_plan->immediate == 1) Correction or Immediate Action @else Corrective Action Plan @endif</td>
                                     <td>
@@ -71,7 +71,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($action_plan->attachment == null) For Auditee Uploading 
+                                        @if($action_plan->attachment == null)  For Auditee Uploading </span>
                                         @elseif($action_plan->iad_status == "Returned")
                                             Returned Action Plan
                                         @else For IAD Checking 
