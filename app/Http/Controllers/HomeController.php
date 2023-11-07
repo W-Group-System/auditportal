@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Department;
 use App\AuditPlan;
 use App\ActionPlan;
+use App\Matrix;
 use App\AuditPlanObservation;
 use Illuminate\Http\Request;
 
@@ -43,6 +44,7 @@ class HomeController extends Controller
 
     public function get_risks()
     {
+        $matrices = Matrix::get();
         $departments = Department::with(['audit_plans' => function($query) {
             $query->select('department_id','audit_plan_id');
             $query->groupBy('department_id','audit_plan_id');
@@ -69,8 +71,8 @@ class HomeController extends Controller
                 {
                     if($audit_plan->findings != null)
                     {
-
-                        $risk = $audit_plan->overall_number + $risk;
+                        $risk_rating = ($matrices->where('name',$audit_plan->overall_risk)->first())->id;
+                        $risk = $risk_rating + $risk;
                     }
                 }
                 else
