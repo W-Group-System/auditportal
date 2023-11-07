@@ -171,14 +171,14 @@ hr {
               @php
                 array_push($departments,$dept->department_name->code);
             @endphp @endforeach</small></td>
-            <td style='text-align: center;'>{{count(($audit->observations)->where('findings','!=',null))}}</td>
-            <td style='text-align: center;'>{{count(($audit->action_plans)->where('status','=','Closed'))}}</td>
-            <td style='text-align: center;'>{{count(($audit->action_plans)->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')))}}</td>
-            <td style='text-align: center;'>{{count(($audit->action_plans)->where('status','!=','Closed')->where('target_date','>=',date('Y-m-d')))}}</td>
-            <td style='text-align: center;'>{{count(($audit->action_plans))}}</td>
+            <td style='text-align: center;'>{{count(($audit->observations)->where('action_plan','!=',"N/A")->where('findings','!=',null))}}</td>
+            <td style='text-align: center;'>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','=','Closed'))}}</td>
+            <td style='text-align: center;'>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')))}}</td>
+            <td style='text-align: center;'>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','Closed')->where('target_date','>=',date('Y-m-d')))}}</td>
+            <td style='text-align: center;'>{{count(($audit->action_plans)->where('action_plan','!=',"N/A"))}}</td>
             @php
-            $closed = count(($audit->action_plans)->where('status','Closed'));
-            $delayed = count(($audit->action_plans)->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')));
+            $closed = count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'));
+            $delayed = count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')));
             $total = $closed + $delayed;
             if($closed+$delayed == 0)
             {
@@ -229,10 +229,11 @@ hr {
             <th class="text-center" >Status</th>
         </tr>
         @foreach($audit->action_plans as $y => $action_plan)
+        @if($action_plan->action_plan != "N/A")
         <tr>
             <td class="text-center" >{{$y+1}}</td>
-            <td class="text-center" >{{nl2br(e($action_plan->action_plan))}}</td>
-            <td class="text-center" >{{nl2br(e($action_plan->observation->code))}}</td>
+            <td class="text-center" >{{$action_plan->action_plan}}</td>
+            <td class="text-center" >{{$action_plan->observation->code}}</td>
             <td class="text-center">
                 @if(($action_plan->histories)->where('action','Change Target Date')->first() != null)
 
@@ -250,6 +251,7 @@ hr {
             <td class="text-center" >@foreach($action_plan->teams as $ke => $team){{$team->department->code}} @if(count($action_plan->teams) != $ke+1),@endif @endforeach</td>
             <td class="text-center" >@if($action_plan->status == "Closed") <span style="color:green;"> Closed </span> @else<span class='label label-warning' @if($action_plan->target_date > date('Y-m-d'))style="color:blue;" @else style="color:red;" @endif> Open </span> @endif</td>
         </tr>
+        @endif
         @endforeach
        
     </table>
