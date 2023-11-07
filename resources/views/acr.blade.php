@@ -72,7 +72,7 @@
                                     <th colspan='2'>Consequence</th>
                                     <th colspan='2'>Likelihood</th>
                                     <th colspan='2'>Overall Risk</th>
-                                    <th>Risk</th>
+                                    <th>Risk Rating</th>
                                     <th>Type</th>
                                     <th>Encoded By</th>
                                     <th>Auditee</th>
