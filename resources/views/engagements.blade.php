@@ -110,9 +110,11 @@
                             >
                                 <td><a href="{{url('view-calendar/'.$audit->id)}}"  class='btn btn-sm btn-info'><i class="fa fa-eye"></i></a></td>
                                 <td @if(($audit->attachments)->where('type','Closing Report')->first() != null)
-                                    class='bg-info text-dark'
-                                    @elseif(($audit->attachments)->where('type','=','Initial Report')->first() != null)
+                                    class='bg-primary  text-dark'
+                                    @elseif(($audit->attachments)->where('type','=','Final Report')->first() != null)
                                     class='bg-warning text-dark'
+                                    @elseif(($audit->attachments)->where('type','=','Initial Report')->first() != null)
+                                    class='bg-danger text-dark'
                                     @else
 
                                     @endif>{{$audit->code}}</td>
