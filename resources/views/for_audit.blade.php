@@ -113,7 +113,7 @@
                                 <td>@foreach($audit->auditor_data as $auditor) {{$auditor->user->name}} <br>@endforeach</td>
                                 <td>{{count(($audit->observations)->where('findings',null))}}</td>
                                 <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','=','Closed'))}}</td>
-                                <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','Closed')->where('target_date','>',date('Y-m-d')))}}</td>
+                                <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')))}}</td>
                                 <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','Closed')->where('target_date','>=',date('Y-m-d')))}}</td>
                                 <td>{{count(($audit->action_plans)->where('action_plan','!=',"N/A"))}}</td>
                                 <td>@php
