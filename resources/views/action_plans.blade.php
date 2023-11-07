@@ -35,7 +35,7 @@
                             </thead>
                         <tbody>
                             @foreach($action_plans as $action_plan)
-                            @if($action_plan->action_plan == "N/A")
+                            @if($action_plan->action_plan != "N/A")
                                 <tr>
                                     <td>
                                         <div class="btn-group">
