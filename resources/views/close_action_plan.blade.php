@@ -15,7 +15,7 @@
                         <div class='row'>
                             <div class='col-md-12'>
                                 Date Completed :
-                                <input name='date_completed' value='{{$action_plan->date_completed}}' class='form-control form-control-sm' type='date' required>
+                                <input name='date_completed' value='{{$action_plan->date_completed}}' min='{{$action_plan->date_completed}}' class='form-control form-control-sm' type='date' required>
                             </div>
                         </div>
                     </div> 
