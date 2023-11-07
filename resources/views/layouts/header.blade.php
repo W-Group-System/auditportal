@@ -129,6 +129,10 @@
                         <a href="{{url('/action-plans')}}"><i class="fa fa-check-square-o"></i> <span
                                 class="nav-label">Action Plans</span></a>
                     </li>
+                    <li class="{{ Route::current()->getName() == 'closed-action-plans' ? 'active' : '' }}">
+                        <a href="{{url('/close-action-plans')}}"><i class="fa fa-check-square-o"></i> <span
+                                class="nav-label">Closed Action Plans</span></a>
+                    </li>
                     {{-- <li class="{{ Route::current()->getName() == 'findings' ? 'active' : '' }}">
                         <a href="{{url('/findings')}}"><i class="fa fa-eye"></i> <span
                                 class="nav-label">Findings</span></a>
@@ -152,7 +156,6 @@
                             @if((auth()->user()->role == 'Administrator') || (auth()->user()->role == "IAD Approver"))
                             <li><a href="{{url('/logs')}}"></i>Logs</a></li>
                             @endif
-                            <li><a href="{{url('/close-action-plans')}}"></i>Closed Action Plans</a></li>
                             {{-- <li><a href="{{url('/status-reports')}}"></i>Status Reports</a></li>
                             <li><a href="{{url('/summary-reports')}}"></i>Summary Reports</a></li> --}}
                         </ul>

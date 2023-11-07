@@ -72,6 +72,7 @@
                                     <th colspan='2'>Consequence</th>
                                     <th colspan='2'>Likelihood</th>
                                     <th colspan='2'>Overall Risk</th>
+                                    <th>Risk</th>
                                     <th>Type</th>
                                     <th>Encoded By</th>
                                     <th>Auditee</th>
@@ -99,6 +100,7 @@
                                         <td>{{$observation->likelihood_number}}</td>
                                         <td>{{$observation->overall_risk}}</td>
                                         <td>{{$observation->overall_number}}</td>
+                                        <td>{{($matrices->where('name',$observation->overall_risk)->first())->id}}</td>
                                         <td>@if($observation->findings == null)<span class='label label-info'>Observation</span>@else<span class='label label-danger'>Findings</span>@endif</td>
                                         <td>{{$observation->created_by_user->name}}</td>
                                         <td>{{$observation->user->name}}</td>

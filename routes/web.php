@@ -89,7 +89,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('change-target-plan/{id}','ActionPlanController@change_target_date')->name('action-plans');
     Route::post('return-action-plan/{id}','ActionPlanController@return_action_plan')->name('action-plans');
     Route::post('close-action-plan/{id}','ActionPlanController@close_action_plan')->name('action-plans');
-    Route::get('close-action-plans','ActionPlanController@close_action_plans')->name('reports');
+    Route::get('close-action-plans','ActionPlanController@close_action_plans')->name('closed-action-plans');
     
     // Route::get('autorithy/{id}','EngagementController@authority')->name('engagements');
     // Route::get('initial-report/{id}','EngagementController@initialReport')->name('engagements');

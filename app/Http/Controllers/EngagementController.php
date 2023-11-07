@@ -11,6 +11,7 @@ use App\ActionPlanRemark;
 use App\ActionPlan;
 use App\ActionPlanInvolve;
 use App\ExplanationHistory;
+use App\Matrix;
 use App\User;
 use App\AuditPlanObservationHistory;
 use App\Notifications\ACRApproved;
@@ -43,7 +44,7 @@ class EngagementController extends Controller
     public function acr(Request $request)
     {
         //
-        
+        $matrices = Matrix::get();
         $reports = AuditPlanObservation::get();
         if(auth()->user()->role == 'Auditee')
         {
@@ -52,6 +53,7 @@ class EngagementController extends Controller
         return view('acr',
         array(
             'reports' => $reports,
+            'matrices' => $matrices,
         )
     
         );
