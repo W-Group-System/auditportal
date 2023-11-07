@@ -90,13 +90,20 @@
                         </div>
                     </div>
                     <div class='row'>
-                        <div class='col-md-6'>
-                            Target Date :
-                            <input class='form-control' type='date' name='target_date'  value='{{$observation->target_date}}' required>
-                        </div>
-                        <div class='col-md-6'>
+                        <div class='col-md-4'>
                             Audit Date :
                             <input class='form-control' type='date' name='audit_date'  value='{{$observation->date_audit}}'  required>
+                        </div>
+                        <div class='col-md-4'>
+                           Attachments <Br>
+                            
+                            @foreach($observation->attachments_data as $key => $attachment)
+                            {{$key+1}}. <a href='{{url($attachment->attachment)}}' target='_blank'>File</a>  <a href='{{url('remove/'.$attachment->id)}}' class='text-danger ' title='Delete' onclick="return confirm('Are you sure you want to delete this?')">X</a><Br>
+                            @endforeach
+                        </div>
+                        <div class='col-md-4'>
+                            New Attachments :
+                            <input class='form-control' type='file' name='attachments[]' multiple>
                         </div>
                     </div>
                     <div class='row'>

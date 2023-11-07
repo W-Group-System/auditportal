@@ -56,7 +56,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('edit-observation/{id}','ScheduleController@edit_observation')->name('for_audit');
     Route::post('edit-observation/{id}','ScheduleController@save_edit')->name('for_audit');
     Route::post('move-observation','ScheduleController@move');
-    
+    Route::get('remove/{id}','ScheduleController@remove');  
     Route::get('for-approval-iad','EngagementController@forapproval')->name('for-approval-iad');
     Route::post('action-acr/{id}','EngagementController@action')->name('for-approval-iad');
 

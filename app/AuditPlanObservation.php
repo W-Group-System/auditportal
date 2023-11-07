@@ -34,4 +34,8 @@ class AuditPlanObservation extends Model implements Auditable
     {
         return $this->hasOne(Explanation::class);
     }
+    public function attachments_data()
+    {
+        return $this->hasMany(AuditPlanObservationAttachment::class);
+    }
 }

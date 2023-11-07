@@ -43,6 +43,18 @@
                                     </tbody>
                                 </table>
                             </div>
+                           
+                            <div class='col-md-12'>
+                                <hr>
+                                Attachments
+                                <Br>
+                            
+                                    @foreach($observation->attachments_data as $key => $attachment)
+                                    {{$key+1}}. <a href='{{url($attachment->attachment)}}' target='_blank'>File</a>  <Br>
+                                    @endforeach
+                                    <hr>
+                            </div>
+                           
                             <div class='col-md-12'>
                                 <table class="table table-striped table-bordered">
                                     <thead>

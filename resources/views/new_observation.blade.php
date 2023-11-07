@@ -99,8 +99,8 @@
                             <input class='form-control' type='date' name='audit_date' value='{{date('Y-m-d')}}' required>
                         </div>
                         <div class='col-md-4'>
-                            Attachments
-                            <input class='form-control' type='file' name='attachments' multiple>
+                            Attachments :
+                            <input class='form-control' type='file' name='attachments[]' multiple>
                         </div>
                     </div>
                     <div class='row'>

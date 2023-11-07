@@ -16,6 +16,7 @@ use App\AuditPlanProcedure;
 use App\AuditPlanObjective;
 use App\AuditPlanDepartment;
 use App\AuditPlanObservation;
+use App\AuditPlanObservationAttachment;
 use App\AuditPlanAuditor;
 use App\Consequence;
 use App\Likelihood;
@@ -60,7 +61,7 @@ class ScheduleController extends Controller
     }
     public function edit (Request $request,$id)
     {
-        // dd($request->all());
+       
        
         $audit_plan = AuditPlan::findOrfail($id);
         $audit_plan->engagement_title = $request->engagement_title;
@@ -505,7 +506,7 @@ class ScheduleController extends Controller
         $likelihood = explode("-",$request->likelihood);
 
         $risk = $likelihood[0]*$consequence[0];
-        $risks = Matrix::where("from","<",$risk)->orderBy('id','desc')->first();
+        $risks = Matrix::where("from","<=",$risk)->orderBy('id','desc')->first();
         $user = User::findOrfail($request->auditee);
         $auditPlanObservation = new AuditPlanObservation;
         $auditPlanObservation->audit_plan_id = $id;
@@ -535,6 +536,22 @@ class ScheduleController extends Controller
             $user->notify(new ACRApproval($auditPlanObservation));
         }
               
+        if($request->hasfile('attachments'))
+
+        {
+               foreach($request->file('attachments') as $attachment)
+                {
+                    $name = time() . '_' . $attachment->getClientOriginalName();
+                    $attachment->move(public_path() . '/observations/', $name);
+                    $file_name = '/observations/' . $name;
+                    
+                    $upload = new AuditPlanObservationAttachment;
+                    $upload->audit_plan_observation_id = $auditPlanObservation->id;
+                    $upload->attachment = $file_name;
+                    $upload->user_id = auth()->user()->id;
+                    $upload->save();
+                }
+        }
         Alert::success('Successfully updated')->persistent('Dismiss');
         return redirect('view-calendar/'.$id);
 
@@ -546,6 +563,13 @@ class ScheduleController extends Controller
         return back();
 
     }
+    public function remove($id)
+    { 
+        $attachment = AuditPlanObservationAttachment::findOrfail($id)->delete();
+        Alert::success('Successfully Remove')->persistent('Dismiss');
+        return back();
+
+    }   
     public function save_edit(Request $request,$id)
     {
         $consequence = explode("-",$request->consequence);
@@ -585,6 +609,24 @@ class ScheduleController extends Controller
         $newHistory->action = "For Approval (return)";
         $newHistory->user_id = auth()->user()->id;
         $newHistory->save();
+
+                
+        if($request->hasfile('attachments'))
+
+        {
+               foreach($request->file('attachments') as $attachment)
+                {
+                    $name = time() . '_' . $attachment->getClientOriginalName();
+                    $attachment->move(public_path() . '/observations/', $name);
+                    $file_name = '/observations/' . $name;
+                    
+                    $upload = new AuditPlanObservationAttachment;
+                    $upload->audit_plan_observation_id = $auditPlanObservation->id;
+                    $upload->attachment = $file_name;
+                    $upload->user_id = auth()->user()->id;
+                    $upload->save();
+                }
+        }
               
         Alert::success('Successfully updated')->persistent('Dismiss');
         return redirect('view-calendar/'.$auditPlanObservation->audit_plan_id);
