@@ -20,4 +20,8 @@ class Department extends Model implements Auditable
     {
         return $this->hasMany(ActionPlan::class);
     }
+    public function risk()
+    {
+        return $this->hasMany(AuditPlanObservation::class);
+    }
 }
