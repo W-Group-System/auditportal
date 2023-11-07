@@ -81,7 +81,6 @@ class HomeController extends Controller
             array_push($deptFindings,$observation);
             if($observation != 0)
             {
-                dd($risk);
             array_push($deptRisk,round($risk/$observation,2));
             }
             else
