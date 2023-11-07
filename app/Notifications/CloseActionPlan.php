@@ -49,7 +49,6 @@ class CloseActionPlan extends Notification
         ->subject('Action Plan has been closed')
         ->line('ACR Code : '.$this->observation->code)
         ->line('Remarks : '.$this->remarks)
-        ->line('Please click the button provided for faster transaction')
         ->line('Thank you for using our application!');
     }
 
