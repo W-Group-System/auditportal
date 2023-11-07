@@ -51,15 +51,20 @@ class HomeController extends Controller
         $deptFindings = ['Findings'];
         $deptRisk = ['Avg. Risk'];
         $departmentResults = [];
+        $a = 0;
         foreach($departments as $department)
         {
             $observation = 0;
             $risk = 0;
+            
             array_push($deptResult,$department->code);
             foreach($department->risk as $audit_plan)
             {
-                
-                $observation = count(($audit_plan)->where('findings','!=',null)) + $observation;
+                if($audit_plan->findings != null)
+                {
+                    $a = 1;
+                }
+                $observation = $a + $observation;
                 if($observation != 0)
                 {
                 $risk = (($audit_plan)->where('findings','!=',null)->sum('overall_number')) + $risk;
