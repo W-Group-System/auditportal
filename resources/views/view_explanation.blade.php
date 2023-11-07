@@ -108,7 +108,13 @@
                                                 <div class='form-group'>
                                                     <label class='col-sm-6 control-label text-left'>Other Party(ies) Involved :</label>
                                                     <div class="col-sm-6">
-                                                        <select name='other_parties_immediate_action[]' data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
+                                                        <select name='other_parties_immediate_action_view[]' disabled data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
+                                                            <option value=''></option>
+                                                            @foreach($departments as $department)
+                                                                <option value='{{$department->id}}'>{{$department->code}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <select name='other_parties_immediate_action[]' style='display:none;' data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
                                                             <option value=''></option>
                                                             @foreach($departments as $department)
                                                                 <option value='{{$department->id}}'>{{$department->code}}</option>
@@ -143,7 +149,13 @@
                                                 <div class='form-group text-left'>
                                                     <label class='col-sm-6 control-label text-left'>Other Party(ies) Involved :</label>
                                                     <div class="col-sm-6">
-                                                        <select name='other_parties_action_plan[]' data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
+                                                        <select name='other_parties_action_plan_view[]' disabled  data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
+                                                            <option value=''></option>
+                                                            @foreach($departments as $department)
+                                                                <option value='{{$department->id}}'>{{$department->code}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <select name='other_parties_action_plan[]' style='display:none;' data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
                                                             <option value=''></option>
                                                             @foreach($departments as $department)
                                                                 <option value='{{$department->id}}'>{{$department->code}}</option>
