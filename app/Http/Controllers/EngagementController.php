@@ -505,7 +505,7 @@ class EngagementController extends Controller
 
         $newHistory = new AuditPlanObservationHistory;
         $newHistory->audit_plan_observation_id = $id;
-        $newHistory->action = "IAD  -".$request->action;
+        $newHistory->action = "IAD ".$request->action;
         $newHistory->user_id = auth()->user()->id;
         $newHistory->remarks = $request->remarks;
         $newHistory->save();
