@@ -68,7 +68,9 @@
                                                     <td>{{$attachment->user->name}}</td>
                                                     <td>
                                                         <a href='#' data-target="#share{{$attachment->id}}" data-toggle="modal" title='Share'><i class="fa fa-edit"></i></a> @foreach($attachment->share as $share){{$share->user->name}} ,@endforeach
+                                                        @if((auth()->user()->role == "IAD Approver") || (auth()->user()->role == "Administrator"))
                                                         <a href='{{url("/remove-attachment/".$attachment->id)}}' onclick="return confirm('Are you sure you want to delete this?')">Delete</a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 @include('share')
