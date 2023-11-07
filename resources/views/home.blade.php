@@ -37,7 +37,7 @@
       <div class="ibox float-e-margins">
           <div class="ibox-title">
               <span class="label label-success pull-right">as of Today</span>
-              <h5>Action Plans Due</h5>
+              <h5>Delayed Action Plans</h5>
           </div>
           <div class="ibox-content">
               <h1 class="no-margins">{{count($action_plans->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')))}}</h1>
