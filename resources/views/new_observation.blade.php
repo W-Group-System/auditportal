@@ -90,13 +90,17 @@
                         </div>
                     </div>
                     <div class='row'>
-                        <div class='col-md-6'>
+                        {{-- <div class='col-md-4'>
                             Target Date :
                             <input class='form-control' type='date' name='target_date' min='{{date('Y-m-d')}}' value='{{date('Y-m-d',strtotime("+1 month"))}}' required>
-                        </div>
-                        <div class='col-md-6'>
+                        </div> --}}
+                        <div class='col-md-4'>
                             Audit Date :
                             <input class='form-control' type='date' name='audit_date' value='{{date('Y-m-d')}}' required>
+                        </div>
+                        <div class='col-md-4'>
+                            Attachments
+                            <input class='form-control' type='file' name='attachments' multiple>
                         </div>
                     </div>
                     <div class='row'>
