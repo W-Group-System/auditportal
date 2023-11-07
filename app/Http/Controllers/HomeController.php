@@ -59,10 +59,10 @@ class HomeController extends Controller
             foreach($department->risk as $audit_plan)
             {
                 
-                $observation = count(($audit_plan->$observations)->where('findings','!=',null)) + $observation;
+                $observation = count(($audit_plan)->where('findings','!=',null)) + $observation;
                 if($observation != 0)
                 {
-                $risk = (($audit_plan->observations)->where('findings','!=',null)->sum('overall_number')) + $risk;
+                $risk = (($audit_plan)->where('findings','!=',null)->sum('overall_number')) + $risk;
                 }
                 else
                 {
