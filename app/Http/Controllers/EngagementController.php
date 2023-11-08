@@ -297,6 +297,22 @@ class EngagementController extends Controller
             $history->save();
           
         }
+
+        if($request->new_immediate_action)
+        {
+            foreach($request->new_immediate_action as $key => $new_action_plan)
+            {
+                $new_Action_plan = new ActionPlan;
+                $new_Action_plan->action_plan = $new_action_plan;
+                $new_Action_plan->target_date = $request->new_target_date[$key];
+                $new_Action_plan->verified_by = auth()->user()->id;
+                $new_Action_plan->user_id = $observation->user_id;
+                $new_Action_plan->action_plan_id = $observation->action_plan_id;
+                $new_Action_plan->audit_plan_observation_id = $id;
+                $new_Action_plan->status = "Verified";
+                $new_Action_plan->save();
+            }
+        }
         $history = new ExplanationHistory;
         $history->explanation_id = $new_explanation->id;
         $history->action = $request->action;

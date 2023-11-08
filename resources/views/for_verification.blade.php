@@ -56,6 +56,51 @@
 <script src="{{ asset('login_css/js/plugins/dataTables/datatables.min.js')}}"></script>
 <script src="{{ asset('login_css/js/plugins/chosen/chosen.jquery.js') }}"></script>
 <script>
+    function add_immediate_action(id)
+    {
+        var lastItemID = $('.content'+id).children().last().attr('id');
+    if(lastItemID){
+        finalLastId = parseInt(last_id[1]) + 1;
+    }else{
+        finalLastId = 1;
+    }
+        var data = "<tr class='new_action_plan' id="+finalLastId+" >";
+            data += "<td>";
+            data += "<textarea class='form-control' name='new_immediate_action[]'  rows='6' cols='100' required placeholder='Correction or Immediate Action'></textarea> </td> ";
+            data += "</td>";
+            data += "<td>";
+            data += "<div class='form-group'>";
+            data += "<label class='col-sm-6 control-label text-left'>Other Party(ies) Involved :</label>";
+            data += "<div class='col-sm-6'>";
+            data += "<input type='text' placeholder='Other Party(ies) Involved (optional)' disabled class='form-control form-control-sm '  >";
+            data += "</div>";
+            data += "</div>";
+            data += "<div class='form-group text-left'>";
+            data += "<label class='col-sm-6 control-label text-left'>Proof:</label>";
+            data += "<div class='col-sm-6'> <span class='text-danger'>No Proof</span>";
+            data += " </div>";
+            data += "</div>";
+            data += "<div class='form-group text-left'>";
+            data += "<label class='col-sm-6 control-label text-left'>Target Completion :</label>";
+            data += " <div class='col-sm-6'>";
+            data += "<input name='new_target_date[]' class='form-control form-control-sm' type='date' required >";
+            data += " </div>";
+            data += "</div>";
+            data += "</td>";
+            data += " </tr>";  
+            
+            $('#content'+id).append(data);
+                                       
+    }
+    function remove_immediate_action(id)
+    {
+        if($('tr.new_action_plan').length > 0)
+        {
+            lastItemID =  $('#content'+id+' tr:last').attr('id');
+        $('#'+lastItemID).remove();
+        }
+                                       
+    }
     $(document).ready(function(){
         
 

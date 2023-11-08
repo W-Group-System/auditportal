@@ -95,7 +95,7 @@
                                 <b>PART 2. DEPARTMENT'S RESPONSE(S)</b>
                             </div>
                             <div class='col-md-12'>
-                                <table class="table table-striped table-bordered">
+                                <table class="table table-striped table-bordered" class='content{{$observation->id}}' id='content{{$observation->id}}'>
                                     <thead>
                                         <tr>
                                             <th style='width:50%'>Explanation:</th>
@@ -108,7 +108,7 @@
                                             <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='cause' readonly>{{$observation->explanation->cause}}</textarea></td>
                                         </tr>
                                         <tr>
-                                            <th colspan='2'>Correction or Immediate Action<br><small><i>(Immediate response to temporarily address the cause of observation within
+                                            <th colspan='2'>Correction or Immediate Action <br><small><i>(Immediate response to temporarily address the cause of observation within
                                                 24 hours turn-around time)</i></small></th>
                                         </tr>
                                         @foreach(($observation->action_plans)->where('immediate','!=',null) as $key => $action_plan)
@@ -121,9 +121,9 @@
                                                     <div class="col-sm-6">
                                                         <select name='other_parties_immediate_action[{{$action_plan->id}}][]' disabled data-placeholder="Other Party(ies) Involved (optional)" class='form-control form-control-sm cat' multiple >
                                                             <option value=''></option>
-                                                            @foreach($departments as $department)
+                                                            {{-- @foreach($departments as $department)
                                                                 <option value='{{$department->id}}' @if(count(($action_plan->teams)->where('department_id',$department->id)) == 1) selected @endif>{{$department->code}}</option>
-                                                            @endforeach
+                                                            @endforeach --}}
                                                         </select>
                                                     </div>
                                                 </div>
@@ -148,7 +148,9 @@
                                         </tr>
                                         @endforeach
                                         <tr>
-                                            <th colspan='2'>Corrective Action Plan<br>
+                                            <th colspan='2'>Corrective Action Plan<button class="btn btn-info btn-circle" onclick="add_immediate_action({{$observation->id}})" type="button"><i class="fa fa-plus"></i>
+                                            </button> <button class="btn btn-danger btn-circle" onclick="remove_immediate_action({{$observation->id}})" type="button"><i class="fa fa-minus"></i>
+                                            </button><br>
                                                 <small><i>(Controls that, if will be in place, may prevent the occurrence of the
                                                     same observation)</i></small></th>
                                         </tr>
