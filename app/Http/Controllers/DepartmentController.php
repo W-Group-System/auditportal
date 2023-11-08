@@ -97,6 +97,20 @@ class DepartmentController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $department = Department::findOrfail($id);
+        $department->name = $request->name;
+        $department->save();
+
+        $department_head = DepartmentHead::where('department_id',$id)->delete();
+
+         $department_head = new DepartmentHead;
+        $department_head->user_id = $request->user_id;
+        $department_head->department_id = $department->id;
+        $department_head->save();
+
+        Alert::success('Successfully Updated')->persistent('Dismiss');
+        return back();
+
     }
 
     /**
