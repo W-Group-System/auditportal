@@ -29,7 +29,7 @@
                             <select name='user_id' class='form-control-sm form-control cat' >
                                 <option value=""></option>
                                 @foreach($employees as $employee)
-                                    <option value='{{$employee->id}}' @if($department->dep_head->user_id == $employee->id) selected @endif>{{$employee->name}}</option>
+                                    <option value='{{$employee->id}}' @if($department->dep_head != null)@if($department->dep_head->user_id == $employee->id) selected @endif @endif>{{$employee->name}}</option>
                                 @endforeach
                             </select>
                         </div>
