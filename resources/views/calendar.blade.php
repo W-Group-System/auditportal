@@ -118,6 +118,8 @@
                                 <td>
                                     @if(count($uploads) > 0)
                                     <a href="{{url('view-calendar/'.$schedule->id)}}" class='btn btn-sm btn-info'><i class="fa fa-eye"></i></a>
+                                    <button class="btn btn-sm btn-info"  title='Edit' data-target="#editSchedule{{$schedule->id}}" data-toggle="modal"><i class="fa fa-edit"></i></button>
+                                 
                                     @else
                                     <button class="btn btn-sm btn-info"  title='Edit' data-target="#editSchedule{{$schedule->id}}" data-toggle="modal"><i class="fa fa-edit"></i></button>
                                     @endif
@@ -130,7 +132,6 @@
                             </tr>
                         @include('edit_schedule')
                         @endforeach
-                        
                     </tbody>
                     </table>
                 </div>

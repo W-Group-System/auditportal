@@ -108,7 +108,9 @@
                                             <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='cause' readonly>{{$observation->explanation->cause}}</textarea></td>
                                         </tr>
                                         <tr>
-                                            <th colspan='2'>Correction or Immediate Action <br><small><i>(Immediate response to temporarily address the cause of observation within
+                                            <th colspan='2'>Correction or Immediate Action <button class="btn btn-info btn-circle" onclick="add_immediate_action({{$observation->id}})" type="button"><i class="fa fa-plus"></i>
+                                            </button> <button class="btn btn-danger btn-circle" onclick="remove_immediate_action({{$observation->id}})" type="button"><i class="fa fa-minus"></i>
+                                            </button> <br><small><i>(Immediate response to temporarily address the cause of observation within
                                                 24 hours turn-around time)</i></small></th>
                                         </tr>
                                         @foreach(($observation->action_plans)->where('immediate','!=',null) as $key => $action_plan)
@@ -148,7 +150,7 @@
                                         </tr>
                                         @endforeach
                                         <tr>
-                                            <th colspan='2'>Corrective Action Plan<button class="btn btn-info btn-circle" onclick="add_immediate_action({{$observation->id}})" type="button"><i class="fa fa-plus"></i>
+                                            <th colspan='2'>Corrective Action Plan <button class="btn btn-info btn-circle" onclick="add_immediate_action({{$observation->id}})" type="button"><i class="fa fa-plus"></i>
                                             </button> <button class="btn btn-danger btn-circle" onclick="remove_immediate_action({{$observation->id}})" type="button"><i class="fa fa-minus"></i>
                                             </button><br>
                                                 <small><i>(Controls that, if will be in place, may prevent the occurrence of the

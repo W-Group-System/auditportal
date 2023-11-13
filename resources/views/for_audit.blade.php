@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-2">
+        {{-- <div class="col-lg-2">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Done Audit</h5>
@@ -36,7 +36,7 @@
                     <h1 class="no-margins">{{count($audits->where('status','Done'))}}</h1>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="col-lg-2">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
