@@ -39,6 +39,7 @@
                                 <option value="Timeliness">Timeliness</option>
                                 <option value="Valuation">Valuation</option>
                                 <option value="Existence">Existence</option>
+                                <option value="Compliance">Compliance</option>
                             </select>
                         </div>
                         <div class='col-md-6'>
