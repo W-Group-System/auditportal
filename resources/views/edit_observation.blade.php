@@ -39,6 +39,7 @@
                                 <option value="Timeliness"  @if($observation->criteria == "Timeliness") selected @endif>Timeliness</option>
                                 <option value="Valuation"  @if($observation->criteria == "Valuation") selected @endif>Valuation</option>
                                 <option value="Existence"  @if($observation->criteria == "Existence") selected @endif>Existence</option>
+                                <option value="Compliance"  @if($observation->criteria == "Compliance") selected @endif>Compliance</option>
                             </select>
                         </div>
                         <div class='col-md-6'>
