@@ -100,12 +100,29 @@
                         </div> --}}
                         <div class='col-md-4'>
                             Audit Date :
-                            <input class='form-control' type='date' name='audit_date' value='{{date('Y-m-d')}}' required>
+                            <input class='form-control' type='date' name='audit_date' value='' >
                         </div>
                         <div class='col-md-4'>
                             Attachments :
                             <input class='form-control' type='file' name='attachments[]' multiple>
                         </div>
+                    </div>
+                    
+                    <div class='row'>
+                        <div class='col-md-12 '>Corrective Action Plan <button class="btn btn-info btn-circle" onclick="add_immediate_action()" type="button"><i class="fa fa-plus"></i>
+                        </button> <button class="btn btn-danger btn-circle" onclick="remove_immediate_action()" type="button"><i class="fa fa-minus"></i>
+                        </button>
+                        </div>
+                        <div class='col-md-8'>
+                            <textarea class='form-control' name='action_plan'  rows="6" cols="100" required placeholder='Corrective Action Plan'></textarea>
+                        </div>
+                        <div class='col-md-4'>
+                            <label class='col-sm-6 control-label text-left'>Target Completion :</label>
+                            <div class="col-sm-6">
+                                <input name='date_complete' class='form-control form-control-sm' max='{{date('Y-m-d',strtotime("+1 month", strtotime(date("Y-m-d"))))}}' type='date' required >
+                            </div>
+                        </div>
+                        
                     </div>
                     <div class='row'>
                         <div class='col-md-12 text-right'>
