@@ -158,7 +158,7 @@
     }else{
         finalLastId = 1;
     }
-    var data = "<div class='row ' id="+finalLastId+" >";
+    var data = "<div class='row new_action_plan' id="+finalLastId+" >";
         data += "<div class='col-md-8'>";
         data += "<textarea class='form-control' name='action_plans[]'  rows='6' cols='100' required placeholder='Agreed Action Plan'></textarea>";
         data +="</div>";
@@ -179,12 +179,12 @@
         data += "</div>";
        
             
-            $('#content').append(data);
+            $('.content').append(data);
                                        
     }
-    function remove_immediate_action(id)
+    function remove_immediate_action()
     {
-        if($('tr.new_action_plan').length > 0)
+        if($('div.new_action_plan').length > 0)
         {
             lastItemID =  $('#content'+id+' tr:last').attr('id');
         $('#'+lastItemID).remove();
