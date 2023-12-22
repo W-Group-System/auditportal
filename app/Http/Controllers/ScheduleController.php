@@ -425,6 +425,7 @@ class ScheduleController extends Controller
         {
             $audits = [];
         }
+        $audits = AuditPlan::where('code','!=',null)->orderBy('audit_to','asc')->get();
         return view('for_audit',
         array(
             'audits' => $audits,
