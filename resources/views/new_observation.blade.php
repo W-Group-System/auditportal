@@ -186,7 +186,7 @@
     {
         if($('div.new_action_plan').length > 0)
         {
-            lastItemID =  $('#content'+id+' tr:last').attr('id');
+            lastItemID =  $('.content div:last').attr('id');
         $('#'+lastItemID).remove();
         }
                                        
