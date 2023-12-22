@@ -180,6 +180,10 @@
        
             
             $('.content').append(data);
+            tinymce.init({
+    selector:'textarea',
+    content_style: "p { margin: 0; }",    
+    });
                                        
     }
     function remove_immediate_action()
