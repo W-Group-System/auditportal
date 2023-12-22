@@ -107,22 +107,33 @@
                             <input class='form-control' type='file' name='attachments[]' multiple>
                         </div>
                     </div>
-                    
-                    <div class='row'>
+                    <hr>
+                    <div class='content'>
+                    <div class='row '>
                         <div class='col-md-12 '>Corrective Action Plan <button class="btn btn-info btn-circle" onclick="add_immediate_action()" type="button"><i class="fa fa-plus"></i>
                         </button> <button class="btn btn-danger btn-circle" onclick="remove_immediate_action()" type="button"><i class="fa fa-minus"></i>
                         </button>
                         </div>
+                    </div>
+                    <div class='row '>
                         <div class='col-md-8'>
-                            <textarea class='form-control' name='action_plan'  rows="6" cols="100" required placeholder='Corrective Action Plan'></textarea>
+                            <textarea class='form-control' name='action_plans[]'  rows="6" cols="100" required placeholder='Agreed Action Plan'></textarea>
                         </div>
                         <div class='col-md-4'>
-                            <label class='col-sm-6 control-label text-left'>Target Completion :</label>
+                            <label class='col-sm-6 control-label text-left'>Target Date :</label>
                             <div class="col-sm-6">
-                                <input name='date_complete' class='form-control form-control-sm' max='{{date('Y-m-d',strtotime("+1 month", strtotime(date("Y-m-d"))))}}' type='date' required >
+                                <input name='date_complete[]' class='form-control form-control-sm' max='{{date('Y-m-d',strtotime("+1 month", strtotime(date("Y-m-d"))))}}' type='date' required >
+                            </div>
+                            <br>
+                            <label class='col-sm-6 control-label text-left'>Status :</label>
+                            <div class="col-sm-6">
+                                <select class='form-control' name='status[]' required>
+                                    <option value='Open'></option>
+                                    <option value='Close'>Close</option>
+                                </select>
                             </div>
                         </div>
-                        
+                    </div>
                     </div>
                     <div class='row'>
                         <div class='col-md-12 text-right'>
@@ -138,6 +149,49 @@
 @section('js')
 <script src="{{ asset('login_css/js/plugins/dataTables/datatables.min.js')}}"></script>
 <script src="{{ asset('login_css/js/plugins/chosen/chosen.jquery.js') }}"></script>
+<script>
+    function add_immediate_action()
+    {
+        var lastItemID = $('.content').children().last().attr('id');
+    if(lastItemID){
+        finalLastId = parseInt(last_id[1]) + 1;
+    }else{
+        finalLastId = 1;
+    }
+    var data = "<div class='row ' id="+finalLastId+" >";
+        data += "<div class='col-md-8'>";
+        data += "<textarea class='form-control' name='action_plans[]'  rows='6' cols='100' required placeholder='Agreed Action Plan'></textarea>";
+        data +="</div>";
+        data += "<div class='col-md-4'>";
+        data += "<label class='col-sm-6 control-label text-left'>Target Date :</label>";
+        data += "<div class="col-sm-6">";
+        data += "<input name='date_complete[]' class='form-control form-control-sm' max='{{date('Y-m-d',strtotime('+1 month', strtotime(date('Y-m-d'))))}}' type='date' required >";
+        data += "</div>";
+        data += "<br>";
+        data += "<label class='col-sm-6 control-label text-left'>Status :</label>";
+        data += "<div class="col-sm-6">";
+        data += "<select class='form-control' name='status[]' required>";
+        data += "<option value='Open'></option>";
+        data += "<option value='Close'>Close</option>";
+        data += "</select>";
+        data += "</div>";
+        data += "</div>";
+        data += "</div>";
+       
+            
+            $('#content').append(data);
+                                       
+    }
+    function remove_immediate_action(id)
+    {
+        if($('tr.new_action_plan').length > 0)
+        {
+            lastItemID =  $('#content'+id+' tr:last').attr('id');
+        $('#'+lastItemID).remove();
+        }
+                                       
+    }
+</script>
 <script>
     $(document).ready(function(){
         
