@@ -128,7 +128,7 @@
                             <label class='col-sm-6 control-label text-left'>Status :</label>
                             <div class="col-sm-6">
                                 <select class='form-control' name='status[]' required>
-                                    <option value='Open'></option>
+                                    <option value='Open'>Open</option>
                                     <option value='Close'>Close</option>
                                 </select>
                             </div>
@@ -164,12 +164,12 @@
         data +="</div>";
         data += "<div class='col-md-4'>";
         data += "<label class='col-sm-6 control-label text-left'>Target Date :</label>";
-        data += "<div class="col-sm-6">";
+        data += "<div class='col-sm-6'>";
         data += "<input name='date_complete[]' class='form-control form-control-sm' max='{{date('Y-m-d',strtotime('+1 month', strtotime(date('Y-m-d'))))}}' type='date' required >";
         data += "</div>";
         data += "<br>";
         data += "<label class='col-sm-6 control-label text-left'>Status :</label>";
-        data += "<div class="col-sm-6">";
+        data += "<div class='col-sm-6'>";
         data += "<select class='form-control' name='status[]' required>";
         data += "<option value='Open'></option>";
         data += "<option value='Close'>Close</option>";
