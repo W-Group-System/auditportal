@@ -32,7 +32,7 @@
                     <div class='row'>
                         <div class='col-md-6'>
                             Audit Area:
-                            <select name='audit_area' class='form-control-sm form-control cat'  required>
+                            <select name='audit_area' class='form-control-sm form-control cat'  >
                                 <option value=""></option>
                                 <option value="Completeness">Completeness</option>
                                 <option value="Accuracy">Accuracy</option>
@@ -44,7 +44,7 @@
                         </div>
                         <div class='col-md-6'>
                             Risk Implication:
-                            <input name='risk_implication' type='text' class='form-control-sm form-control'  required>
+                            <input name='risk_implication' type='text' class='form-control-sm form-control'  >
                         </div>
                     </div>
                     <div class='row'>
