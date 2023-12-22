@@ -154,7 +154,7 @@
     {
         var lastItemID = $('.content').children().last().attr('id');
     if(lastItemID){
-        finalLastId = parseInt(last_id[1]) + 1;
+        finalLastId = parseInt(lastItemID[1]) + 1;
     }else{
         finalLastId = 1;
     }
