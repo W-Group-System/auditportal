@@ -62,13 +62,13 @@
                     <div class='row'>
                         <div class='col-md-12'>
                             Auditee:
-                            <select name='auditee' class='form-control-sm form-control cat'  required>
+                            <select name='auditee' class='form-control-sm form-control cat' multiple required>
                                 <option value=""></option>
                                 {{-- @foreach($audit_plan->department as $dept)
                                 <option value="{{$dept->user_id}}">{{$dept->user_name->name}} - {{$dept->user_name->position}}</option>
                                 @endforeach --}}
                                 @foreach($users as $user)
-                                <option value="{{$user->id}}">{{$user->name}} - {{$user->position}}</option>
+                                <option value="{{$user->id}}">{{$user->name}} - {{$user->position}} - {{$user->department->name}}</option>
                                 @endforeach
                             </select>
                         </div>

@@ -505,7 +505,8 @@ class ScheduleController extends Controller
     {
         $consequence = explode("-",$request->consequence);
         $likelihood = explode("-",$request->likelihood);
-
+        foreach($request->auditee as $auditee)
+        {
         $risk = $likelihood[0]*$consequence[0];
         $risks = Matrix::where("from","<=",$risk)->orderBy('id','desc')->first();
         $user = User::findOrfail($request->auditee);
@@ -519,7 +520,7 @@ class ScheduleController extends Controller
         $auditPlanObservation->consequence_number = $consequence[0];
         $auditPlanObservation->likelihood = $likelihood[1];
         $auditPlanObservation->likelihood_number = $likelihood[0];
-        $auditPlanObservation->user_id = $request->auditee;
+        $auditPlanObservation->user_id = $auditee;
         $auditPlanObservation->created_by = auth()->user()->id;
         $auditPlanObservation->overall_number = $risk;
         $auditPlanObservation->overall_risk = $risks->name;
@@ -553,6 +554,14 @@ class ScheduleController extends Controller
                     $upload->save();
                 }
         }
+    }
+        // if(count($request->action_plans) >0)
+        // {
+        //     foreach($request->action_plans as $key => $action_plan)
+        //     {
+                
+        //     }
+        // }
         Alert::success('Successfully updated')->persistent('Dismiss');
         return redirect('view-calendar/'.$id);
 
