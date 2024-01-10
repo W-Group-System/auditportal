@@ -509,7 +509,7 @@ class ScheduleController extends Controller
         {
         $risk = $likelihood[0]*$consequence[0];
         $risks = Matrix::where("from","<=",$risk)->orderBy('id','desc')->first();
-        $user = User::findOrfail($request->auditee);
+        $user = User::findOrfail($auditee);
         $auditPlanObservation = new AuditPlanObservation;
         $auditPlanObservation->audit_plan_id = $id;
         $auditPlanObservation->observation = $request->observation;
