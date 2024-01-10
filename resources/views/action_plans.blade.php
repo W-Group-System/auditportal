@@ -63,7 +63,7 @@
                                         </div>
 
                                     </td>
-                                    <td><small>@if($action_plan->observation){{$action_plan->observation->code}}@else Old Code @endif</small></td>
+                                    <td><small>{{$action_plan->audit_plan->code}}</small></td>
                                     <td><small>{{$action_plan->audit_plan->engagement_title}}</small></td>
                                     <td><small>@if($action_plan->observation){{$action_plan->observation->created_by_user->name}}@endif</small></td>
                                     <td><small>{{$action_plan->user->name}}</small></td>

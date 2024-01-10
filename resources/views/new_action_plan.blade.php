@@ -45,7 +45,7 @@
                     <div class='row'>
                         <div class='col-md-4'>
                             Auditee:
-                            <select name='auditee' class='form-control-sm form-control cat'  >
+                            <select name='auditee[]' class='form-control-sm form-control cat' multiple required  >
                                 <option value=""></option>
                                 @foreach($users->where('role','Auditee') as $user)
                                     <option value='{{$user->id}}'>{{$user->name}} - {{$user->department->code}}</option>
