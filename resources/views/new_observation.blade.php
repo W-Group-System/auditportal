@@ -108,7 +108,7 @@
                         </div>
                     </div>
                     <hr>
-                    <div class='content'>
+                    {{-- <div class='content'>
                     <div class='row '>
                         <div class='col-md-12 '>Corrective Action Plan <button class="btn btn-info btn-circle" onclick="add_immediate_action()" type="button"><i class="fa fa-plus"></i>
                         </button> <button class="btn btn-danger btn-circle" onclick="remove_immediate_action()" type="button"><i class="fa fa-minus"></i>
@@ -134,7 +134,7 @@
                             </div>
                         </div>
                     </div>
-                    </div>
+                    </div> --}}
                     <div class='row'>
                         <div class='col-md-12 text-right'>
                             <br>    

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\ActionPlan;
+use App\AuditPlan;
 use App\User;
 use App\ActionPlanRemark;
 use App\AuditPlanObservation;
@@ -21,6 +22,9 @@ class ActionPlanController extends Controller
     public function index()
     {
         $action_plans = ActionPlan::where('status','Verified')->get();
+        $audit_plans = AuditPlan::orderBy('code','desc')->get();
+        $acrs = AuditPlanObservation::get();
+        $users = User::where('status',null)->get();
         if(auth()->user()->role == "Auditee")
         {
             $action_plans = ActionPlan::whereHas('observation',function( $query ){
@@ -30,8 +34,39 @@ class ActionPlanController extends Controller
         return view('action_plans',
             array(
                 'action_plans' => $action_plans,
+                'audit_plans' => $audit_plans,
+                'acrs' => $acrs,
+                'users' => $users,
             )
         );
+    }
+    public function new_action_plan(Request $request)
+    {
+        $user = User::findOrfail($request->auditee);
+        $action_plan = new ActionPlan;
+        $action_plan->audit_plan_id = $request->audit_plan;
+        $action_plan->audit_plan_observation_id = $request->acr;
+        $action_plan->action_plan = $request->action_plan;
+        $action_plan->user_id = $request->auditee;
+        if($request->type == "Correction or Immediate Action")
+        {
+            $action_plan->immediate = 1;
+        }
+        $action_plan->target_date = $request->target_date;
+        $action_plan->status = "Verified";
+        $action_plan->auditor = $request->auditor;
+        $action_plan->save();
+        Alert::success('Successfully Created')->persistent('Dismiss');
+        return back();
+    }
+    public function edit_action_plan (Request $request,$id)
+    {
+        $action_plan = ActionPlan::findOrfail($id);
+        $action_plan->action_plan = $request->action_plan;
+        $action_plan->save();
+
+        Alert::success('Successfully Updated')->persistent('Dismiss');
+        return back();
     }
     public function upload_proof(Request $request,$id)
     {

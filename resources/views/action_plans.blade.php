@@ -11,8 +11,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Action Plans
-                        {{-- <button class="btn btn-success "  data-target="#uploadDocument" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;New Engagement</button></h5> --}}
-                        
+                        <button class="btn btn-success"  data-target="#new" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;New Action Plan</button></h5>
                     </div>
                 <div class="ibox-content">
 
@@ -27,7 +26,7 @@
                                     <th>Auditee</th>
                                     <th>Agreed Action Plan</th>
                                     <th>Target Date</th>
-                                    <th>Date Completed</th>
+                                    {{-- <th>Date Completed</th> --}}
                                     <th>Type</th>
                                     <th>Supporting Document</th>
                                     <th>Status</th>
@@ -41,6 +40,9 @@
                                         <div class="btn-group">
                                             <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><i class="fa fa-ellipsis-v"></i> </button>
                                             <ul class="dropdown-menu">
+                                                @if((auth()->user()->role == "IAD Approver") || (auth()->user()->role == "Administrator"))
+                                                    <li><a title='Edit Action Plan' href="#edit_action_plan{{$action_plan->id}}" data-toggle="modal" >Edit</a></li>
+                                                @endif
                                                 @if(auth()->user()->role == "Auditee")
                                                     <li><a title='Update' href="#view{{$action_plan->id}}" data-toggle="modal" >Upload</a></li>
                                                     <li><a title='View History' href="#view_history{{$action_plan->id}}" data-toggle="modal" >View History</a></li>
@@ -61,13 +63,13 @@
                                         </div>
 
                                     </td>
-                                    <td>{{$action_plan->observation->code}}</td>
-                                    <td>{{$action_plan->observation->audit_plan->engagement_title}}</td>
-                                    <td>{{$action_plan->observation->created_by_user->name}}</td>
-                                    <td>{{$action_plan->observation->user->name}}</td>
-                                    <td>{{$action_plan->action_plan}}</td>
+                                    <td><small>@if($action_plan->observation){{$action_plan->observation->code}}@else Old Code @endif</small></td>
+                                    <td><small>{{$action_plan->audit_plan->engagement_title}}</small></td>
+                                    <td><small>@if($action_plan->observation){{$action_plan->observation->created_by_user->name}}@endif</small></td>
+                                    <td><small>{{$action_plan->user->name}}</small></td>
+                                    <td ><small>{!! nl2br(e($action_plan->action_plan)) !!}</small></td>
                                     <td @if($action_plan->target_date < date('Y-m-d')) class='bg-danger' @endif>{{$action_plan->target_date}}</td>
-                                    <td>{{$action_plan->date_completed}}</td>
+                                    {{-- <td>{{$action_plan->date_completed}}</td> --}}
                                     <td>@if($action_plan->immediate == 1) Correction or Immediate Action @else Corrective Action Plan @endif</td>
                                     <td>
                                         @if($action_plan->attachment == null)
@@ -96,7 +98,9 @@
 
     </div>
 </div>
+@include('new_action_plan')
 @foreach($action_plans as $action_plan)
+    @include('edit_action_plan')
     @include('view_action_plan')
     @include('return_action_plan')
     @include('close_action_plan')
