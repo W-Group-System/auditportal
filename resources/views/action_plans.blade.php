@@ -11,7 +11,9 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Action Plans
+                        @if((auth()->user()->role == "Auditor") || (auth()->user()->role == "IAD Approver"))
                         <button class="btn btn-success"  data-target="#new" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;New Action Plan</button></h5>
+                        @endif
                     </div>
                 <div class="ibox-content">
 
