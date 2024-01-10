@@ -6,6 +6,28 @@
                     </div>
                     <div class="modal-body">             
                         @csrf
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                IA Code: <strong><small>{{$action_plan->audit_plan->code}}</small></strong> <br>
+                                Title: <strong><small>{{$action_plan->audit_plan->engagement_title}}</small></strong> <br>
+                                Auditor: <small>@if($action_plan->observation){{$action_plan->observation->created_by_user->name}} @else @if($action_plan->auditor_data){{$action_plan->auditor_data->name}} @endif @endif</small> <br>
+                                Auditee: <small>{{$action_plan->user->name}}</small>
+                                
+                            </div>
+                        </div>
+                        <hr>
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                Findings: <br> @if($action_plan->observation){{$action_plan->observation->observation}} @else{!! nl2br(e($action_plan->findings)) !!} @endif<br>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                Action Plan: <br> {!! nl2br(e($action_plan->action_plan)) !!}<br>
+                            </div>
+                        </div>
+                        <hr>
                         <div class='row text-center'>
                             <div class='col-md-3 border  border-primary border-top-bottom border-left-right'>
                             Action By

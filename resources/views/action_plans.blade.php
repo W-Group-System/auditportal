@@ -47,7 +47,7 @@
                                                 @endif
                                                 @if(auth()->user()->role == "Auditee")
                                                     <li><a title='Update' href="#view{{$action_plan->id}}" data-toggle="modal" >Upload</a></li>
-                                                    <li><a title='View History' href="#view_history{{$action_plan->id}}" data-toggle="modal" >View History</a></li>
+                                                    <li><a title='View' href="#view_history{{$action_plan->id}}" data-toggle="modal" >View</a></li>
                                                 @else
                                                     <li><a title='Update' href="#view{{$action_plan->id}}" data-toggle="modal" >Upload</a></li>
                                                     <li><a title='Change Target Date' href="#change{{$action_plan->id}}" data-toggle="modal" >Change Target Date</a></li>
@@ -59,7 +59,7 @@
                                                     @endif
                                                     
                                                    
-                                                    <li><a title='View History' href="#view_history{{$action_plan->id}}" data-toggle="modal" >View History</a></li>
+                                                    <li><a title='View' href="#view_history{{$action_plan->id}}" data-toggle="modal" >View</a></li>
                                                 @endif
                                             </ul>
                                         </div>
