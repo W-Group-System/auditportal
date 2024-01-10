@@ -62,7 +62,7 @@
                     <div class='row'>
                         <div class='col-md-12'>
                             Auditee:
-                            <select name='auditee' class='form-control-sm form-control cat' multiple required>
+                            <select name='auditee[]' class='form-control-sm form-control cat' multiple required>
                                 <option value=""></option>
                                 {{-- @foreach($audit_plan->department as $dept)
                                 <option value="{{$dept->user_id}}">{{$dept->user_name->name}} - {{$dept->user_name->position}}</option>
