@@ -51,6 +51,7 @@ class ActionPlanController extends Controller
             $action_plan->action_plan = $request->action_plan;
             $action_plan->findings = $request->findings;
             $action_plan->status = $request->status;
+            $action_plan->department_id = $user->department_id;
             if($request->status == "Closed")
             {
                 $action_plan->iad_status = "Closed";

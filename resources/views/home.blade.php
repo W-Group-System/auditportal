@@ -108,12 +108,12 @@
                         <tr>
                             <td>{{$department->code}}</td>
                             <td>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'))}}</td>
-                            <td>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')))}}</td>
-                            <td>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','Closed')->where('target_date','>=',date('Y-m-d')))}}</td>
+                            <td>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',date('Y-m-d')))}}</td>
+                            <td>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')))}}</td>
                             <td>{{count(($department->action_plans)->where('action_plan','!=',"N/A"))}}</td>
                             <td>@php
                                 $closed = count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'));
-                                $delayed = count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','Closed')->where('target_date','<',date('Y-m-d')));
+                                $delayed = count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',date('Y-m-d')));
                                 $total = $closed + $delayed;
                                 if($closed+$delayed == 0)
                                 {
