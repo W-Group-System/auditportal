@@ -49,13 +49,18 @@ class ActionPlanController extends Controller
             $action_plan->audit_plan_id = $request->audit_plan;
             $action_plan->audit_plan_observation_id = $request->acr;
             $action_plan->action_plan = $request->action_plan;
+            $action_plan->findings = $request->findings;
+            $action_plan->status = $request->status;
+            if($request->status == "Closed")
+            {
+                $action_plan->iad_status = "Closed";
+            }
             $action_plan->user_id = $auditee;
             if($request->type == "Correction or Immediate Action")
             {
                 $action_plan->immediate = 1;
             }
             $action_plan->target_date = $request->target_date;
-            $action_plan->status = "Verified";
             $action_plan->auditor = $request->auditor;
             $action_plan->save();
         }

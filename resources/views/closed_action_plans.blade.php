@@ -47,9 +47,9 @@
                                         </div>
 
                                     </td>
-                                    <td>{{$action_plan->observation->code}}</td>
-                                    <td>{{$action_plan->observation->created_by_user->name}}</td>
-                                    <td>{{$action_plan->observation->user->name}}</td>
+                                    <td><small>{{$action_plan->audit_plan->code}}</small></td>
+                                    <td><small>@if($action_plan->observation){{$action_plan->observation->created_by_user->name}}@endif</small></td>
+                                    <td><small>{{$action_plan->user->name}}</small></td>
                                     <td>{{nl2br(e($action_plan->action_plan))}}</td>
                                     <td>{{$action_plan->target_date}}</td>
                                     <td>{{$action_plan->date_completed}}</td>

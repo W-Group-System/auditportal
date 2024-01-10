@@ -8,7 +8,7 @@
                 <div class="modal-body">             
                     @csrf
                     <div class='row'>
-                        <div class='col-md-4'>
+                        <div class='col-md-6'>
                             Audit Plan:
                             <select name='audit_plan' class='form-control-sm form-control cat' required >
                                 <option value=""></option>
@@ -17,7 +17,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class='col-md-4'>
+                        <div class='col-md-6'>
                             ACR :
                             <select name='acr' class='form-control-sm form-control cat'  >
                                 <option value=""></option>
@@ -26,14 +26,11 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class='col-md-4'>
-                            Auditor :
-                            <select name='auditor' class='form-control-sm form-control cat' >
-                                <option value=""></option>
-                                @foreach($users->where('role','Auditor') as $user)
-                                    <option value='{{$user->id}}'>{{$user->name}} - {{$user->department->code}}</option>
-                                @endforeach
-                            </select>
+                    </div>
+                    <div class='row'>
+                        <div class='col-md-12'>
+                            Findings:
+                            <textarea class='form-control' name='findings'  rows="6" cols="100" required placeholder='Findings'></textarea>
                         </div>
                     </div>
                     <div class='row'>
@@ -53,6 +50,15 @@
                             </select>
                         </div>
                         <div class='col-md-4'>
+                            Auditor :
+                            <select name='auditor' class='form-control-sm form-control cat' >
+                                <option value=""></option>
+                                @foreach($users->where('role','Auditor') as $user)
+                                    <option value='{{$user->id}}'>{{$user->name}} - {{$user->department->code}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class='col-md-4'>
                             Type:
                             <select name='type' class='form-control-sm form-control cat'  required>
                                 <option value=""></option>
@@ -60,10 +66,20 @@
                                 <option value="Correction or Immediate Action">Correction or Immediate Action</option>
                             </select>
                         </div>
+                    </div>
+                    <div class='row'>
                         <div class='col-md-4'>
                             Target Date:
                             <input name='target_date' class='form-control form-control-sm' type='date' required >
                         </div>
+                        <div class='col-md-4'>
+                           Status:
+                           <select class='form-control' name='status' required>
+                                <option value='Verified'>Open</option>
+                                <option value='Closed'>Close</option>
+                            </select>
+                        </div>
+                      
                     </div>
                 </div> 
                 <div class="modal-footer">
