@@ -18,7 +18,7 @@
                         <hr>
                         <div class='row'>
                             <div class='col-md-12'>
-                                Findings: <br> @if($action_plan->observation){{$action_plan->observation->observation}} @else{!! nl2br(e($action_plan->findings)) !!} @endif<br>
+                                Findings: <br> @if($action_plan->observation){!!$action_plan->observation->observation!!} @else{!! nl2br(e($action_plan->findings)) !!} @endif<br>
                             </div>
                         </div>
                         <hr>
