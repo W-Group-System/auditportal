@@ -123,6 +123,10 @@ class ActionPlanController extends Controller
 
         $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
         $user = User::findOrfail($action_plan->user_id);
+        if($observation == null)
+        {
+            $observation = [];
+        }
         $user->notify(new ChangeTargetDate($observation,$history->remarks));
 
         Alert::success('Successfully Change')->persistent('Dismiss');
