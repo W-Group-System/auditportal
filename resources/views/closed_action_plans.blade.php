@@ -40,6 +40,9 @@
                                             <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><i class="fa fa-ellipsis-v"></i> </button>
                                             <ul class="dropdown-menu">
                                                  <li><a title='View History' href="#view_history{{$action_plan->id}}" data-toggle="modal" >View History</a></li>
+                                                 @if($action_plan->attachment == null)
+                                                 <li><a title='View History' href="#upload_attachment{{$action_plan->id}}" data-toggle="modal" >Upload Attachment</a></li>
+                                                 @endif
                                                  @if((auth()->user()->role == "IAD Approver") || (auth()->user()->role == "Administrator"))
                                                  <li><a title='Return Action Plan' href="#return{{$action_plan->id}}" data-toggle="modal" >Re-open Action Plan</a></li>
                                                 @endif
@@ -78,6 +81,7 @@
 </div>
 @foreach($action_plans as $action_plan)
     @include('view_history_action_plan')
+    @include('upload_action_plan')
     @include('return_action_plan')
 @endforeach
 @endsection
