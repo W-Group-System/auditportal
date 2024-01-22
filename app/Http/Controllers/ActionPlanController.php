@@ -52,6 +52,17 @@ class ActionPlanController extends Controller
             $action_plan->findings = $request->findings;
             $action_plan->status = $request->status;
             $action_plan->department_id = $user->department_id;
+            
+            if($request->hasfile('file'))
+            {
+                $attachment = $request->file('file');
+                $name = time() . '_' . $attachment->getClientOriginalName();
+                $attachment->move(public_path() . '/action_plan_attachments/', $name);
+                $file_name = '/action_plan_attachments/' . $name;
+                
+                $action_plan->attachment = $file_name;
+
+            }
             if($request->status == "Closed")
             {
                 $action_plan->iad_status = "Closed";
