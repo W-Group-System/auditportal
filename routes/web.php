@@ -87,6 +87,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('action-plans','ActionPlanController@index')->name('action-plans');
     Route::post('save-action-plan/{id}','ActionPlanController@upload_proof')->name('action-plans');
+    Route::post('upload-attachment-close/{id}','ActionPlanController@upload_proof_close')->name('action-plans');
     Route::post('change-target-plan/{id}','ActionPlanController@change_target_date')->name('action-plans');
     Route::post('return-action-plan/{id}','ActionPlanController@return_action_plan')->name('action-plans');
     Route::post('close-action-plan/{id}','ActionPlanController@close_action_plan')->name('action-plans');

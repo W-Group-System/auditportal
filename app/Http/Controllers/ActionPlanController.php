@@ -80,6 +80,20 @@ class ActionPlanController extends Controller
         Alert::success('Successfully Created')->persistent('Dismiss');
         return back();
     }
+    public function upload_proof_close(Request $request,$id)
+    {
+            $action_plan = ActionPlan::findOrfail($id);
+            $attachment = $request->file('file');
+            $name = time() . '_' . $attachment->getClientOriginalName();
+            $attachment->move(public_path() . '/action_plan_attachments/', $name);
+            $file_name = '/action_plan_attachments/' . $name;
+            
+            $action_plan->attachment = $file_name;
+            $action_plan->save();
+            Alert::success('Successfully Uploaded.')->persistent('Dismiss');
+            return back();
+        
+    }
     public function edit_action_plan (Request $request,$id)
     {
         $action_plan = ActionPlan::findOrfail($id);
