@@ -555,13 +555,6 @@ class ScheduleController extends Controller
                 }
         }
     }
-        // if(count($request->action_plans) >0)
-        // {
-        //     foreach($request->action_plans as $key => $action_plan)
-        //     {
-                
-        //     }
-        // }
         Alert::success('Successfully updated')->persistent('Dismiss');
         return redirect('view-calendar/'.$id);
 

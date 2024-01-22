@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ChangeTargetDate extends Notification
+class FollowUp extends Notification
 {
     use Queueable;
 
@@ -16,15 +16,11 @@ class ChangeTargetDate extends Notification
      *
      * @return void
      */
-    protected $observation;
-    protected $remarks;
-    public function __construct($observation,$remarks)
+    public function __construct()
     {
         //
-        $this->observation = $observation;
-        $this->remarks = $remarks;
-
     }
+
     /**
      * Get the notification's delivery channels.
      *
@@ -45,13 +41,9 @@ class ChangeTargetDate extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-        ->greeting('Good Day!')
-        ->subject('Change Target Date')
-        ->line('Your target date has been change.')
-        ->line('Remarks : '.$this->remarks)
-        ->line('Please click the button provided for faster transaction')
-        ->action('Action Plans', url('/action-plans'))
-        ->line('Thank you for using our application!');
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', url('/'))
+                    ->line('Thank you for using our application!');
     }
 
     /**
