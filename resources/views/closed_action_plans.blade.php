@@ -51,7 +51,7 @@
 
                                     </td>
                                     <td><small>{{$action_plan->audit_plan->code}}</small></td>
-                                    <td><small>@if($action_plan->observation){{$action_plan->observation->created_by_user->name}}@endif</small></td>
+                                    <td><small>@if($action_plan->observation){{$action_plan->observation->created_by_user->name}} @else @if($action_plan->auditor_data){{$action_plan->auditor_data->name}} @endif @endif</small></td>
                                     <td><small>{{$action_plan->user->name}}</small></td>
                                     <td>{{nl2br(e($action_plan->action_plan))}}</td>
                                     <td>{{$action_plan->target_date}}</td>
