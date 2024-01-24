@@ -81,7 +81,7 @@
                         </div>
                         <div class='col-md-4'>
                            File (optional):
-                           <input type="file" class="form-control-sm form-control "   name="file" required/>
+                           <input type="file" class="form-control-sm form-control "   name="file" />
                         </div>
                       
                     </div>
