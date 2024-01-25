@@ -47,7 +47,7 @@ class SubmitProof extends Notification
         ->greeting('Good Day!')
         ->subject('Action Plan')
         ->line('Proof has been submitted')
-        ->line('ACR Code : '.$this->observation->code)
+        // ->line('ACR Code : '.$this->observation->code)
         ->line('Please click the button provided for faster transaction')
         ->action('Action Plans', url('/action-plans'))
         ->line('Thank you for using our application!');

@@ -130,7 +130,7 @@ class ActionPlanController extends Controller
         $history->save();
 
         $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
-        $user = User::findOrfail($observation->created_by);
+        $user = User::findOrfail($action_plan->user_id);
         $user->notify(new SubmitProof($observation));
 
         Alert::success('Successfully Uploaded')->persistent('Dismiss');
