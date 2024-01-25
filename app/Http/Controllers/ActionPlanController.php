@@ -179,10 +179,9 @@ class ActionPlanController extends Controller
         $history->action = "Return Action Plan";
         $history->remarks = $request->remarks;
         $history->save();
-
-        $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
-        $user = User::findOrfail($observation->user_id);
-        $user->notify(new ReturnActionPlan($observation,$history->remarks));
+        
+        $user = User::findOrfail($action_plan->user_id);
+        $user->notify(new ReturnActionPlan($history->remarks));
         Alert::success('Successfully Returned')->persistent('Dismiss');
         return back();
     }

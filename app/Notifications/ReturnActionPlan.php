@@ -16,12 +16,10 @@ class ReturnActionPlan extends Notification
      *
      * @return void
      */
-    protected $observation;
     protected $remarks;
-    public function __construct($observation,$remarks)
+    public function __construct($remarks)
     {
         //
-        $this->observation = $observation;
         $this->remarks = $remarks;
 
     }
@@ -48,7 +46,6 @@ class ReturnActionPlan extends Notification
         return (new MailMessage)
         ->greeting('Good Day!')
         ->subject('Your action plan has been returned.')
-        ->line('ACR Code : '.$this->observation->code)
         ->line('Remarks : '.$this->remarks)
         ->line('Please click the button provided for faster transaction')
         ->action('Action Plans', url('/action-plans'))
