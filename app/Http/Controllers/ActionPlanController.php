@@ -196,13 +196,13 @@ class ActionPlanController extends Controller
 
         $action_plans = ActionPlan::where('audit_plan_observation_id',$action_plan->audit_plan_observation_id)->where('status','!=','Closed')->count();
 
-        if($action_plans == 0)
-        {
-            $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
-            $observation->status = "Closed";
-            $observation->save();
+        // if($action_plans == 0)
+        // {
+        //     $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
+        //     $observation->status = "Closed";
+        //     $observation->save();
 
-        }
+        // }
         
 
         $history = new ActionPlanRemark;
