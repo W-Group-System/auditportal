@@ -16,12 +16,11 @@ class CloseActionPlan extends Notification
      *
      * @return void
      */
-    protected $observation;
     protected $remarks;
-    public function __construct($observation,$remarks)
+    public function __construct($remarks)
     {
         //
-        $this->observation = $observation;
+        // $this->observation = $observation;
         $this->remarks = $remarks;
 
     }
@@ -47,7 +46,6 @@ class CloseActionPlan extends Notification
         return (new MailMessage)
         ->greeting('Good Day!')
         ->subject('Action Plan has been closed')
-        ->line('ACR Code : '.$this->observation->code)
         ->line('Remarks : '.$this->remarks)
         ->line('Thank you for using our application!');
     }
