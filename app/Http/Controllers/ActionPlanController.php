@@ -42,6 +42,15 @@ class ActionPlanController extends Controller
     }
     public function new_action_plan(Request $request)
     {
+        $file_name = null;
+        if($request->hasfile('file'))
+        {
+            $attachment = $request->file('file');
+            $name = time() . '_' . $attachment->getClientOriginalName();
+            $attachment->move(public_path() . '/action_plan_attachments/', $name);
+            $file_name = '/action_plan_attachments/' . $name;
+        }
+
         foreach($request->auditee as $auditee)
         {
             $user = User::findOrfail($auditee);
@@ -53,16 +62,14 @@ class ActionPlanController extends Controller
             $action_plan->status = $request->status;
             $action_plan->department_id = $user->department_id;
             
-            if($request->hasfile('file'))
-            {
-                $attachment = $request->file('file');
-                $name = time() . '_' . $attachment->getClientOriginalName();
-                $attachment->move(public_path() . '/action_plan_attachments/', $name);
-                $file_name = '/action_plan_attachments/' . $name;
-                
-                $action_plan->attachment = $file_name;
+          
+                if($file_name)
+                {
+                    $action_plan->attachment = $file_name;
+                }
+            
 
-            }
+            
             if($request->status == "Closed")
             {
                 $action_plan->iad_status = "Closed";
