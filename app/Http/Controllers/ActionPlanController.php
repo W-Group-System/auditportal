@@ -27,9 +27,10 @@ class ActionPlanController extends Controller
         $users = User::where('status',null)->get();
         if(auth()->user()->role == "Auditee")
         {
-            $action_plans = ActionPlan::whereHas('observation',function( $query ){
-                $query->where('user_id',auth()->user()->id);
-            })->where('status','Verified')->get();
+            // $action_plans = ActionPlan::whereHas('observation',function( $query ){
+            //     $query->where('user_id',auth()->user()->id);
+            // })->where('status','Verified')->get();
+            $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('status','Verified')->get();
         }
         return view('action_plans',
             array(
