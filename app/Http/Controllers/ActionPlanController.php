@@ -21,7 +21,7 @@ class ActionPlanController extends Controller
 
     public function index()
     {
-        $action_plans = ActionPlan::where('status','Verified')->get();
+        $action_plans = ActionPlan::where('status','Verified')->where('action_plan','!=',"N/A")->get();
         $audit_plans = AuditPlan::orderBy('code','desc')->get();
         $acrs = AuditPlanObservation::get();
         $users = User::where('status',null)->get();
@@ -30,7 +30,7 @@ class ActionPlanController extends Controller
             // $action_plans = ActionPlan::whereHas('observation',function( $query ){
             //     $query->where('user_id',auth()->user()->id);
             // })->where('status','Verified')->get();
-            $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('status','Verified')->get();
+            $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('action_plan','!=',"N/A")->where('status','Verified')->get();
         }
         return view('action_plans',
             array(
