@@ -213,10 +213,10 @@ class ActionPlanController extends Controller
         $history->remarks = $request->remarks;
         $history->save();  
         $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
-        $user = User::findOrfail($observation->user_id);
-        $user->notify(new CloseActionPlan($history->remarks));
-        $usera = User::findOrfail($observation->created_by);
-        $usera->notify(new CloseActionPlan($history->remarks));
+        // $user = User::findOrfail($observation->user_id);
+        // $user->notify(new CloseActionPlan($history->remarks));
+        // $usera = User::findOrfail($observation->created_by);
+        // $usera->notify(new CloseActionPlan($history->remarks));
         $users = User::where('role','IAD Approver')->where('status',null)->get();
         foreach($users as $userd)
         {
