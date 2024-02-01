@@ -216,7 +216,7 @@
             responsive: true,
             dom: '<"html5buttons"B>lTfgitp',
             buttons: [
-                
+                {extend: 'csv'},
             ]
 
         });
