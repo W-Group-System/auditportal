@@ -153,16 +153,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {{-- {{dd($departmentResults)}} --}}
-                    @foreach($departmentResults as $key => $result)
-                    @if($key != 0)
-                        <tr>
-                            @foreach($departmentResults as $result)
-                            <td>{{$result[$key]}}</td>
-                            @endforeach
-                        </tr>
-                        @endif
-                        @endforeach
+                    @foreach($departmentResults[0] as $key => $result)
+                            <tr>
+                                @foreach($departmentResults as $resulta)
+                                <td>{{$resulta[$key]}}</td>
+                                @endforeach
+                            </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </div>
@@ -180,8 +177,8 @@
     var audit_plans = {!! json_encode(($departmentResults)) !!};
 </script>  
 
-<script src="{{ asset('login_css/js/plugins/morris/raphael-2.1.0.min.js') }}"></script>
-<script src="{{ asset('login_css/js/plugins/morris/morris.js') }}"></script>
+{{-- <script src="{{ asset('login_css/js/plugins/morris/raphael-2.1.0.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('login_css/js/plugins/morris/morris.js') }}"></script> --}}
 
 <script src="{{ asset('login_css/js/plugins/d3/d3.min.js') }}"></script>
 <script src="{{ asset('login_css/js/plugins/c3/c3.min.js') }}"></script>
@@ -211,20 +208,7 @@
         },
             });
         });
-   Morris.Bar({
-        element: 'morris-bar-chart',
-        data: [{ y: 'ITD', a: 60, b: 50 },
-            { y: 'HRD', a: 75, b: 65 },
-            { y: 'BPD', a: 50, b: 40 },
-            { y: 'ATM', a: 75, b: 65 },
-            { y: 'WGI', a: 50, b: 40 }, ],
-        xkey: 'y',
-        ykeys: ['a', 'b'],
-        labels: ['Action Plans', 'Closed Action Plan'],
-        hideHover: 'auto',
-        resize: true,
-        barColors: ['#1ab394', '#cacaca'],
-    });
+
 
     $(document).ready(function(){
       $('.tables').DataTable({
