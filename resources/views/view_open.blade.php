@@ -9,6 +9,7 @@
                         <table class="table table-striped table-bordered table-hover tables" >
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>Code</th>
                                     <th>Auditor</th>
                                     <th>Auditee</th>
@@ -17,12 +18,39 @@
                                     <th>Date Completed</th>
                                     <th>Type</th>
                                     <th>Supporting Document</th>
-                                    <th>Date Closed</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                         <tbody>
                             @foreach(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')) as $action_plan)
                                 <tr>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><i class="fa fa-ellipsis-v"></i> </button>
+                                            <ul class="dropdown-menu">
+                                                @if((auth()->user()->role == "IAD Approver") || (auth()->user()->role == "Administrator"))
+                                                    <li><a title='Edit Action Plan' href="#edit_action_plan{{$action_plan->id}}" data-toggle="modal" >Edit</a></li>
+                                                @endif
+                                                @if(auth()->user()->role == "Auditee")
+                                                    <li><a title='Update' href="#view{{$action_plan->id}}" data-toggle="modal" >Upload</a></li>
+                                                    <li><a title='View' href="#view_history{{$action_plan->id}}" data-toggle="modal" >View</a></li>
+                                                @else
+                                                    <li><a title='Update' href="#view{{$action_plan->id}}" data-toggle="modal" >Upload</a></li>
+                                                    <li><a title='Change Target Date' href="#change{{$action_plan->id}}" data-toggle="modal" >Change Target Date</a></li>
+                                                    <li><a title='Return Action Plan' href="#return{{$action_plan->id}}" data-toggle="modal" >Return Action Plan</a></li>
+                                                    @if($action_plan->attachment == null)
+                                                    @elseif($action_plan->iad_status == "Returned")
+                                                    @else
+                                                    <li><a title='Closed Action Plan' href="#closed{{$action_plan->id}}" data-toggle="modal" >Close Action Plan</a></li>
+                                                    @endif
+                                                    
+                                                   
+                                                    {{-- <li><a title='View' href="#view_history{{$action_plan->id}}" data-toggle="modal" >View</a></li> --}}
+                                                @endif
+                                            </ul>
+                                        </div>
+
+                                    </td>
                                     <td><small>{{$action_plan->audit_plan->code}}</small></td>
                                     <td><small>@if($action_plan->observation){{$action_plan->observation->created_by_user->name}} @else @if($action_plan->auditor_data){{$action_plan->auditor_data->name}} @endif @endif</small></td>
                                     <td><small>{{$action_plan->user->name}}</small></td>
@@ -38,8 +66,13 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {{date('M. d, Y',strtotime($action_plan->updated_at))}}
+                                        @if($action_plan->attachment == null)  For Auditee Uploading </span>
+                                        @elseif($action_plan->iad_status == "Returned")
+                                            Returned Action Plan
+                                        @else For IAD Checking 
+                                        @endif
                                     </td>
+                                    
                                 </tr>
                             @endforeach
                         </tbody>
