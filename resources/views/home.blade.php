@@ -136,7 +136,7 @@
                        
                         @endforeach
                    
-                        @foreach($groups as $group)
+                        @foreach($groups as $key => $group)
                         @php
                         $dep_grou = ($group->dep)->pluck('department_id')->toArray();
                         $close_count = 0;
@@ -152,7 +152,7 @@
                                     $close_count = $close_count + count(($group_department->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'));
                                 @endphp
                                 @endforeach
-                                {{$close_count}}
+                                <a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_group{{$key}}" @endif>{{$close_count}}</a>
                             </td>
                            <td>
                                 @foreach($departments->whereIn('id',$dep_grou) as $group_department)
@@ -160,7 +160,7 @@
                                     $delayed_count = $delayed_count + count(($group_department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',date('Y-m-d')));
                                 @endphp
                                 @endforeach
-                                {{$delayed_count}}    
+                                <a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_delayed_group{{$key}}" @endif>{{$delayed_count}}</a>
                            </td>
                            <td>
                             @foreach($departments->whereIn('id',$dep_grou) as $group_department)
@@ -168,7 +168,7 @@
                                 $open = $open + count(($group_department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')));
                             @endphp
                             @endforeach
-                            {{$open}}  
+                            <a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_open_group{{$key}}" @endif>{{$open}}</a>
                            </td>
                            <td>
                             @foreach($departments->whereIn('id',$dep_grou) as $group_department)
@@ -209,6 +209,14 @@
     @include('view_closed')
     @include('view_dalayed')
     @include('view_open')
+    @endforeach
+    @foreach($groups as $key => $group)
+    @php
+        $dep_grou = ($group->dep)->pluck('department_id')->toArray();
+    @endphp
+    @include('view_closed_group')
+    @include('view_delayed_group')
+    @include('view_open_group')
     @endforeach
     @endif
     @if(auth()->user()->role != "Auditee")
