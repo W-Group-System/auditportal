@@ -105,6 +105,7 @@
                     </thead>
                     <tbody>
                         @foreach($departments as $department)
+                        @if($department->group == null)
                         <tr>
                             <td>{{$department->code}}</td>
                             <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view{{$department->id}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'))}}</a></td>
@@ -131,7 +132,72 @@
                                 {{number_format($percent*100,2)}} %
                             @endif</td>
                         </tr>
+                        @endif
+                       
                         @endforeach
+                   
+                        @foreach($groups as $group)
+                        @php
+                        $dep_grou = ($group->dep)->pluck('department_id')->toArray();
+                        $close_count = 0;
+                        $delayed_count = 0;
+                        $open = 0;
+                        $total = 0;
+                        @endphp
+                        <tr>
+                           <td>{{$group->name}}</td>
+                           <td> 
+                                @foreach($departments->whereIn('id',$dep_grou) as $group_department)
+                                @php
+                                    $close_count = $close_count + count(($group_department->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'));
+                                @endphp
+                                @endforeach
+                                {{$close_count}}
+                            </td>
+                           <td>
+                                @foreach($departments->whereIn('id',$dep_grou) as $group_department)
+                                @php
+                                    $delayed_count = $delayed_count + count(($group_department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',date('Y-m-d')));
+                                @endphp
+                                @endforeach
+                                {{$delayed_count}}    
+                           </td>
+                           <td>
+                            @foreach($departments->whereIn('id',$dep_grou) as $group_department)
+                            @php
+                                $open = $open + count(($group_department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')));
+                            @endphp
+                            @endforeach
+                            {{$open}}  
+                           </td>
+                           <td>
+                            @foreach($departments->whereIn('id',$dep_grou) as $group_department)
+                            @php
+                                $total = $total +  count(($group_department->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','For Approval'));
+                            @endphp
+                            @endforeach
+                            {{$total}}  
+                           
+                           </td>
+                           <td>
+                            @php
+                                if($close_count+$delayed_count == 0)
+                                {
+                                    $percent = 1;
+                                }
+                                else
+                                {
+                                    $percent = $close_count/($close_count+$delayed_count);
+                                }
+                            @endphp
+                            @if(count($group_department->action_plans) == 0)
+                            100.00 %
+                            @else
+                                {{number_format($percent*100,2)}} %
+                            @endif
+                           </td>
+                        </tr>
+                       @endforeach
                     </tbody>
                 </table>
             </div>
@@ -222,7 +288,9 @@
 
     $(document).ready(function(){
       $('.tables').DataTable({
-            pageLength: 10,
+            order: [[5, 'asc']],
+            pageLength: -1 ,
+            ordering: true,
             responsive: true,
             dom: '<"html5buttons"B>lTfgitp',
             buttons: [
@@ -234,6 +302,7 @@
     });
     $(document).ready(function(){
       $('.tables-data').DataTable({
+           
             pageLength: 25,
             ordering: false,
             responsive: true,

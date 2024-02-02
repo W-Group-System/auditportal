@@ -17,7 +17,7 @@ class DepartmentController extends Controller
     public function index()
     {
         //
-        $departments = Department::with('dep_head')->get();
+        $departments = Department::with('dep_head','group')->get();
         $employees = User::where('status', null)->get();
         return view('departments', array(
             'departments' => $departments,
