@@ -149,24 +149,26 @@
     <div class="col-lg-5">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>Latest Update</h5>
+                <h5>Activity</h5>
             </div>
             <div class="ibox-content">
-                <table class="table table-striped table-bordered table-hover tables">
+                <table class="table table-striped table-bordered table-hover tables-data">
                     <thead>
                     <tr>
-                        <th>Department</th>
-                        <th>Findings</th>
-                        <th>Avg. Risk</th>
+                        <th>User</th>
+                        <th>Action</th>
+                        <th>Remarks</th>
+                        <th>Date</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($departmentResults[0] as $key => $result)
-                            <tr>
-                                @foreach($departmentResults as $resulta)
-                                <td>{{$resulta[$key]}}</td>
-                                @endforeach
-                            </tr>
+                    @foreach($remarks as $remark)
+                        <tr>
+                            <td>{{$remark->user->name}}</td>
+                            <td>{{$remark->action}}</td>
+                            <td>{{$remark->remarks}}</td>
+                            <td>{{date('M d, Y h:i A',strtotime($remark->created_at))}}</td>
+                        </tr>
                     @endforeach
                     </tbody>
                 </table>
@@ -221,6 +223,19 @@
     $(document).ready(function(){
       $('.tables').DataTable({
             pageLength: 10,
+            responsive: true,
+            dom: '<"html5buttons"B>lTfgitp',
+            buttons: [
+                {extend: 'csv'},
+            ]
+
+        });
+
+    });
+    $(document).ready(function(){
+      $('.tables-data').DataTable({
+            pageLength: 25,
+            ordering: false,
             responsive: true,
             dom: '<"html5buttons"B>lTfgitp',
             buttons: [

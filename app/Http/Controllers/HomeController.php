@@ -5,6 +5,7 @@ use App\Department;
 use App\AuditPlan;
 use App\ActionPlan;
 use App\Matrix;
+use App\ActionPlanRemark;
 use App\AuditPlanObservation;
 use Illuminate\Http\Request;
 
@@ -28,6 +29,7 @@ class HomeController extends Controller
     public function index()
     {
         $audits = AuditPlan::where('code','!=',null)->orderBy('audit_to','asc')->get();
+        $remarks = ActionPlanRemark::orderBy('id','desc')->get()->take(1000);
         $action_plans = ActionPlan::where('status','Verified')->where('action_plan','!=',"N/A")->get();
         $reports = AuditPlanObservation::get();
         $results = $this->get_risks();
@@ -39,6 +41,7 @@ class HomeController extends Controller
             'audits' => $audits,
             'reports' => $reports,
             'action_plans' => $action_plans,
+            'remarks' => $remarks,
         ));
     }
 
