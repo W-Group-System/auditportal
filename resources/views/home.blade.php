@@ -137,12 +137,14 @@
             </div>
         </div>
     </div>
+    @if(auth()->user()->role != "Auditee")
     @foreach($departments as $department)
     
     @include('view_closed')
     @include('view_dalayed')
     @include('view_open')
     @endforeach
+    @endif
     @if(auth()->user()->role != "Auditee")
     <div class="col-lg-5">
         <div class="ibox float-e-margins">
