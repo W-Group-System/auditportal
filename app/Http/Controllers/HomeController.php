@@ -31,7 +31,7 @@ class HomeController extends Controller
         $action_plans = ActionPlan::where('status','Verified')->where('action_plan','!=',"N/A")->get();
         $reports = AuditPlanObservation::get();
         $results = $this->get_risks();
-        $departments = Department::get();
+        $departments = Department::where('status',null)->get();
         return view('home',
         array(
             'departmentResults' => $results,
