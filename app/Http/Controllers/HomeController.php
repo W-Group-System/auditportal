@@ -30,7 +30,8 @@ class HomeController extends Controller
     public function index()
     {
         $audits = AuditPlan::where('code','!=',null)->orderBy('audit_to','asc')->get();
-        $groups = DepartmentGroup::with('dep')->groupBy('name')->get(['name']);
+        $companies = Department::where('company','!=',null)->groupBy('company')->pluck('company');
+        $groups = DepartmentGroup::with('dep')->groupBy('name','company')->get(['name','company']);
         $remarks = ActionPlanRemark::orderBy('id','desc')->get()->take(1000);
         $action_plans = ActionPlan::where('status','Verified')->where('action_plan','!=',"N/A")->get();
         $reports = AuditPlanObservation::get();
@@ -45,6 +46,7 @@ class HomeController extends Controller
             'action_plans' => $action_plans,
             'remarks' => $remarks,
             'groups' => $groups,
+            'companies' => $companies,
         ));
     }
 

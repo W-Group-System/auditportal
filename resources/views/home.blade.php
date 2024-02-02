@@ -86,10 +86,12 @@
       </div>
     </div>
   </div> --}}
-    <div class="col-lg-5">
+  @foreach($companies as $company)
+  <small>
+    <div class="col-lg-4">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>Closed as of @if((int)date('d') > 5) ({{date('F t, Y')}}) @else {{date('F t, Y',strtotime("-1 month"))}} @endif</h5>
+                <h5>Closed as of @if((int)date('d') > 5) ({{date('F t, Y')}}) @else {{date('F t, Y',strtotime("-1 month"))}} @endif - {{$company}}</h5>
             </div>
             <div class="ibox-content">
                 <table class="table table-striped table-bordered table-hover tables">
@@ -104,7 +106,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($departments as $department)
+                        @foreach($departments->where('company',$company) as $department)
                         @if($department->group == null)
                         <tr>
                             <td>{{$department->code}}</td>
@@ -136,7 +138,7 @@
                        
                         @endforeach
                    
-                        @foreach($groups as $key => $group)
+                        @foreach($groups->where('company',$company) as $key => $group)
                         @php
                         $dep_grou = ($group->dep)->pluck('department_id')->toArray();
                         $close_count = 0;
@@ -203,6 +205,8 @@
             </div>
         </div>
     </div>
+  </small>
+    @endforeach
     @if(auth()->user()->role != "Auditee")
     @foreach($departments as $department)
     
@@ -220,7 +224,7 @@
     @endforeach
     @endif
     @if(auth()->user()->role != "Auditee")
-    <div class="col-lg-5">
+    {{-- <div class="col-lg-5">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <h5>Activity</h5>
@@ -248,7 +252,7 @@
                 </table>
             </div>
         </div>
-    </div>
+    </div> --}}
     @endif
 </div>
 @endsection
