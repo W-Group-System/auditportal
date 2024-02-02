@@ -107,9 +107,9 @@
                         @foreach($departments as $department)
                         <tr>
                             <td>{{$department->code}}</td>
-                            <td>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'))}}</td>
-                            <td>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',date('Y-m-d')))}}</td>
-                            <td>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')))}}</td>
+                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view{{$department->id}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'))}}</a></td>
+                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_delayed{{$department->id}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',date('Y-m-d')))}}</td>
+                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_open{{$department->id}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')))}}</a></td>
                             <td>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','For Approval'))}}</td>
                             <td>@php
                                 $closed = count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'));
@@ -137,6 +137,12 @@
             </div>
         </div>
     </div>
+    @foreach($departments as $department)
+    
+    @include('view_closed')
+    @include('view_dalayed')
+    @include('view_open')
+    @endforeach
     @if(auth()->user()->role != "Auditee")
     <div class="col-lg-5">
         <div class="ibox float-e-margins">
