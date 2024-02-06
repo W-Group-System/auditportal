@@ -223,37 +223,7 @@
     @include('view_open_group')
     @endforeach
     @endif
-    @if(auth()->user()->role != "Auditee")
-    {{-- <div class="col-lg-5">
-        <div class="ibox float-e-margins">
-            <div class="ibox-title">
-                <h5>Activity</h5>
-            </div>
-            <div class="ibox-content">
-                <table class="table table-striped table-bordered table-hover tables-data">
-                    <thead>
-                    <tr>
-                        <th>User</th>
-                        <th>Action</th>
-                        <th>Remarks</th>
-                        <th>Date</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($remarks as $remark)
-                        <tr>
-                            <td>{{$remark->user->name}}</td>
-                            <td>{{$remark->action}}</td>
-                            <td>{{$remark->remarks}}</td>
-                            <td>{{date('M d, Y h:i A',strtotime($remark->created_at))}}</td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div> --}}
-    @endif
+ 
 </div>
 @endsection
 

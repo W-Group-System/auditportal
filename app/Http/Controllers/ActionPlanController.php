@@ -130,9 +130,9 @@ class ActionPlanController extends Controller
         $history->remarks = "Upload Proof by ".auth()->user()->name." Remarks : ".$request->remarks;
         $history->save();
 
-        // $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
-        // $user = User::findOrfail($action_plan->user_id);
-        // $user->notify(new SubmitProof($observation));
+        $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
+        $user = User::findOrfail($action_plan->user_id);
+        $user->notify(new SubmitProof($observation));
 
         Alert::success('Successfully Uploaded')->persistent('Dismiss');
         return back();
@@ -197,13 +197,17 @@ class ActionPlanController extends Controller
 
         $action_plans = ActionPlan::where('audit_plan_observation_id',$action_plan->audit_plan_observation_id)->where('status','!=','Closed')->count();
 
-        // if($action_plans == 0)
-        // {
-        //     $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
-        //     $observation->status = "Closed";
-        //     $observation->save();
+        if($action_plans == 0)
+        {
+            $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
+            if($observation)
+            {
+                $observation->status = "Closed";
+                $observation->save();
+            }
+           
 
-        // }
+        }
         
 
         $history = new ActionPlanRemark;
@@ -213,10 +217,8 @@ class ActionPlanController extends Controller
         $history->remarks = $request->remarks;
         $history->save();  
         $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
-        // $user = User::findOrfail($observation->user_id);
-        // $user->notify(new CloseActionPlan($history->remarks));
-        // $usera = User::findOrfail($observation->created_by);
-        // $usera->notify(new CloseActionPlan($history->remarks));
+        $user = User::findOrfail($action_plan->user_id);
+        $user->notify(new CloseActionPlan($history->remarks));
         $users = User::where('role','IAD Approver')->where('status',null)->get();
         foreach($users as $userd)
         {
