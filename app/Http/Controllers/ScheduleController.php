@@ -575,9 +575,10 @@ class ScheduleController extends Controller
     }   
     public function save_edit(Request $request,$id)
     {
+        
         $consequence = explode("-",$request->consequence);
         $likelihood = explode("-",$request->likelihood);
-
+        
         $risk = $likelihood[0]*$consequence[0];
         $risks = Matrix::where("from","<",$risk)->orderBy('id','desc')->first();
         $user = User::findOrfail($request->auditee);
@@ -592,7 +593,7 @@ class ScheduleController extends Controller
         $auditPlanObservation->likelihood_number = $likelihood[0];
         $auditPlanObservation->user_id = $request->auditee;
         $auditPlanObservation->created_by = auth()->user()->id;
-        if($risk)
+        if($risks)
         {
                 $auditPlanObservation->overall_number = $risk;
                 $auditPlanObservation->overall_risk = $risks->name;
