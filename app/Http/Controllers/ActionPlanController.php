@@ -255,6 +255,19 @@ class ActionPlanController extends Controller
                 $action_plans = ActionPlan::where('status','Closed')->where('audit_plan_id',$request->code)->get();
             }
         }
+        // if($request->code)
+        // {
+            if(auth()->user()->role == "Auditee")
+
+            {
+                $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('status','Closed')->get();
+    
+            }
+            else
+            {
+                $action_plans = ActionPlan::where('status','Closed')->get();
+            }
+        // }
         return view('closed_action_plans',
             array(
                 'action_plans' => $action_plans,
