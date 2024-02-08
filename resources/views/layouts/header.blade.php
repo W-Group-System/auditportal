@@ -155,6 +155,7 @@
                         <ul class="nav nav-second-level collapse">
                             @if((auth()->user()->role == 'Administrator') || (auth()->user()->role == "IAD Approver"))
                             <li><a href="{{url('/logs')}}"></i>Logs</a></li>
+                            <li><a href="{{url('/engagement-reports')}}"></i>Engagements</a></li>
                             @endif
                             {{-- <li><a href="{{url('/status-reports')}}"></i>Status Reports</a></li>
                             <li><a href="{{url('/summary-reports')}}"></i>Summary Reports</a></li> --}}

@@ -18,7 +18,15 @@ use PDF;
 class ActionPlanController extends Controller
 {
     //
-
+    public function engagementReports ()
+    {
+        $audit_plans = AuditPlan::get();
+        return view('engagement_reports',
+            array(
+                'audit_plans' => $audit_plans,
+            )
+        );
+    }
     public function index(Request $request)
     {
         $code = $request->code;

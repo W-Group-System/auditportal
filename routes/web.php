@@ -100,5 +100,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/logs', 'AuditController@index')->name('reports');
 
+    Route::get('engagement-reports','ActionPlanController@engagementReports')->name('reports');
+
 
 });
