@@ -48,7 +48,7 @@
                                     }
                                     
                                 @endphp
-                                <td>{{$total}}</td>
+                                <td>{{$total+count(($audit_plan->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')))}}</td>
                                 <td>
                                 @if(count($audit_plan->action_plans) == 0)
                                 100.00 %
