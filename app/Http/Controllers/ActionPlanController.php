@@ -257,16 +257,16 @@ class ActionPlanController extends Controller
         }
         // if($request->code)
         // {
-            if(auth()->user()->role == "Auditee")
+            // if(auth()->user()->role == "Auditee")
 
-            {
-                $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('status','Closed')->get();
+            // {
+            //     $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('status','Closed')->get();
     
-            }
-            else
-            {
-                $action_plans = ActionPlan::where('status','Closed')->get();
-            }
+            // }
+            // else
+            // {
+            //     $action_plans = ActionPlan::where('status','Closed')->get();
+            // }
         // }
         return view('closed_action_plans',
             array(
