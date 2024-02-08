@@ -6,6 +6,31 @@
 
 <div class="wrapper wrapper-content">
     @include('error')
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-content">
+                    <form  method='GET' onsubmit='show();'  enctype="multipart/form-data" >
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <select name='code' class='form-control-sm form-control cat' required>
+                                    <option value=""></option>
+                                    @foreach($codes as $code)
+                                    <option value="{{$code->id}}" @if($code->id == $done_code) selected @endif>{{$code->engagement_title}} - {{$code->code}}</option>
+                                    @endforeach
+                                 
+                                </select>
+                            </div>
+                           
+                            <div class="col-lg-2">
+                                <button class="btn btn-primary mt-4" type="submit" id='submit'><i class="fa fa-check"></i>&nbsp;Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class='row'>
         <div class="col-lg-12">
             <div class="ibox float-e-margins">

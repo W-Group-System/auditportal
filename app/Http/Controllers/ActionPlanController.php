@@ -237,21 +237,29 @@ class ActionPlanController extends Controller
         return back();
     }
 
-    public function close_action_plans()
-    {
-        if(auth()->user()->role == "Auditee")
-
+    public function close_action_plans(Request $request)
+    { 
+        $action_plans = [];
+        $codes = AuditPlan::get();
+        $code = $request->code;
+        if($request->code)
         {
-            $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('status','Closed')->get();
+            if(auth()->user()->role == "Auditee")
 
-        }
-        else
-        {
-            $action_plans = ActionPlan::where('status','Closed')->get();
+            {
+                $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('audit_plan_id',$request->code)->where('status','Closed')->get();
+    
+            }
+            else
+            {
+                $action_plans = ActionPlan::where('status','Closed')->where('audit_plan_id',$request->code)->get();
+            }
         }
         return view('closed_action_plans',
             array(
                 'action_plans' => $action_plans,
+                'codes' => $codes,
+                'done_code' => $code,
             )
         );
     }
