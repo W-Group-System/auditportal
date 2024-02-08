@@ -29,7 +29,7 @@ class ActionPlanController extends Controller
             {
                 if($request->status == "For IAD Checking")
                 {
-                    $action_plans = ActionPlan::where('status','Verified')->where('audit_plan_id',$request->code)->where('action_plan','!=',"N/A")->where('attachment','!=',null)->where('iad_status','!=',"Returned")->get();
+                    $action_plans = ActionPlan::where('status','Verified')->where('audit_plan_id',$request->code)->where('action_plan','!=',"N/A")->where('attachment','!=',null)->where('iad_status',null)->get();
                 }
                 elseif($request->status == "Open")
                 {
@@ -47,7 +47,7 @@ class ActionPlanController extends Controller
             else
             {
              
-                $action_plans = ActionPlan::where('status','Verified')->where('action_plan','!=',"N/A")->where('attachment','!=',null)->where('iad_status','!=',"Returned")->get();
+                $action_plans = ActionPlan::where('status','Verified')->where('action_plan','!=',"N/A")->where('attachment','!=',null)->where('iad_status',null)->get();
                 
                 if($request->status == "Open")
                 {
