@@ -26,9 +26,9 @@
                             <div class="col-lg-3">
                                 <label>Status</label>
                                 <select name='status' class='form-control-sm form-control cat'   >
-                                    <option value="For IAD Checking">For IAD Checking</option>
-                                    <option value="Open" >For Auditee Uploading</option>
-                                    <option value="All" >All</option>
+                                    <option value="For IAD Checking" @if($status == "For IAD Checking") selected @endif>For IAD Checking</option>
+                                    <option value="Open" @if($status == "Open") selected @endif>For Auditee Uploading</option>
+                                    <option value="All" @if($status == "All") selected @endif>All</option>
                                 </select>
                             </div>
                            

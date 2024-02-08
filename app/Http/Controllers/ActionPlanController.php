@@ -22,6 +22,7 @@ class ActionPlanController extends Controller
     public function index(Request $request)
     {
         $code = $request->code;
+        $status = $request->status;
         $action_plans = [];
         if(auth()->user()->role != "Auditee")
         {
@@ -79,6 +80,7 @@ class ActionPlanController extends Controller
                 'acrs' => $acrs,
                 'users' => $users,
                 'done_code' => $code,
+                'status' => $status,
             )
         );
     }
