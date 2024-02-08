@@ -6,6 +6,42 @@
 
 <div class="wrapper wrapper-content">
     @include('error')
+    @if(auth()->user()->role != "Auditee")
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-content">
+                    <form  method='GET' onsubmit='show();'  enctype="multipart/form-data" >
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <label>Code</label>
+                                <select name='code' class='form-control-sm form-control cat' >
+                                    {{-- <option></option> --}}
+                                    <option value="">All</option>
+                                    @foreach($audit_plans as $code)
+                                    <option value="{{$code->id}}" @if($code->id == $done_code) selected @endif>{{$code->engagement_title}} - {{$code->code}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-lg-3">
+                                <label>Status</label>
+                                <select name='status' class='form-control-sm form-control cat'   >
+                                    <option value="For IAD Checking">For IAD Checking</option>
+                                    <option value="Open" >For Auditee Uploading</option>
+                                    <option value="All" >All</option>
+                                </select>
+                            </div>
+                           
+                            <div class="col-lg-2">
+                                <button class="btn btn-primary mt-4" type="submit" id='submit'><i class="fa fa-check"></i>&nbsp;Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
     <div class='row'>
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
