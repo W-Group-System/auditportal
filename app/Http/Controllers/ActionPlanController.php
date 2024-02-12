@@ -18,12 +18,15 @@ use PDF;
 class ActionPlanController extends Controller
 {
     //
-    public function engagementReports ()
+    public function engagementReports (Request $request)
     {
-        $audit_plans = AuditPlan::get();
+        $audit_plans = AuditPlan::with(['action_plans' => function($q) use ($request) {
+            $q->whereDate('created_at','<=',$request->generate_date);
+        }])->get();
         return view('engagement_reports',
             array(
                 'audit_plans' => $audit_plans,
+                'generate_date' =>$request->generate_date,
             )
         );
     }

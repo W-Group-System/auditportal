@@ -6,11 +6,34 @@
 
 <div class="wrapper wrapper-content">
     @include('error')
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-content">
+                    <form  method='GET' onsubmit='show();'  enctype="multipart/form-data" >
+                        <div class="row">
+                            <div class="col-lg-3">
+                                
+                            As of
+                               <input class='form-control' type='date' name='generate_date' value='{{$generate_date}}' max='{{date('Y-m-d')}}' required>
+                            </div>
+                           
+                            <div class="col-lg-2">
+                                <br>
+                                <button class="btn btn-primary mt-4" type="submit" id='submit'><i class="fa fa-check"></i>&nbsp;Generate</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class='row'>
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Engagements</div>
+                    <h5>Engagements
+                </div>
                 <div class="ibox-content">
 
                     <div class="table-responsive">
@@ -31,11 +54,11 @@
                             <tr>
                                 <td>{{$audit_plan->code}}</td>
                                 <td>{{$audit_plan->engagement_title}}</td>
-                                <td>{{count(($audit_plan->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'))}}</td>
+                                <td>{{count(($audit_plan->action_plans)->where('action_plan','!=',"N/A")->where('update_at','<=',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('status','Closed'))}}</td>
                                 <td>{{count(($audit_plan->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',date('Y-m-d')))}}</td>
-                                <td>{{count(($audit_plan->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')))}}</td>
+                                <td>{{count(($audit_plan->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')))+count(($audit_plan->action_plans)->where('action_plan','!=',"N/A")->where('update_at','>',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('status','Closed'))}}</td>
                                 @php
-                                    $closed = count(($audit_plan->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'));
+                                    $closed = count(($audit_plan->action_plans)->where('action_plan','!=',"N/A")->where('update_at','<=',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('status','Closed'));
                                     $delayed = count(($audit_plan->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',date('Y-m-d')));
                                     $total = $closed + $delayed;
                                     if($closed+$delayed == 0)
@@ -48,7 +71,7 @@
                                     }
                                     
                                 @endphp
-                                <td>{{$total+count(($audit_plan->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')))}}</td>
+                                <td>{{$total+count(($audit_plan->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')))+count(($audit_plan->action_plans)->where('action_plan','!=',"N/A")->where('update_at','>',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('status','Closed'))}}</td>
                                 <td>
                                 @if(count($audit_plan->action_plans) == 0)
                                 100.00 %
