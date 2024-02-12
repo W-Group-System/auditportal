@@ -20,13 +20,18 @@ class ActionPlanController extends Controller
     //
     public function engagementReports (Request $request)
     {
-        $audit_plans = AuditPlan::with(['action_plans' => function($q) use ($request) {
-            $q->whereDate('created_at','<=',$request->generate_date);
+        $date = $request->generate_date;
+        if($request->generate_data == null)
+        {
+            $date = ('Y-m-d');
+        }
+        $audit_plans = AuditPlan::with(['action_plans' => function($q) use ($date) {
+            $q->whereDate('created_at','<=',$date);
         }])->get();
         return view('engagement_reports',
             array(
                 'audit_plans' => $audit_plans,
-                'generate_date' =>$request->generate_date,
+                'generate_date' =>$date,
             )
         );
     }
