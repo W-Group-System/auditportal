@@ -91,7 +91,7 @@
     <div class="col-lg-4">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>Closed as of @if((int)date('d') > 5) ({{date('F t, Y')}}) @else {{date('F t, Y',strtotime("-1 month"))}} @endif - {{$company}}</h5>
+                <h5>Closed as of ({{date('F d,Y')}} - {{$company}})</h5>
             </div>
             <div class="ibox-content">
                 <table class="table table-striped table-bordered table-hover tables">
@@ -192,11 +192,8 @@
                                     $percent = $close_count/($close_count+$delayed_count);
                                 }
                             @endphp
-                            @if(count($group_department->action_plans) == 0)
-                            100.00 %
-                            @else
-                                {{number_format($percent*100,2)}} %
-                            @endif
+                           
+                                {{number_format($percent*100,2)}} % 
                            </td>
                         </tr>
                        @endforeach
