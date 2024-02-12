@@ -21,9 +21,9 @@ class ActionPlanController extends Controller
     public function engagementReports (Request $request)
     {
         $date = $request->generate_date;
-        if($request->generate_data == null)
+        if($date == null)
         {
-            $date = ('Y-m-d');
+            $date = date('Y-m-d');
         }
         $audit_plans = AuditPlan::with(['action_plans' => function($q) use ($date) {
             $q->whereDate('created_at','<=',$date);
