@@ -15,6 +15,7 @@
                             <div class="col-lg-3">
                                 <select name='code' class='form-control-sm form-control cat' required>
                                     <option value=""></option>
+                                    <option value="ALL">ALL</option>
                                     @foreach($codes as $code)
                                     <option value="{{$code->id}}" @if($code->id == $done_code) selected @endif>{{$code->engagement_title}} - {{$code->code}}</option>
                                     @endforeach

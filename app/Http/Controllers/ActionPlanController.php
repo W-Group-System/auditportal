@@ -301,16 +301,31 @@ class ActionPlanController extends Controller
         $action_plans = [];
         $codes = AuditPlan::get();
         $code = $request->code;
-      
+        
         if(auth()->user()->role == "Auditee")
-
         {
-            $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('audit_plan_id',$request->code)->where('status','Closed')->get();
+            if($request->code == "ALL")
+            {
+
+                $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('status','Closed')->get();
+            }
+            else
+            {
+                
+                $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('audit_plan_id',$request->code)->where('status','Closed')->get();
+            }
 
         }
         else
         {
-            $action_plans = ActionPlan::where('status','Closed')->where('audit_plan_id',$request->code)->get();
+            if($request->code == "ALL")
+            {
+            $action_plans = ActionPlan::where('status','Closed')->get();
+            }
+            else
+            {
+                $action_plans = ActionPlan::where('status','Closed')->where('audit_plan_id',$request->code)->get();
+            }
         }
     
         // if($request->code)
