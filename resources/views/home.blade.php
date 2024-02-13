@@ -86,12 +86,34 @@
       </div>
     </div>
   </div> --}}
+  <div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-content">
+                <form  method='GET' onsubmit='show();'  enctype="multipart/form-data" >
+                    <div class="row">
+                        <div class="col-lg-3">
+                            
+                        As of
+                           <input class='form-control' type='date' name='generate_date' value='{{$generate_date}}' max='{{date('Y-m-d')}}' required>
+                        </div>
+                       
+                        <div class="col-lg-2">
+                            <br>
+                            <button class="btn btn-primary mt-4" type="submit" id='submit'><i class="fa fa-check"></i>&nbsp;Generate</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
   @foreach($companies as $company)
   <small>
     <div class="col-lg-4">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>Closed as of ({{date('F d,Y')}} - {{$company}})</h5>
+                <h5>Closed as of ({{date('F d,Y',strtotime($generate_date))}} - {{$company}})</h5>
             </div>
             <div class="ibox-content">
                 <table class="table table-striped table-bordered table-hover tables">
@@ -110,12 +132,12 @@
                         @if($department->group == null)
                         <tr>
                             <td>{{$department->code}}</td>
-                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view{{$department->id}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'))}}</a></td>
+                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view{{$department->id}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('updated_at','<=',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('status','Closed'))}}</a></td>
                             <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_delayed{{$department->id}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',date('Y-m-d')))}}</td>
-                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_open{{$department->id}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')))}}</a></td>
+                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_open{{$department->id}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')))+count(($department->action_plans)->where('action_plan','!=',"N/A")->where('update_at','>',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('status','Closed'))}}</a></td>
                             <td>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','For Approval'))}}</td>
                             <td>@php
-                                $closed = count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'));
+                                $closed = count(($department->action_plans)->where('update_at','<=',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('action_plan','!=',"N/A")->where('status','Closed'));
                                 $delayed = count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',date('Y-m-d')));
                                 $total = $closed + $delayed;
                                 if($closed+$delayed == 0)
@@ -128,11 +150,9 @@
                                 }
                                 
                             @endphp
-                            @if(count($department->action_plans) == 0)
-                            100.00 %
-                            @else
+                         
                                 {{number_format($percent*100,2)}} %
-                            @endif</td>
+                           </td>
                         </tr>
                         @endif
                        

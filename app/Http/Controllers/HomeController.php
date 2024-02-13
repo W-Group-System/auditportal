@@ -27,8 +27,13 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
+        $date = $request->generate_date;
+        if($date == null)
+        {
+            $date = date('Y-m-d');
+        }
         $audits = AuditPlan::where('code','!=',null)->orderBy('audit_to','asc')->get();
         $companies = Department::where('company','!=',null)->groupBy('company')->pluck('company');
         $groups = DepartmentGroup::with('dep')->groupBy('name','company')->get(['name','company']);
@@ -36,7 +41,9 @@ class HomeController extends Controller
         $action_plans = ActionPlan::where('status','Verified')->where('action_plan','!=',"N/A")->get();
         $reports = AuditPlanObservation::get();
         $results = $this->get_risks();
-        $departments = Department::where('status',null)->get();
+        $departments = Department::with(['action_plans' => function($q) use ($date) {
+            $q->whereDate('created_at','<=',$date);
+        }])->where('status',null)->get();
         return view('home',
         array(
             'departmentResults' => $results,
@@ -47,6 +54,7 @@ class HomeController extends Controller
             'remarks' => $remarks,
             'groups' => $groups,
             'companies' => $companies,
+            'generate_date' => $date,
         ));
     }
 
