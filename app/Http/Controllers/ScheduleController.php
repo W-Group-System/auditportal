@@ -522,7 +522,8 @@ class ScheduleController extends Controller
         $auditPlanObservation->likelihood_number = $likelihood[0];
         $auditPlanObservation->user_id = $auditee;
         $auditPlanObservation->created_by = auth()->user()->id;
-       
+        $auditPlanObservation->overall_number = $risk;
+        $auditPlanObservation->overall_risk = $risks->name;
   
         $auditPlanObservation->code = $this->generate_code_acr($request->audit_date);
         $auditPlanObservation->date_audit = $request->audit_date;
@@ -593,11 +594,10 @@ class ScheduleController extends Controller
         $auditPlanObservation->likelihood_number = $likelihood[0];
         $auditPlanObservation->user_id = $request->auditee;
         $auditPlanObservation->created_by = auth()->user()->id;
-        if($risks)
-        {
-                $auditPlanObservation->overall_number = $risk;
-                $auditPlanObservation->overall_risk = $risks->name;
-        }
+     
+        $auditPlanObservation->overall_number = $risk;
+        $auditPlanObservation->overall_risk = $risks->name;
+        
         $auditPlanObservation->date_audit = $request->audit_date;
         $auditPlanObservation->target_date = $request->target_date;
         $auditPlanObservation->department_id = $user->department_id;
