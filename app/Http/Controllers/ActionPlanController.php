@@ -86,7 +86,7 @@ class ActionPlanController extends Controller
         if(auth()->user()->role == "Auditee")
         {
           
-            $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('action_plan','!=',"N/A")->where('status','Verified')->get();
+            $action_plans = ActionPlan::where('department_id',auth()->user()->department_id)->where('action_plan','!=',"N/A")->where('status','Verified')->get();
            
         }
         return view('action_plans',
