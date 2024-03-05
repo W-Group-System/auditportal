@@ -199,7 +199,7 @@ class ActionPlanController extends Controller
         {
             $user_id = $action_plan->auditor;
         }
-        if($user->id != null)
+        if($user_id != null)
         {
 
             $user = User::findOrfail($user_id);
