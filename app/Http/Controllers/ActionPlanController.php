@@ -189,17 +189,22 @@ class ActionPlanController extends Controller
         $history->remarks = "Upload Proof by ".auth()->user()->name." Remarks : ".$request->remarks;
         $history->save();
 
-        $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
-        if($observation)
+        if($action_plan->audit_plan_observation_id != null)
         {
+            
+            $observation = AuditPlanObservation::where('id',$action_plan->audit_plan_observation_id)->first();
             $user_id = $observation->created_by;
         }
         else
         {
             $user_id = $action_plan->auditor;
         }
-        $user = User::findOrfail($user_id);
-        $user->notify(new SubmitProof($observation));
+        if($user->id != null)
+        {
+
+            $user = User::findOrfail($user_id);
+            $user->notify(new SubmitProof($observation));
+        }
 
         Alert::success('Successfully Uploaded')->persistent('Dismiss');
         return back();
