@@ -135,7 +135,7 @@
                             <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_open{{$department->id}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')))+count(($department->action_plans)->where('action_plan','!=',"N/A")->where('update_at','>',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('status','Closed'))}}</a></td>
                             <td>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','For Approval'))}}</td>
                             <td>@php
-                                $closed = count(($department->action_plans)->where('update_at','<=',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('action_plan','!=',"N/A")->where('status','Closed'));
+                                $closed = count(($department->action_plans)->where('updated_at','<=',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('action_plan','!=',"N/A")->where('status','Closed'));
                                 $delayed = count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',date('Y-m-d')));
                                 $total = $closed + $delayed;
                                 if($closed+$delayed == 0)
@@ -168,17 +168,17 @@
                            <td>{{$group->name}}</td>
                            <td> 
                                 @foreach($departments->whereIn('id',$dep_grou) as $group_department)
-                                @php
-                                    $close_count = $close_count + count(($group_department->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'));
-                                @endphp
+                                    @php
+                                        $close_count = $close_count + count(($group_department->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'));
+                                    @endphp
                                 @endforeach
                                 <a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_group{{$key}}" @endif>{{$close_count}}</a>
                             </td>
                            <td>
                                 @foreach($departments->whereIn('id',$dep_grou) as $group_department)
-                                @php
-                                    $delayed_count = $delayed_count + count(($group_department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',date('Y-m-d')));
-                                @endphp
+                                    @php
+                                        $delayed_count = $delayed_count + count(($group_department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',date('Y-m-d')));
+                                    @endphp
                                 @endforeach
                                 <a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_delayed_group{{$key}}" @endif>{{$delayed_count}}</a>
                            </td>
