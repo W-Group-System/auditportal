@@ -188,7 +188,7 @@ class ActionPlanController extends Controller
         $history->action = "Upload Proof";
         $history->remarks = "Upload Proof by ".auth()->user()->name." Remarks : ".$request->remarks;
         $history->save();
-
+        $observation = "";
         if($action_plan->audit_plan_observation_id != null)
         {
             
