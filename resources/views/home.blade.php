@@ -107,6 +107,11 @@
         </div>
     </div>
   @foreach($companies as $company)
+  @php
+      $total_closed = 0;
+      $total_delayed = 0;
+      $total_open = 0;
+  @endphp
   <small>
     <div class="col-lg-4">
         <div class="ibox float-e-margins">
@@ -127,6 +132,11 @@
                     </thead>
                     <tbody>
                         @foreach($departments->where('company',$company) as $department)
+                        @php
+                            $total_closed = $total_closed+count(($department->action_plans)->where('action_plan','!=',"N/A")->where('date_completed','<=',date('Y-m-d',strtotime($generate_date)))->where('status','Closed'));
+                            $total_delayed = $total_delayed+count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',date('Y-m-d')));
+                            $total_open = $total_open+count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d')))+count(($department->action_plans)->where('action_plan','!=',"N/A")->where('update_at','>',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('status','Closed'));
+                        @endphp
                         @if($department->group == null)
                         <tr>
                             <td>{{$department->code}}</td>
@@ -172,6 +182,9 @@
                                         $close_count = $close_count + count(($group_department->action_plans)->where('action_plan','!=',"N/A")->where('status','Closed'));
                                     @endphp
                                 @endforeach
+                                @php
+                                    // $total_closed = $total_closed;
+                                @endphp
                                 <a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_group{{$key}}" @endif>{{$close_count}}</a>
                             </td>
                            <td>
@@ -216,6 +229,26 @@
                         </tr>
                        @endforeach
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <th>{{$total_closed}}</th>
+                            <th>{{$total_delayed}}</th>
+                            <th>{{$total_open}}</th>
+                            <th>{{$total_open+$total_delayed+$total_closed}}</th>
+                            @php
+                                if($total_closed+$total_delayed == 0)
+                                {
+                                    $percent_total = 1;
+                                }
+                                else
+                                {
+                                    $percent_total = $total_closed/($total_closed+$total_delayed);
+                                }
+                            @endphp
+                            <th> {{number_format($percent_total*100,2)}} % </th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
