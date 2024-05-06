@@ -45,7 +45,7 @@ class ActionPlanNotif extends Notification
         return (new MailMessage)
         ->greeting('Greetings!')
         ->subject('Status of Action Plans')
-        ->line('We would like to follow up on the current status of the agreed action plans as '.date('F Y'))
+        ->line('We would like to follow up on the current status of the agreed action plans as of '.date('F Y'))
         ->line('Please submit proof for all completed action plans in order to close the findings.')
         ->line('If there are any action plans that will not be completed by the stated target date, please provide us with a new target date so that we can update our monitoring.')
         // ->line('ACR Code : '.$this->observation->code)
