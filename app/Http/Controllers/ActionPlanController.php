@@ -103,7 +103,7 @@ class ActionPlanController extends Controller
     }
     public function email(Request $request)
     {
-        $users = User::where('role','Auditee')->where('status',null)->get()->take(1);
+        $users = User::where('role','Auditee')->where('status',null)->get();
         // dd($users);
         foreach($users as $user)
         {
