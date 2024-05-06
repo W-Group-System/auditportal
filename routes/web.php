@@ -14,6 +14,7 @@
 
 
 Auth::routes();
+Route::get('email-notif','ActionPlanController@email');
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/','HomeController@index')->name('home');
 

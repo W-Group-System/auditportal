@@ -7,6 +7,7 @@ use App\User;
 use App\ActionPlanRemark;
 use App\AuditPlanObservation;
 use App\Notifications\SubmitProof;
+use App\Notifications\ActionPlanNotif;
 use App\Notifications\ChangeTargetDate;
 use App\Notifications\ReturnActionPlan;
 use App\Notifications\CloseActionPlan;
@@ -99,6 +100,36 @@ class ActionPlanController extends Controller
                 'status' => $status,
             )
         );
+    }
+    public function email(Request $request)
+    {
+        $users = User::where('role','Auditee')->where('status',null)->get()->take(1);
+        // dd($users);
+        foreach($users as $user)
+        {
+            $table = "<table style='margin-bottom:10px;' width='100%' border='1' cellspacing=0><tr><th>Agreed Action Plan #</th><th>Agreed Action Plan</th><th>Target Date</th></tr>";
+            $action_plans = ActionPlan::where('department_id',$user->department_id)->where('action_plan','!=',"N/A")->where('status','Verified')->get();
+            foreach($action_plans as $key => $action_plan)
+            {
+                if($action_plan->target_date < date('Y-m-d'))
+                {
+                    $status = " style='background-color:Tomato;color:white;'";
+                }
+                else
+                {
+                    $status = "";
+                }
+                $table .= "<tr ".$status."><td style='width:30%;'>".($key+1)."</td><td style='width:40%;'>".$action_plan->action_plan."</td><td style='width:30%;'>".date('Y-m-d',strtotime($action_plan->target_date))."</td></tr>";
+            }
+            $table .= "</table>";
+            if($action_plans->count() > 0)
+            {
+                $user->notify(new ActionPlanNotif($table));
+            }
+    
+        }
+      
+        dd($users);
     }
     public function new_action_plan(Request $request)
     {
