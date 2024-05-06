@@ -129,7 +129,7 @@ class ActionPlanController extends Controller
     
         }
       
-        dd($users);
+       return "success";
     }
     public function new_action_plan(Request $request)
     {
