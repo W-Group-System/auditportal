@@ -43,6 +43,8 @@ class ActionPlanNotif extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
+        ->cc('audit@rico.com.ph')
+        ->cc('iad@wgroup.com.ph')
         ->greeting('Greetings!')
         ->subject('Status of Action Plans')
         ->line('We would like to follow up on the current status of the agreed action plans as of '.date('F Y'))
