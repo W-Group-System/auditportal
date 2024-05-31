@@ -84,11 +84,11 @@ class ActionPlanController extends Controller
         $audit_plans = AuditPlan::orderBy('code','desc')->get();
         $acrs = AuditPlanObservation::get();
         $users = User::where('status',null)->get();
-        if(auth()->user()->role == "Auditee")
+        if((auth()->user()->role == "Auditee") || (auth()->user()->role == "Department Head"))
         {
-          
-            $action_plans = ActionPlan::where('department_id',auth()->user()->department_id)->where('action_plan','!=',"N/A")->where('status','Verified')->get();
-           
+        //   dd(auth()->user()->departments);  
+            $action_plans = ActionPlan::where('department_id',auth()->user()->department_id)->orWhereIn('department_id',((auth()->user()->departments)->pluck('department_id')->toArray()))->where('action_plan','!=',"N/A")->where('status','Verified')->get();
+        //    dd($action_plans);
         }
         return view('action_plans',
             array(

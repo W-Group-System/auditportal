@@ -51,4 +51,8 @@ class User extends Authenticatable implements Auditable
     {
         return $this->belongsTo(ActionPlan::class);
     }
+    public function departments()
+    {
+        return $this->hasMany(UserDepartment::class);
+    }
 }
