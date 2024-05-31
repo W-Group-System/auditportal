@@ -87,8 +87,16 @@ class ActionPlanController extends Controller
         if((auth()->user()->role == "Auditee") || (auth()->user()->role == "Department Head"))
         {
         //   dd(auth()->user()->departments);  
-            $action_plans = ActionPlan::where('department_id',auth()->user()->department_id)->orWhereIn('department_id',((auth()->user()->departments)->pluck('department_id')->toArray()))->where('action_plan','!=',"N/A")->where('status','Verified')->get();
-        //    dd($action_plans);
+            $departmentId = auth()->user()->department_id;
+            $departmentIds = auth()->user()->departments->pluck('department_id');
+            
+            $action_plans = ActionPlan::where(function($query) use ($departmentId, $departmentIds) {
+                $query->where('department_id', $departmentId)
+                    ->orWhereIn('department_id', $departmentIds);
+            })->where('action_plan', '!=', 'N/A')
+            ->where('status', 'Verified')
+            ->get();
+            //    dd($action_plans);
         }
         return view('action_plans',
             array(
