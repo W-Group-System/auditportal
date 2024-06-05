@@ -58,9 +58,10 @@
                             <thead>
                                 <tr>
                                     <th>Action</th>
+                                    <th>#</th>
                                     <th>Code</th>
                                     <th>Title</th>
-                                    <th>Auditor</th>
+                                    {{-- <th>Auditor</th> --}}
                                     <th>Auditee</th>
                                     <th>Agreed Action Plan</th>
                                     <th>Target Date</th>
@@ -101,9 +102,10 @@
                                         </div>
 
                                     </td>
+                                    <td>AP-{{$action_plan->id}}</td>
                                     <td><small>{{$action_plan->audit_plan->code}}</small></td>
                                     <td><small>{{$action_plan->audit_plan->engagement_title}}</small></td>
-                                    <td><small>@if($action_plan->observation){{$action_plan->observation->created_by_user->name}} @else @if($action_plan->auditor_data){{$action_plan->auditor_data->name}} @endif @endif</small></td>
+                                    {{-- <td><small>@if($action_plan->observation){{$action_plan->observation->created_by_user->name}} @else @if($action_plan->auditor_data){{$action_plan->auditor_data->name}} @endif @endif</small></td> --}}
                                     <td><small>{{$action_plan->user->name}}</small></td>
                                     <td ><small>{!! nl2br(e($action_plan->action_plan)) !!}</small></td>
                                     <td @if($action_plan->target_date < date('Y-m-d')) class='bg-danger' @endif>{{$action_plan->target_date}}</td>

@@ -17,10 +17,12 @@ class SubmitProof extends Notification
      * @return void
      */
     protected $observation;
-    public function __construct($observation)
+    protected $dd;
+    public function __construct($observation,$dd)
     {
         //
         $this->observation = $observation;
+        $this->dd = $dd;
 
     }
 
@@ -47,6 +49,7 @@ class SubmitProof extends Notification
         ->greeting('Good Day!')
         ->subject('Action Plan')
         ->line('Proof has been submitted')
+        ->line('Action Plan #: AP-'.$this->dd)
         // ->line('ACR Code : '.$this->observation->code)
         ->line('Please click the button provided for faster transaction')
         ->action('Action Plans', url('/action-plans'))

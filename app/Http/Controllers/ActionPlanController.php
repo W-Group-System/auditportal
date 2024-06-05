@@ -242,7 +242,7 @@ class ActionPlanController extends Controller
         {
 
             $user = User::findOrfail($user_id);
-            $user->notify(new SubmitProof($observation));
+            $user->notify(new SubmitProof($observation,$id));
         }
 
         Alert::success('Successfully Uploaded')->persistent('Dismiss');
@@ -293,7 +293,7 @@ class ActionPlanController extends Controller
         $history->save();
         
         $user = User::findOrfail($action_plan->user_id);
-        $user->notify(new ReturnActionPlan($history->remarks));
+        $user->notify(new ReturnActionPlan($history->remarks,$id));
         Alert::success('Successfully Returned')->persistent('Dismiss');
         return back();
     }
