@@ -161,7 +161,7 @@ class ActionPlanController extends Controller
             $action_plan->status = $request->status;
             $action_plan->department_id = $user->department_id;
             
-          
+            
                 if($file_name)
                 {
                     $action_plan->attachment = $file_name;
@@ -180,7 +180,12 @@ class ActionPlanController extends Controller
             }
             $action_plan->target_date = $request->target_date;
             $action_plan->auditor = $request->auditor;
-            $action_plan->save();
+            $ac = ActionPlan::where('action_plan',$request->action_plan)->where('user_id',$auditee)->first();
+            if($ac == null)
+            {
+                $action_plan->save();
+            }
+          
         }
         
         Alert::success('Successfully Created')->persistent('Dismiss');
