@@ -42,7 +42,7 @@ class HomeController extends Controller
         $reports = AuditPlanObservation::get();
         $results = $this->get_risks();
         $departments = Department::with(['action_plans' => function($q) use ($date) {
-            $q->whereDate('created_at','<=',$date)->where('status','Verified');
+            $q->whereDate('created_at','<=',$date);
         }])->where('status',null)->get();
         return view('home',
         array(
