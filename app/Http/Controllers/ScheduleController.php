@@ -596,7 +596,11 @@ class ScheduleController extends Controller
         $auditPlanObservation->created_by = auth()->user()->id;
      
         $auditPlanObservation->overall_number = $risk;
-        $auditPlanObservation->overall_risk = $risks->name;
+        if($risks != null)
+        {
+            $auditPlanObservation->overall_risk = $risks->name;
+        }
+        
         
         $auditPlanObservation->date_audit = $request->audit_date;
         $auditPlanObservation->target_date = $request->target_date;

@@ -64,8 +64,8 @@
                             Auditee:
                             <select name='auditee' class='form-control-sm form-control cat'  required>
                                 <option value=""></option>
-                                @foreach($audit_plan->department as $dept)
-                                <option value="{{$dept->user_id}}" @if($dept->user_id == $observation->user_id) selected @endif >{{$dept->user_name->name}} - {{$dept->user_name->position}}</option>
+                                @foreach($users as $user)
+                                <option value="{{$user->id}}" @if($user->user_id == $observation->user_id) selected @endif >{{$user->name}} - {{$user->position}} - {{$user->department->name}}</option>
                                 @endforeach
                             </select>
                         </div>
