@@ -69,8 +69,6 @@ class ActionPlanController extends Controller
         // Additional filters based on code and status
         if ($code) {
             $query->where('audit_plan_id', $code);
-    
-           
         }
     
         // Apply status filter if applicable
@@ -80,9 +78,21 @@ class ActionPlanController extends Controller
         if ($searchTerm) {
             $query->where(function($q) use ($searchTerm) {
                 $q->whereHas('audit_plan', function($q) use ($searchTerm) {
-                    $q->where('code', 'like', "%{$searchTerm}%");
+                    $q->where('code', 'like', "%{$searchTerm}%")
+                      ->orWhere('engagement_title', 'like', "%{$searchTerm}%");
                 })
-                ->orWhere('action_plan', 'like', "%{$searchTerm}%");
+                ->orWhere('action_plan', 'like', "%{$searchTerm}%")
+                ->orWhereHas('auditor_data', function($q) use ($searchTerm) {
+                    $q->where('name', 'like', "%{$searchTerm}%"); // Auditor's name search
+                })
+                ->orWhereHas('observation', function($q) use ($searchTerm) {
+                    $q->whereHas('created_by_user', function($q) use ($searchTerm) {
+                        $q->where('name', 'like', "%{$searchTerm}%"); // Created by user name search
+                    });
+                })
+                ->orWhereHas('user', function($q) use ($searchTerm) {
+                    $q->where('name', 'like', "%{$searchTerm}%"); // Action plan user search
+                });
             });
         }
         // Get action plans with pagination

@@ -49,7 +49,7 @@
                 <div class="ibox-content">
                         <div class="row">
                             <div class="col-lg-4">
-                                <input type="text" name="search" class="form-control" placeholder="Search by Code, Title, or Action Plan" value="{{ old('search', $searchTerm) }}">
+                                <input type="text" name="search" class="form-control" placeholder="Search by Code, Title, auditor, auditee" value="{{ old('search', $searchTerm) }}">
                             </div>
                             <div class="col-lg-2">
                                 <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
