@@ -39,75 +39,61 @@ class ActionPlanController extends Controller
     public function index(Request $request)
     {
         $code = $request->code;
+        $done_code = $request->code;
         $status = $request->status;
-        $action_plans = [];
-        if(auth()->user()->role != "Auditee")
-        {
-            if($request->code)
-            {
-                if($request->status == "For IAD Checking")
-                {
-                    $action_plans = ActionPlan::where('status','Verified')->where('audit_plan_id',$request->code)->where('action_plan','!=',"N/A")->where('attachment','!=',null)->where('iad_status',null)->get();
-                }
-                elseif($request->status == "Open")
-                {
-                    $action_plans = ActionPlan::where('status','Verified')->where('audit_plan_id',$request->code)->where('action_plan','!=',"N/A")->where(function($query) {
-                        $query->where('iad_status', 'Returned')
-                            ->where('attachment', null);
-                    })->get();
-                }
-                elseif($request->status == "All")
-                {
-                    $action_plans = ActionPlan::where('status','Verified')->where('audit_plan_id',$request->code)->where('action_plan','!=',"N/A")->get();
-                }
-                // elseif()
-            }
-            else
-            {
-             
-                $action_plans = ActionPlan::where('status','Verified')->where('action_plan','!=',"N/A")->where('attachment','!=',null)->where('iad_status',null)->get();
-                
-                if($request->status == "Open")
-                {
-                    $action_plans = ActionPlan::where('status','Verified')->where('action_plan','!=',"N/A")->where(function($query) {
-                        $query->where('iad_status', 'Returned')
-                            ->orWhere('attachment', null);
-                    })->get();
-                }
-                elseif($request->status == "All")
-                {
-                    $action_plans = ActionPlan::where('status','Verified')->where('action_plan','!=',"N/A")->get();
-                }
-
-            }
-        }
-        $audit_plans = AuditPlan::orderBy('code','desc')->get();
-        $acrs = AuditPlanObservation::get();
-        $users = User::where('status',null)->get();
-        if((auth()->user()->role == "Auditee") || (auth()->user()->role == "Department Head"))
-        {
-        //   dd(auth()->user()->departments);  
+        $searchTerm = $request->search; 
+    
+        // Base query for action plans
+        $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user'])
+            ->where('status', 'Verified')
+            ->where('action_plan', '!=', 'N/A');
+    
+        // User role checks
+        if (auth()->user()->role == "Auditee" || auth()->user()->role == "Department Head") {
             $departmentId = auth()->user()->department_id;
             $departmentIds = auth()->user()->departments->pluck('department_id');
-            
-            $action_plans = ActionPlan::where(function($query) use ($departmentId, $departmentIds) {
-                $query->where('department_id', $departmentId)
+    
+            $query->where(function ($subQuery) use ($departmentId, $departmentIds) {
+                $subQuery->where('department_id', $departmentId)
                     ->orWhereIn('department_id', $departmentIds);
-            })->where('action_plan', '!=', 'N/A')
-            ->where('status', 'Verified')
-            ->get();
-            //    dd($action_plans);
+            });
         }
-        return view('action_plans',
-            array(
-                'action_plans' => $action_plans,
-                'audit_plans' => $audit_plans,
-                'acrs' => $acrs,
-                'users' => $users,
-                'done_code' => $code,
-                'status' => $status,
-            )
-        );
+    
+        // Additional filters based on code and status
+        if ($code) {
+            $query->where('audit_plan_id', $code);
+    
+            if ($status == "For IAD Checking") {
+                $query->whereNull('iad_status')->whereNotNull('attachment');
+            } elseif ($status == "Open") {
+                $query->where(function ($subQuery) {
+                    $subQuery->where('iad_status', 'Returned')
+                        ->orWhereNull('attachment');
+                });
+            }
+        }
+    
+        // Apply status filter if applicable
+        if ($status === "All") {
+            // No additional filters needed for "All"
+        }
+        if ($searchTerm) {
+            $query->where(function($q) use ($searchTerm) {
+                $q->whereHas('audit_plan', function($q) use ($searchTerm) {
+                    $q->where('code', 'like', "%{$searchTerm}%");
+                })
+                ->orWhere('action_plan', 'like', "%{$searchTerm}%");
+            });
+        }
+        // Get action plans with pagination
+        $action_plans = $query->paginate(10);
+    
+        // Fetch additional data
+        $audit_plans = AuditPlan::orderBy('code', 'desc')->get();
+        $acrs = AuditPlanObservation::all();
+        $users = User::whereNull('status')->get();
+    
+        return view('action_plans', compact('action_plans', 'audit_plans', 'acrs', 'users', 'done_code', 'status','searchTerm'));
     }
     public function email(Request $request)
     {
