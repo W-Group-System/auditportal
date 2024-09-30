@@ -58,19 +58,19 @@ class ActionPlanController extends Controller
                     ->orWhereIn('department_id', $departmentIds);
             });
         }
-    
+        if ($status == "For IAD Checking") {
+            $query->whereNull('iad_status')->whereNotNull('attachment');
+        } elseif ($status == "Open") {
+            $query->where(function ($subQuery) {
+                $subQuery->where('iad_status', 'Returned')
+                    ->orWhereNull('attachment');
+            });
+        }
         // Additional filters based on code and status
         if ($code) {
             $query->where('audit_plan_id', $code);
     
-            if ($status == "For IAD Checking") {
-                $query->whereNull('iad_status')->whereNotNull('attachment');
-            } elseif ($status == "Open") {
-                $query->where(function ($subQuery) {
-                    $subQuery->where('iad_status', 'Returned')
-                        ->orWhereNull('attachment');
-                });
-            }
+           
         }
     
         // Apply status filter if applicable
