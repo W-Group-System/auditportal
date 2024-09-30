@@ -6,12 +6,14 @@
 
 <div class="wrapper wrapper-content">
     @include('error')
+    
+    <form  method='GET' onsubmit='show();'  enctype="multipart/form-data" >
     @if(auth()->user()->role != "Auditee")
+    
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-content">
-                    <form  method='GET' onsubmit='show();'  enctype="multipart/form-data" >
                         <div class="row">
                             <div class="col-lg-3">
                                 <label>Code</label>
@@ -36,7 +38,6 @@
                                 <button class="btn btn-primary mt-4" type="submit" id='submit'><i class="fa fa-check"></i>&nbsp;Search</button>
                             </div>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -46,7 +47,6 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-content">
-                    <form method="GET" action="">
                         <div class="row">
                             <div class="col-lg-4">
                                 <input type="text" name="search" class="form-control" placeholder="Search by Code, Title, or Action Plan" value="{{ old('search', $searchTerm) }}">
@@ -55,11 +55,12 @@
                                 <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
                             </div>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
+    
+</form>
     <div class='row'>
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
@@ -148,7 +149,7 @@
     
                         <!-- Pagination links -->
                         <div class="mt-3">
-                            {{ $action_plans->links() }} <!-- This will display the pagination links -->
+                            {{ $action_plans->appends(request()->only(['search', 'code', 'status']))->links() }} <!-- This will display the pagination links -->
                         </div>
     
                     </div>
