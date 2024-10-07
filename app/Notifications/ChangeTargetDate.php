@@ -47,7 +47,7 @@ class ChangeTargetDate extends Notification
         return (new MailMessage)
         ->greeting('Good Day!')
         ->subject('Change Target Date')
-        ->line('Your target date has been change.')
+        ->line('Your target date has been changed.')
         ->line('Remarks : '.$this->remarks)
         ->line('Please click the button provided for faster transaction')
         ->action('Action Plans', url('/action-plans'))

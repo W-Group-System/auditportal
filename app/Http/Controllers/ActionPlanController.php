@@ -261,7 +261,7 @@ class ActionPlanController extends Controller
         $history->user_id = auth()->user()->id;
         $history->action_plan_id = $id;
         $history->action = "Change Target Date";
-        $history->remarks = "Change Target Date from ". $action_plan->target_date." to ".$request->target_date;
+        $history->remarks = "Changed Target Date from ". $action_plan->target_date." to ".$request->target_date;
         $history->save();
 
         $action_plan->target_date = $request->target_date;
