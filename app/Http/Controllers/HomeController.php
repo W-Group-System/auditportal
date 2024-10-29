@@ -59,58 +59,37 @@ class HomeController extends Controller
     }
 
     public function get_risks()
-    {
-        $matrices = Matrix::get();
-        $departments = Department::with(['audit_plans' => function($query) {
-            $query->select('department_id','audit_plan_id');
-            $query->groupBy('department_id','audit_plan_id');
-        }])->get();
-        $deptResult = ['x'];
-        $deptFindings = ['Findings'];
-        $deptRisk = ['Avg. Risk'];
-        $departmentResults = [];
-        $a = 0;
-        foreach($departments as $department)
-        {
-            $observation = 0;
-            $risk = 0;
-            
-            array_push($deptResult,$department->code);
-            foreach($department->risk as $audit_plan)
-            {
-                if($audit_plan->findings != null)
-                {
-                    $a = 1;
-                }
-                $observation = $a + $observation;
-                if($observation != 0)
-                {
-                    if($audit_plan->findings != null)
-                    {
-                        $risk_rating = ($matrices->where('name',$audit_plan->overall_risk)->first())->id;
-                        $risk = $risk_rating + $risk;
-                    }
-                }
-                else
-                {
-                    $risk = 0;
-                }
-            }
-            array_push($deptFindings,$observation);
-            if($observation != 0)
-            {
-            array_push($deptRisk,round($risk/$observation,2));
-            }
-            else
-            {
-                array_push($deptRisk,0.00);
-            }
-            
-        }
-        array_push($departmentResults,$deptResult);
-        array_push($departmentResults,$deptFindings);
-        array_push($departmentResults,$deptRisk);
+{
+    $matrices = Matrix::all()->keyBy('name');
+    $departments = Department::with(['risk' => function($query) {
+        $query->select('department_id', 'overall_risk', 'findings');
+    }])->get();
 
-        return $departmentResults;
+    $departmentResults = [
+        ['x'], // Department codes
+        ['Findings'], // Findings count
+        ['Avg. Risk'], // Average Risk
+    ];
+
+    foreach ($departments as $department) {
+        $observationCount = 0;
+        $totalRisk = 0;
+
+        $departmentResults[0][] = $department->code; // Add department code
+
+        foreach ($department->risk as $audit_plan) {
+            if ($audit_plan->findings) {
+                $observationCount++;
+                $riskRating = $matrices->get($audit_plan->overall_risk)->id ?? 0;
+                $totalRisk += $riskRating;
+            }
+        }
+
+        $departmentResults[1][] = $observationCount; // Add findings count
+        $averageRisk = $observationCount > 0 ? round($totalRisk / $observationCount, 2) : 0.00;
+        $departmentResults[2][] = $averageRisk; // Add average risk
+    }
+
+    return $departmentResults;
     }
 }

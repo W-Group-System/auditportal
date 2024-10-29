@@ -255,7 +255,7 @@
     </div>
   </small>
     @endforeach
-    @if(auth()->user()->role != "Auditee")
+    {{-- @if(auth()->user()->role != "Auditee")
     @foreach($departments as $department)
     
     @include('view_closed')
@@ -271,7 +271,7 @@
     @include('view_open_group')
     @endforeach
     @endif
- 
+  --}}
 </div>
 @endsection
 
