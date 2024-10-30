@@ -411,26 +411,39 @@ class ScheduleController extends Controller
 
     public function forAudit(Request $request)
     {
-        if((auth()->user()->role == "Administrator") || (auth()->user()->role == "IAD Approver"))
-        {
-            $audits = AuditPlan::where('code','!=',null)->orderBy('audit_to','asc')->get();
+        $query = AuditPlan::where('code', '!=', null);
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'LIKE', "%$search%")
+                  ->orWhere('engagement_title', 'LIKE', "%$search%")
+                //   ->orWhereHas('department', function($q) use ($search) {
+                //       $q->where('department_name.name', 'LIKE', "%$search%");
+                //   })
+                  ->orWhereHas('auditor_data', function($q) use ($search) {
+                      $q->whereHas('user', function($q) use ($search) {
+                          $q->where('name', 'LIKE', "%$search%");
+                      });
+                  });
+            });
         }
-        elseif(auth()->user()->role == "Auditor")
-        {
-            $audits = AuditPlan::where('code','!=',null)->whereHas('auditor_data', function ( $query)  {
-                $query->where('user_id',auth()->user()->id);
-            })->orderBy('audit_to','asc')->get();
+    
+        // Handle roles
+        if ((auth()->user()->role == "Administrator") || (auth()->user()->role == "IAD Approver")) {
+            $audits = $query->orderBy('audit_to', 'asc')->paginate(10);
+        } elseif (auth()->user()->role == "Auditor") {
+            $audits = $query->whereHas('auditor_data', function ($query) {
+                $query->where('user_id', auth()->user()->id);
+            })->orderBy('audit_to', 'asc')->paginate(10);
+        } else {
+            $audits = collect();
         }
-        else
-        {
-            $audits = [];
-        }
-        $audits = AuditPlan::where('code','!=',null)->orderBy('audit_to','asc')->get();
-        return view('for_audit',
-        array(
+    
+        return view('for_audit', [
             'audits' => $audits,
-        )
-        );
+            'search' => $request->input('search', '') // Pass search value back to the view
+        ]);
        
     }
     public function forapproval(Request $request)
