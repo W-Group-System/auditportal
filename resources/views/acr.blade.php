@@ -65,6 +65,7 @@
                                     <th>Action</th>
                                     <th>Code</th>
                                     <th>Engagement Title</th>
+                                    <th>Title</th>
                                     <th>Criteria / Standard</th>
                                     <th>Date Discovered</th>
                                     <th>Date Prepared</th>
@@ -90,6 +91,12 @@
                                         </div></td>
                                         <td>{{$observation->code}}</td>
                                         <td>{{$observation->audit_plan->engagement_title}}</td>
+                                        @php
+                                            $paragraphs = str_replace('&nbsp;','', $observation->observation);
+                                            $paragraphs = str_replace('<br>','</p>', $observation->observation);
+                                            $paragraphs = explode('</p>', $paragraphs);
+                                        @endphp
+                                        <td>{!!$paragraphs[0]."</p>"!!}</td>
                                         <td>{{$observation->criteria}}</td>
                                         <td>{{$observation->date_audit}}</td>
                                         <td>{{date('Y-m-d',strtotime($observation->created_at))}}</td>
