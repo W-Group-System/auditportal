@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\ActionPlan;
 use App\AuditPlan;
 use App\User;
+use App\Department;
 use App\ActionPlanRemark;
 use App\AuditPlanObservation;
 use App\Notifications\SubmitProof;
@@ -42,11 +43,16 @@ class ActionPlanController extends Controller
         $done_code = $request->code;
         $status = $request->status;
         $searchTerm = $request->search; 
+        $dept = $request->department;
+        $status_report = $request->status_report;
+        $generated_date = $request->generated_date;
     
         // Base query for action plans
         $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user'])
             ->where('status', 'Verified')
             ->where('action_plan', '!=', 'N/A');
+        
+       
     
         // User role checks
         if (auth()->user()->role == "Auditee" || auth()->user()->role == "Department Head") {
@@ -96,14 +102,50 @@ class ActionPlanController extends Controller
             });
         }
         // Get action plans with pagination
-        $action_plans = $query->paginate(10);
-    
+     
+        if($dept)
+        {
+            $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user'])
+            ->where('status', 'Verified')
+            ->where('action_plan', '!=', 'N/A')
+            ->where('department_id',$dept);
+        }
+        if($status_report == "Closed")
+        {
+            $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user'])
+            ->where('action_plan','!=',"N/A")->where('status','Closed')
+            ->where('department_id',$dept);
+        }
+        else if($status_report == "Delayed")
+        {
+            $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user'])
+            ->where('action_plan','!=',"N/A")
+            ->where('status','Verified')
+            ->where('target_date','<',date('Y-m-d'))
+            ->where('department_id',$dept);
+        }
+        else if($status_report == "Open")
+        {
+            $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user'])
+            ->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',date('Y-m-d'))
+            ->where('department_id',$dept);
+        }
+        if($dept)
+        {
+
+            $action_plans = $query->paginate(2000);
+        }
+        else
+        {
+
+            $action_plans = $query->paginate(10);
+        }
         // Fetch additional data
         $audit_plans = AuditPlan::orderBy('code', 'desc')->get();
         $acrs = AuditPlanObservation::all();
         $users = User::whereNull('status')->get();
     
-        return view('action_plans', compact('action_plans', 'audit_plans', 'acrs', 'users', 'done_code', 'status','searchTerm'));
+        return view('action_plans', compact('action_plans', 'audit_plans', 'acrs', 'users', 'done_code', 'status','searchTerm','dept'));
     }
     public function email(Request $request)
     {

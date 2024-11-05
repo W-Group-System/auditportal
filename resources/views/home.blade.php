@@ -60,7 +60,7 @@
       </div>
   </div>
 </div>
-<div class="row">
+{{-- <div class="row">
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
@@ -73,7 +73,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 @endif
 <div class="row">
   {{-- <div class="col-md-5 grid-margin stretch-card">
@@ -140,9 +140,9 @@
                         @if($department->group == null)
                         <tr>
                             <td>{{$department->code}}</td>
-                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view{{$department->id}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('date_completed','<=',date('Y-m-d',strtotime($generate_date)))->where('status','Closed'))}}</a></td>
-                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_delayed{{$department->id}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',$generate_date))}}</td>
-                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_open{{$department->id}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',$generate_date))+count(($department->action_plans)->where('action_plan','!=',"N/A")->where('update_at','>',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('status','Closed'))}}</a></td>
+                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal" target='_blank'  href="{{url('action-plans?department='.$department->id.'&status_report=Closed')}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('date_completed','<=',date('Y-m-d',strtotime($generate_date)))->where('status','Closed'))}}</a></td>
+                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  target='_blank'  href="{{url('action-plans?department='.$department->id.'&status_report=Delayed')}}"   @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',$generate_date))}}</td>
+                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"   target='_blank'  href="{{url('action-plans?department='.$department->id.'&status_report=Open')}}"   @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',$generate_date))+count(($department->action_plans)->where('action_plan','!=',"N/A")->where('update_at','>',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('status','Closed'))}}</a></td>
                             <td>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','For Approval'))}}</td>
                             <td>@php
                                 $closed = count(($department->action_plans)->where('date_completed','<=',date('Y-m-d',strtotime($generate_date)))->where('action_plan','!=',"N/A")->where('status','Closed'));
@@ -255,13 +255,13 @@
     </div>
   </small>
     @endforeach
-    {{-- @if(auth()->user()->role != "Auditee")
-    @foreach($departments as $department)
+    @if(auth()->user()->role != "Auditee")
+    {{-- @foreach($departments as $department)
     
     @include('view_closed')
     @include('view_dalayed')
     @include('view_open')
-    @endforeach
+    @endforeach --}}
     @foreach($groups as $key => $group)
     @php
         $dep_grou = ($group->dep)->pluck('department_id')->toArray();
@@ -271,7 +271,7 @@
     @include('view_open_group')
     @endforeach
     @endif
-  --}}
+ 
 </div>
 @endsection
 
