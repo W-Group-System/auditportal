@@ -55,7 +55,7 @@
 
   
         <label for="name_of_whistleblower">Name of Whistleblower:</label>
-        <input type="text" class="form-control" id="name_of_whistleblower" placeholder="(an employee who informs on a person or organization engaged in an illicit activity)" name="name_of_whistleblower" required>
+        <input type="text" class="form-control" id="name_of_whistleblower" placeholder="(an employee who informs on a person or organization engaged in an illicit activity)" name="name_of_whistleblower" >
      <br>
         <div class='row'>
     <div class='col-md-12'> <button type="submit" class="btn btn-info">Submit</button></div>
