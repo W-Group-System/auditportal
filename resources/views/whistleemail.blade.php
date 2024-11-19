@@ -360,10 +360,10 @@
                           </tr>
                           <tr>
                             <td width="30%">
-                                Name of Respondent: 
+                                Name of Whistleblower: 
                             </td>
                             <td align="left">
-                                {{$data['data']->name_of_respondent}}
+                                {{$data['data']->name_of_whistleblower}}
                             </td>
                           </tr>
                         </tbody>
