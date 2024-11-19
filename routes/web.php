@@ -12,10 +12,12 @@
 */
 
 
-
+Route::get('whistle-blower','WhistleBlowerController@new');
+Route::post('new-whistle','WhistleBlowerController@store');
 Auth::routes();
 Route::get('email-notif','ActionPlanController@email');
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/whistle-reports','WhistleBlowerController@reports')->name('reports');
     Route::get('/','HomeController@index')->name('home');
 
     Route::get('/home','HomeController@index')->name('home');
