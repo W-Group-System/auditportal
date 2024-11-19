@@ -30,22 +30,16 @@
 <form method='post' action='{{url('new-whistle')}}' onsubmit='show();' class="form-horizontal"  enctype="multipart/form-data" >
 @csrf
 <div class="container">
-    <div class="form-group">
     <h2>WHISTLEBLOWER REPORT</h2>
-    </div>
-    <div class="form-group">
       <label for="issue">Issue:</label>
       <textarea  class="form-control" id='issue' placeholder="Issue" name="issue" required></textarea>
-    </div>
-    <div class="form-group">
+
       <label for="pwd">Name of Respondent:</label>
       <input type="text" class="form-control" id="pwd" placeholder="(an alleged employee who is the subject of the report filed by the whistleblower)" name="name_of_respondent" required>
-    </div>
-    <div class="form-group">
+   
       <label for="department">Department of Respondent:</label>
       <input type="text" class="form-control" id="department" placeholder="Department of Respondent" name="department" required>
-    </div>
-    <div class="form-group">
+
       <label for="risk">Risk:</label>
       <select class='form-control' id='risk' name='risk' required>
         <option value=''> </option>
@@ -53,22 +47,20 @@
         <option value='Medium'>Medium</option>
         <option value='Low'>Low</option>
       </select>
-    </div>
-    <div class="form-group">
       <label for="date_of_incident">Date of Incident:</label>
       <input type="date" class="form-control" id="date_of_incident" max='{{date('Y-m-d')}}' name="date_of_incident" required>
-    </div>
-    <div class="form-group">
+
       <label for="proof">Proof:</label>
       <input type="file" class="form-control" id="proof"  name="proof[]" multiple required>
-    </div>
-    <div class="form-group">
+
+  
         <label for="name_of_whistleblower">Name of Whistleblower:</label>
         <input type="text" class="form-control" id="name_of_whistleblower" placeholder="(an employee who informs on a person or organization engaged in an illicit activity)" name="name_of_whistleblower" required>
-      </div>
-      <div class="form-group">
-    <button type="submit" class="btn btn-info">Submit</button>
-      </div>
+     <br>
+        <div class='row'>
+    <div class='col-md-12'> <button type="submit" class="btn btn-info">Submit</button></div>
+       
+     </div>
 
 </div>
 </form>
