@@ -9,7 +9,7 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Whistle Blowers Report
+                    <h5>Whistleblowers Report
                        
                     </div>
                     <div class="ibox-content">
