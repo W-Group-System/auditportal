@@ -124,6 +124,7 @@ class ActionPlanController extends Controller
         {
             $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user'])
             ->where('action_plan','!=',"N/A")->where('status','Closed')
+            ->where('action_plan','!=','N/A')
             ->where('department_id',$dept);
         }
         else if($status_report == "Delayed")
@@ -131,6 +132,7 @@ class ActionPlanController extends Controller
             $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user'])
             ->where('status','Verified')
             ->where('target_date','<',date('Y-m-d'))
+            ->where('action_plan','!=','N/A')
             ->where('department_id',$dept);
         }
         else if($status_report == "Open")
