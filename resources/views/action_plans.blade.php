@@ -15,6 +15,17 @@
             <div class="ibox ">
                 <div class="ibox-content">
                         <div class="row">
+                            {{-- @if(auth()->user()->role != 'Auditee')
+                            <div class="col-lg-3">
+                                <label>Department</label>
+                                <select name='department' class='form-control-sm form-control cat' >
+                                    <option value=""></option>
+                                    @foreach($departments as $department)
+                                    <option value="{{$department->id}}" @if($department->id == $dept) selected @endif>{{$department->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @endif --}}
                             <div class="col-lg-3">
                                 <label>Code</label>
                                 <select name='code' class='form-control-sm form-control cat' >
@@ -52,6 +63,15 @@
                                 <input type="text" name="search" class="form-control" placeholder="Search by Code, Title, auditor, auditee" value="{{ old('search', $searchTerm) }}">
                             </div>
                             <div class="col-lg-2">
+                                <select name='limit' class='form-control-sm form-control cat' placeholder='Limit'  required>
+                                    <option value="ALL" @if($default == "ALL") selected @endif>ALL</option>
+                                    <option value="10" @if($default == "10") selected @endif>10</option>
+                                    <option value="20" @if($default == "20") selected @endif>20</option>
+                                    <option value="50" @if($default == "50") selected @endif>50</option>
+                                    <option value="100" @if($default == "100") selected @endif>100</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2">
                                 <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
                             </div>
                         </div>
@@ -66,15 +86,18 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Action Plans
-                        @if((auth()->user()->role == "Auditor") || (auth()->user()->role == "IAD Approver") || (auth()->user()->role == "Administrator"))
-                        <button class="btn btn-success" data-target="#new" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;New Action Plan</button>
+                        {{-- @if((auth()->user()->role == "Auditor") || (auth()->user()->role == "IAD Approver") || (auth()->user()->role == "Administrator"))
+                        <a href='{{url("export-excel")}}' ><button class="btn btn-success" data-target="#new" data-toggle="modal" type="button"><i class="fa fa-plus"></i>&nbsp;New Action Plan</button></a>
                         </h5>
                         @endif
+                        &nbsp; --}}
+                        <button class="btn btn-info" onclick="fnExcelReport();" data-toggle="modal" type="button"><i class="	fa fa-cloud-download"></i>&nbsp;Excel</button>
+                        </h5>
                     </div>
                     <div class="ibox-content">
     
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover ">
+                            <table class="table table-striped table-bordered table-hover " id='YTD'>
                                 <thead>
                                     <tr>
                                         <th>Action</th>
@@ -200,5 +223,39 @@
 
     });
 
+</script>
+<script>
+    function fnExcelReport() {
+    var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+    var j = 0;
+    var tab = document.getElementById('YTD'); // id of table
+
+    for (j = 0; j < tab.rows.length; j++) {
+        tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+        //tab_text=tab_text+"</tr>";
+    }
+
+    tab_text = tab_text + "</table>";
+    tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+    tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+    var msie = window.navigator.userAgent.indexOf("MSIE ");
+
+    // If Internet Explorer
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+        txtArea1.document.open("txt/html", "replace");
+        txtArea1.document.write(tab_text);
+        txtArea1.document.close();
+        txtArea1.focus();
+
+        sa = txtArea1.document.execCommand("SaveAs", true, "Download.xls");
+    } else {
+        // other browser not tested on IE 11
+        sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+    }
+
+    return sa;
+}
 </script>
 @endsection

@@ -39,6 +39,16 @@ class ActionPlanController extends Controller
     }
     public function index(Request $request)
     {
+        $default = 10;
+        $limit = $request->limit;
+        if($limit)
+        {
+            $default = $limit;
+        }
+        if($limit == "ALL")
+        {
+            $default = 10000;
+        }
         $code = $request->code;
         $done_code = $request->code;
         $status = $request->status;
@@ -119,7 +129,6 @@ class ActionPlanController extends Controller
         else if($status_report == "Delayed")
         {
             $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user'])
-            ->where('action_plan','!=',"N/A")
             ->where('status','Verified')
             ->where('target_date','<',date('Y-m-d'))
             ->where('department_id',$dept);
@@ -132,20 +141,22 @@ class ActionPlanController extends Controller
         }
         if($dept)
         {
-
-            $action_plans = $query->paginate(2000);
+           
+                $action_plans = $query->paginate($default);
+            
         }
         else
         {
-
-            $action_plans = $query->paginate(10);
+           
+                $action_plans = $query->paginate($default);
+            
         }
         // Fetch additional data
         $audit_plans = AuditPlan::orderBy('code', 'desc')->get();
         $acrs = AuditPlanObservation::all();
         $users = User::whereNull('status')->get();
     
-        return view('action_plans', compact('action_plans', 'audit_plans', 'acrs', 'users', 'done_code', 'status','searchTerm','dept'));
+        return view('action_plans', compact('action_plans', 'audit_plans', 'acrs', 'users', 'done_code', 'status','searchTerm','dept','default'));
     }
     public function email(Request $request)
     {
