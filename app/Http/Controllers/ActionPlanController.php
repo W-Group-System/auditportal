@@ -158,7 +158,7 @@ class ActionPlanController extends Controller
         $acrs = AuditPlanObservation::all();
         $users = User::whereNull('status')->get();
     
-        return view('action_plans', compact('action_plans', 'audit_plans', 'acrs', 'users', 'done_code', 'status','searchTerm','dept','default'));
+        return view('action_plans', compact('action_plans', 'audit_plans', 'acrs', 'users', 'done_code', 'status','searchTerm','dept','default','status_report'));
     }
     public function email(Request $request)
     {

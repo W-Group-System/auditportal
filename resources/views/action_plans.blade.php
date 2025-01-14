@@ -43,6 +43,8 @@
                                     <option value="Open" @if($status == "Open") selected @endif>For Auditee Uploading</option>
                                     <option value="All" @if($status == "All") selected @endif>All</option>
                                 </select>
+                                <input name='department' value='{{$dept}}' hidden>
+                                <input name='status_report' value='{{$status_report}}' hidden>
                             </div>
                            
                             <div class="col-lg-2">
@@ -172,7 +174,7 @@
     
                         <!-- Pagination links -->
                         <div class="mt-3">
-                            {{ $action_plans->appends(request()->only(['search', 'code', 'status']))->links() }} <!-- This will display the pagination links -->
+                            {{ $action_plans->appends(request()->only(['search', 'code', 'status','department','limit','status_report']))->links() }} <!-- This will display the pagination links -->
                         </div>
     
                     </div>
