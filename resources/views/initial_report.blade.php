@@ -227,7 +227,7 @@ tr.no-bottom-border td {
         <td class="text-center" style='width:5%;border-top: none;'></td>
         <td class="text-left" style='width:80%;border-top: none;'>
             <b>Status</b> : {{$observation->status}} <Br>
-            <b>Person in Charge</b> : {{$observation->user->name}} <br>
+            <b>Person in Charge</b> : {{ optional($observation->user)->name }} <br>
             <b>Target Date</b> : {{date('M d, Y',strtotime($observation->target_date))}} <br>
         </td>
     </tr>
