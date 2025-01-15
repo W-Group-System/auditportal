@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
         // }
         // \URL::forceScheme('https');
         $host = request()->getHost();
-        if(request()->getHost() === "audit-iad.wsystem.online/")
+        if(request()->getHost() === "audit-iad.wsystem.online")
         {
             URL::forceScheme('https');
         }
