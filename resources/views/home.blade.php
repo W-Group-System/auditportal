@@ -154,7 +154,8 @@
                                 }
                                 else
                                 {
-                                    $percent = $closed/($closed+$delayed);
+                                    // $percent = $closed/($closed+$delayed);
+                                    $percent = $closed/($total);
                                 }
                                 
                             @endphp
