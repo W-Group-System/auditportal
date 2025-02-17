@@ -149,7 +149,7 @@
                                     ->where('action_plan', '!=', "N/A")
                                     ->where('status', '!=', 'For Approval')
                                     ->where('date_completed', '<=', date('Y-m-d',strtotime($generate_date)))
-                                    ->count() 
+                                    ->count()   
                                 }}
                             </td>
                             <td>@php
