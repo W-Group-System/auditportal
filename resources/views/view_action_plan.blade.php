@@ -8,18 +8,31 @@
                     <div class="modal-body">             
                         @csrf
                         <div class='row'>
-                            <div class='col-md-12'>
-                        Proof : @if($action_plan->attachment == null)
-                                <span class='text-danger'>No Proof</span>
+                            <div class="col-md-12">
+                                Proof: 
+                                @if(is_null($action_plan->attachment) && (!$action_plan->files || $action_plan->files->isEmpty()))
+                                    <span class="text-danger">No Proof</span>
                                 @else
-                                <a href='{{url($action_plan->attachment)}}' target='_blank'><i class='fa fa-file-pdf-o'></i></a>
+                                    @if($action_plan->attachment)
+                                        <a href="{{ url($action_plan->attachment) }}" target="_blank">
+                                            <i class="fa fa-file-pdf-o"></i>
+                                        </a>
+                                    @endif
+                                    @if($action_plan->files && $action_plan->files->isNotEmpty())
+                                        @foreach($action_plan->files as $file)
+                                            <a href="{{ url($file->attachment) }}" target="_blank">
+                                                <i class="fa fa-file-pdf-o"></i>
+                                            </a>
+                                        @endforeach
+                                    @endif
                                 @endif
                             </div>
                         </div>
                         <div class='row'>
                             <div class='col-md-12'>
                                 Upload Proof :
-                                <input name='file' class='form-control form-control-sm' type='file' required>
+                                <!-- <input name='file' class='form-control form-control-sm' type='file' required> -->
+                                <input name='file[]' class='form-control form-control-sm' type='file' multiple accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" required>
                             </div>
                         </div>
                         <div class='row'>

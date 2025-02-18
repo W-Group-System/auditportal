@@ -81,7 +81,8 @@
                         </div>
                         <div class='col-md-4'>
                            File (optional):
-                           <input type="file" class="form-control-sm form-control "   name="file" />
+                           <!-- <input type="file" class="form-control-sm form-control" name="file" /> -->
+                           <input name='file[]' class='form-control form-control-sm' type='file' multiple accept=".jpg,.jpeg,.png,.pdf,.doc,.docx">
                         </div>
                       
                     </div>

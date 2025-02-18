@@ -39,4 +39,8 @@ class ActionPlan extends Model implements Auditable
     {
         return $this->belongsTo(User::class,'auditor','id');
     }
+    public function files()
+    {
+        return $this->hasMany(ActionPlanAttachments::class,'action_plan_id');
+    }
 }

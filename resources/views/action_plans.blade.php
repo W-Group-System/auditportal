@@ -152,10 +152,27 @@
                                             <td @if($action_plan->target_date < date('Y-m-d')) class='bg-danger' @endif>{{$action_plan->target_date}}</td>
                                             <td>@if($action_plan->immediate == 1) Correction or Immediate Action @else Corrective Action Plan @endif</td>
                                             <td>
-                                                @if($action_plan->attachment == null)
+                                                {{-- @if($action_plan->attachment == null)
                                                 <span class='text-danger'>No Proof</span>
                                                 @else
                                                 <a href='{{url($action_plan->attachment)}}' target='_blank'><i class='fa fa-file-pdf-o'></i></a>
+                                                @endif --}}
+
+                                                @if(is_null($action_plan->attachment) && (!$action_plan->files || $action_plan->files->isEmpty()))
+                                                    <span class="text-danger">No Proof</span>
+                                                @else
+                                                    @if($action_plan->attachment)
+                                                        <a href="{{ url($action_plan->attachment) }}" target="_blank">
+                                                            <i class="fa fa-file-pdf-o"></i>
+                                                        </a>
+                                                    @endif
+                                                    @if($action_plan->files && $action_plan->files->isNotEmpty())
+                                                        @foreach($action_plan->files as $file)
+                                                            <a href="{{ url($file->attachment) }}" target="_blank">
+                                                                <i class="fa fa-file-pdf-o"></i>
+                                                            </a>
+                                                        @endforeach
+                                                    @endif
                                                 @endif
                                             </td>
                                             <td>
