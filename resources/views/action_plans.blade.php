@@ -179,7 +179,8 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($action_plan->attachment == null)  For Auditee Uploading
+                                                @if(is_null($action_plan->attachment) && (!$action_plan->files || $action_plan->files->isEmpty()))
+                                                    For Auditee Uploading
                                                 @elseif($action_plan->iad_status == "Returned")
                                                     Returned Action Plan
                                                 @else For IAD Checking 
