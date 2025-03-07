@@ -496,12 +496,14 @@ class ActionPlanController extends Controller
             if($request->code == "ALL")
             {
 
-                $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('status','Closed')->get();
+                // $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('status','Closed')->get();
+                $action_plans = ActionPlan::where('department_id',auth()->user()->department_id)->where('status','Closed')->get();
             }
             else
             {
                 
-                $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('audit_plan_id',$request->code)->where('status','Closed')->get();
+                // $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('audit_plan_id',$request->code)->where('status','Closed')->get();
+                $action_plans = ActionPlan::where('department_id',auth()->user()->department_id)->where('audit_plan_id',$request->code)->where('status','Closed')->get();
             }
 
         }
@@ -516,6 +518,7 @@ class ActionPlanController extends Controller
                 $action_plans = ActionPlan::where('status','Closed')->where('audit_plan_id',$request->code)->get();
             }
         }
+        
         return view('closed_action_plans',
             array(
                 'action_plans' => $action_plans,
