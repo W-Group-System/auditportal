@@ -18,7 +18,8 @@
                                 Employee :
                                 <select name='user' rows="6" cols="100" class='form-control form-control-sm cat' required>
                                     @foreach($users->where('role','Auditee') as $user)
-                                        <option value='{{$user->id}}' @if($user->id == $action_plan->user_id) selected @endif>{{$user->name}}</option>
+                                        <!-- <option value='{{$user->id}}' @if($user->id == $action_plan->user_id) selected @endif>{{$user->name}}</option> -->
+                                        <option value='{{$user->id}}' @if($user->id == $action_plan->user_id) selected @endif>{{$user->name}} - {{$user->department->code}}</option>
                                     @endforeach
                                 </select>
                             </div>

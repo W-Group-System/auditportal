@@ -200,7 +200,7 @@
                                 @php
                                     // $total_closed = $total_closed;
                                 @endphp
-                                <a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_group{{$key}}" @endif>{{$close_count}}</a>
+                                <a @if(auth()->user()->role != "Auditee") data-toggle="modal" target='_blank' href="#view_group{{$key}}" @endif>{{$close_count}}</a>
                             </td>
                            <td>
                                 @foreach($departments->whereIn('id',$dep_grou) as $group_department)
@@ -208,7 +208,7 @@
                                         $delayed_count = $delayed_count + count(($group_department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',$generate_date));
                                     @endphp
                                 @endforeach
-                                <a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_delayed_group{{$key}}" @endif>{{$delayed_count}}</a>
+                                <a @if(auth()->user()->role != "Auditee") data-toggle="modal" target='_blank' href="#view_delayed_group{{$key}}" @endif>{{$delayed_count}}</a>
                            </td>
                            <td>
                             @foreach($departments->whereIn('id',$dep_grou) as $group_department)
@@ -216,7 +216,7 @@
                                 $open = $open + count(($group_department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',$generate_date));
                             @endphp
                             @endforeach
-                            <a @if(auth()->user()->role != "Auditee") data-toggle="modal"  href="#view_open_group{{$key}}" @endif>{{$open}}</a>
+                            <a @if(auth()->user()->role != "Auditee") data-toggle="modal" target='_blank' href="#view_open_group{{$key}}" @endif>{{$open}}</a>
                            </td>
                            <td>
                             @foreach($departments->whereIn('id',$dep_grou) as $group_department)
