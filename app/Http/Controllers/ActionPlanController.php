@@ -325,11 +325,31 @@ class ActionPlanController extends Controller
             return back();
         
     }
-    public function edit_action_plan (Request $request,$id)
+    // public function edit_action_plan (Request $request,$id)
+    // {
+    //     $user = User::findOrFail($id);
+    //     $action_plan = ActionPlan::findOrfail($id);
+    //     $action_plan->action_plan = $request->action_plan;
+    //     $action_plan->user_id = $request->user;
+    //     $action_plan->department_id = $user->department_id;
+    //     $action_plan->save();
+
+    //     Alert::success('Successfully Updated')->persistent('Dismiss');
+    //     return back();
+    // }
+
+    public function edit_action_plan(Request $request, $id)
     {
-        $action_plan = ActionPlan::findOrfail($id);
+        // Fetch the action plan by ID
+        $action_plan = ActionPlan::findOrFail($id);
+
+        // Fetch the selected user
+        $user = User::findOrFail($request->user);
+
+        // Update action plan details
         $action_plan->action_plan = $request->action_plan;
-        $action_plan->user_id = $request->user;
+        $action_plan->user_id = $user->id;
+        $action_plan->department_id = $user->department_id; // Assign department ID from user
         $action_plan->save();
 
         Alert::success('Successfully Updated')->persistent('Dismiss');
