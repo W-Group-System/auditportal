@@ -59,12 +59,10 @@ class ActionPlanController extends Controller
         $generated_date = $request->generated_date;
     
         // Base query for action plans
-        $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user'])
+        $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user', 'files'])
             ->where('status', 'Verified')
             ->where('action_plan', '!=', 'N/A');
         
-       
-    
         // User role checks
         if (auth()->user()->role == "Auditee" || auth()->user()->role == "Department Head") {
             $departmentId = auth()->user()->department_id;
@@ -75,33 +73,22 @@ class ActionPlanController extends Controller
                     ->orWhereIn('department_id', $departmentIds);
             });
         }
-        $query = ActionPlan::with('files'); // Eager load attachments
-
+        
         if ($status == "For IAD Checking") {
             $query->whereNull('iad_status')
-                ->whereHas('files'); // Ensure it has attachments
+                  ->where(function ($subQuery) {
+                      $subQuery->whereNotNull('attachment') // Check old attachment column
+                               ->orWhereHas('files'); // Check if related files exist
+                  });
         } elseif ($status == "Open") {
             $query->where(function ($subQuery) {
                 $subQuery->where('iad_status', 'Returned')
-                        ->orWhereDoesntHave('files'); // Ensure no attachments exist
+                         ->orWhere(function ($q) {
+                             $q->whereNull('attachment') // Check old attachment column
+                               ->whereDoesntHave('files'); // Ensure no related files exist
+                         });
             });
         }
-
-        // if ($status == "For IAD Checking") {
-        //     $query->whereNull('iad_status')
-        //         ->where(function ($subQuery) {
-        //             $subQuery->whereNotNull('attachment') // Check old attachment column
-        //                     ->orWhereHas('files'); // Check if there are related attachments
-        //         });
-        // } elseif ($status == "Open") {
-        //     $query->where(function ($subQuery) {
-        //         $subQuery->where('iad_status', 'Returned')
-        //                 ->orWhere(function ($q) {
-        //                     $q->whereNull('attachment') // Check old attachment column
-        //                     ->whereDoesntHave('files'); // Ensure no related attachments exist
-        //                 });
-        //     });
-        // }
 
         // if ($status == "For IAD Checking") {
         //     $query->whereNull('iad_status')->whereNotNull('attachment');
