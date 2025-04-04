@@ -75,14 +75,42 @@ class ActionPlanController extends Controller
                     ->orWhereIn('department_id', $departmentIds);
             });
         }
+        $query = ActionPlan::with('files'); // Eager load attachments
+
         if ($status == "For IAD Checking") {
-            $query->whereNull('iad_status')->whereNotNull('attachment');
+            $query->whereNull('iad_status')
+                ->whereHas('files'); // Ensure it has attachments
         } elseif ($status == "Open") {
             $query->where(function ($subQuery) {
                 $subQuery->where('iad_status', 'Returned')
-                    ->orWhereNull('attachment');
+                        ->orWhereDoesntHave('files'); // Ensure no attachments exist
             });
         }
+
+        // if ($status == "For IAD Checking") {
+        //     $query->whereNull('iad_status')
+        //         ->where(function ($subQuery) {
+        //             $subQuery->whereNotNull('attachment') // Check old attachment column
+        //                     ->orWhereHas('files'); // Check if there are related attachments
+        //         });
+        // } elseif ($status == "Open") {
+        //     $query->where(function ($subQuery) {
+        //         $subQuery->where('iad_status', 'Returned')
+        //                 ->orWhere(function ($q) {
+        //                     $q->whereNull('attachment') // Check old attachment column
+        //                     ->whereDoesntHave('files'); // Ensure no related attachments exist
+        //                 });
+        //     });
+        // }
+
+        // if ($status == "For IAD Checking") {
+        //     $query->whereNull('iad_status')->whereNotNull('attachment');
+        // } elseif ($status == "Open") {
+        //     $query->where(function ($subQuery) {
+        //         $subQuery->where('iad_status', 'Returned')
+        //             ->orWhereNull('attachment');
+        //     });
+        // }
         // Additional filters based on code and status
         if ($code) {
             $query->where('audit_plan_id', $code);
