@@ -409,71 +409,53 @@ class ScheduleController extends Controller
         return $pdf->stream('authority_to_audit');
     }
 
-    // public function forAudit(Request $request)
-    // {
-    //     $query = AuditPlan::where('code', '!=', null);
-        
-    //     if ($request->has('search')) {
-    //         $search = $request->input('search');
-    //         $query->where(function($q) use ($search) {
-    //             $q->where('code', 'LIKE', "%$search%")
-    //               ->orWhere('engagement_title', 'LIKE', "%$search%")
-    //             //   ->orWhereHas('department', function($q) use ($search) {
-    //             //       $q->where('department_name.name', 'LIKE', "%$search%");
-    //             //   })
-    //               ->orWhereHas('auditor_data', function($q) use ($search) {
-    //                   $q->whereHas('user', function($q) use ($search) {
-    //                       $q->where('name', 'LIKE', "%$search%");
-    //                   });
-    //               });
-    //         });
-    //     }
-    
-    //     // Handle roles
-    //     // if ((auth()->user()->role == "Administrator") || (auth()->user()->role == "IAD Approver")) {
-    //         $audits = $query->orderBy('audit_to', 'asc')->paginate(10);
-    //         // dd($audits);
-    //     // } elseif (auth()->user()->role == "Auditor") {
-    //     //     $audits = $query->whereHas('auditor_data', function ($query) {
-    //     //         $query->where('user_id', auth()->user()->id);
-    //     //     })->orderBy('audit_to', 'asc')->paginate(10);
-    //     // } else {
-    //     //     $audits = collect();
-    //     // }
-    
-    //     return view('for_audit', [
-    //         'audits' => $audits,
-    //         'search' => $request->input('search', '') // Pass search value back to the view
-    //     ]);
-       
-    // }
-
-
     public function forAudit(Request $request)
     {
-        $query = AuditPlan::with(['auditor_data.user'])->whereNotNull('code');
+        $query = AuditPlan::where('code', '!=', null);
 
         if ($request->has('search')) {
             $search = $request->input('search');
-
-            $query->where(function ($q) use ($search) {
-                $q->where('code', 'LIKE', "$search%")
-                ->orWhere('engagement_title', 'LIKE', "$search%")
-                ->orWhereHas('auditor_data.user', function ($q) use ($search) {
-                    $q->where('name', 'LIKE', "$search%");
-                });
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'LIKE', "%$search%")
+                  ->orWhere('engagement_title', 'LIKE', "%$search%")
+                //   ->orWhereHas('department', function($q) use ($search) {
+                //       $q->where('department_name.name', 'LIKE', "%$search%");
+                //   })
+                  ->orWhereHas('auditor_data', function($q) use ($search) {
+                      $q->whereHas('user', function($q) use ($search) {
+                          $q->where('name', 'LIKE', "%$search%");
+                      });
+                  });
             });
         }
+    
+        // Handle roles
+        // if ((auth()->user()->role == "Administrator") || (auth()->user()->role == "IAD Approver")) {
+        // $audits = $query->orderBy('audit_to', 'asc')->paginate(10);
+        // } elseif (auth()->user()->role == "Auditor") {
+        //     $audits = $query->whereHas('auditor_data', function ($query) {
+        //         $query->where('user_id', auth()->user()->id);
+        //     })->orderBy('audit_to', 'asc')->paginate(10);
+        // } else {
+        //     $audits = collect();
+        // }
 
-        $audits = $query->orderBy('audit_to', 'asc')->paginate(10);
-
+        if ((auth()->user()->role == "Administrator") || (auth()->user()->role == "IAD Approver")) {
+            $audits = $query->orderBy('audit_to', 'asc')->paginate(10);
+        } elseif (auth()->user()->role == "Auditor") {
+            $audits = $query->whereHas('auditor_data', function ($query) {
+                $query->where('user_id', auth()->user()->id);
+            })->orderBy('audit_to', 'asc')->paginate(10);
+        } else {
+            $audits = collect();
+        }
+    
         return view('for_audit', [
             'audits' => $audits,
-            'search' => $request->input('search', '')
+            'search' => $request->input('search', '') // Pass search value back to the view
         ]);
+       
     }
-
-
     public function forapproval(Request $request)
     {
        
