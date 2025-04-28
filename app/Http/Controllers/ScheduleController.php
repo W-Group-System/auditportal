@@ -431,7 +431,7 @@ class ScheduleController extends Controller
     
         // Handle roles
         // if ((auth()->user()->role == "Administrator") || (auth()->user()->role == "IAD Approver")) {
-        // $audits = $query->orderBy('audit_to', 'asc')->paginate(10);
+            $audits = $query->orderBy('audit_to', 'asc')->paginate(10);
         // } elseif (auth()->user()->role == "Auditor") {
         //     $audits = $query->whereHas('auditor_data', function ($query) {
         //         $query->where('user_id', auth()->user()->id);
@@ -439,16 +439,6 @@ class ScheduleController extends Controller
         // } else {
         //     $audits = collect();
         // }
-
-        if ((auth()->user()->role == "Administrator") || (auth()->user()->role == "IAD Approver")) {
-            $audits = $query->orderBy('audit_to', 'asc')->paginate(10);
-        } elseif (auth()->user()->role == "Auditor") {
-            $audits = $query->whereHas('auditor_data', function ($query) {
-                $query->where('user_id', auth()->user()->id);
-            })->orderBy('audit_to', 'asc')->paginate(10);
-        } else {
-            $audits = collect();
-        }
     
         return view('for_audit', [
             'audits' => $audits,
