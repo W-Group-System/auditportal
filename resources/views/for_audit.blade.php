@@ -129,10 +129,7 @@
 <script>
     $(document).ready(function() {
         $('.cat').chosen({ width: "100%" });
-        $('.tables').DataTable({
-            pageLength: 25,
-            responsive: true,
-        });
+        
     });
 </script>
 @endsection
