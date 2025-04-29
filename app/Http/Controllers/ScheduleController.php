@@ -411,8 +411,16 @@ class ScheduleController extends Controller
 
     public function forAudit(Request $request)
     {
-        $query = AuditPlan::whereNotNull('code');
         // $query = AuditPlan::where('code', '!=', null);
+        $query = AuditPlan::whereNotNull('code')
+        ->with([
+            'attachments',
+            'department.department_name',
+            'department.user_name',
+            'auditor_data.user',
+            'observations',
+            'action_plans'
+        ]); 
 
         // if ($request->has('search')) {
         //     $search = $request->input('search');
