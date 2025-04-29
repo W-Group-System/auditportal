@@ -411,21 +411,36 @@ class ScheduleController extends Controller
 
     public function forAudit(Request $request)
     {
-        $query = AuditPlan::where('code', '!=', null);
+        $query = AuditPlan::whereNotNull('code');
+        // $query = AuditPlan::where('code', '!=', null);
 
+        // if ($request->has('search')) {
+        //     $search = $request->input('search');
+        //     $query->where(function($q) use ($search) {
+        //         $q->where('code', 'LIKE', "%$search%")
+        //           ->orWhere('engagement_title', 'LIKE', "%$search%")
+        //         //   ->orWhereHas('department', function($q) use ($search) {
+        //         //       $q->where('department_name.name', 'LIKE', "%$search%");
+        //         //   })
+        //           ->orWhereHas('auditor_data', function($q) use ($search) {
+        //               $q->whereHas('user', function($q) use ($search) {
+        //                   $q->where('name', 'LIKE', "%$search%");
+        //               });
+        //           });
+        //     });
+        // }
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where(function($q) use ($search) {
                 $q->where('code', 'LIKE', "%$search%")
                   ->orWhere('engagement_title', 'LIKE', "%$search%")
-                //   ->orWhereHas('department', function($q) use ($search) {
-                //       $q->where('department_name.name', 'LIKE', "%$search%");
-                //   })
-                  ->orWhereHas('auditor_data', function($q) use ($search) {
-                      $q->whereHas('user', function($q) use ($search) {
-                          $q->where('name', 'LIKE', "%$search%");
-                      });
+                  ->orWhereHas('auditor_data.user', function($q) use ($search) {
+                      $q->where('name', 'LIKE', "%$search%");
                   });
+                  // Uncomment if needed
+                  // ->orWhereHas('department.department_name', function($q) use ($search) {
+                  //     $q->where('name', 'LIKE', "%$search%");
+                  // });
             });
         }
     
