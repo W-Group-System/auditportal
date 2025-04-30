@@ -28,6 +28,7 @@ class Kernel extends ConsoleKernel
         //          ->hourly();
 
         $schedule->command('command:get_reports')->everyMinute();
+        $schedule->command('command:actionplan_report')->monthlyOn(22, '08:00');
     }
 
     /**
