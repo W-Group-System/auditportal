@@ -196,7 +196,7 @@
             </div>
             <div class="footer">
                 <div class='text-right'>
-                    WGROUP DEVELOPERsssssssss &copy; {{date('Y')}}
+                    WGROUP DEVELOPER &copy; {{date('Y')}}
                 </div>
             </div>
         </div>
