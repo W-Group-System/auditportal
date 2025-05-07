@@ -4,7 +4,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" >Action Plan <label class='label label-danger'></span></h5>
                 </div>
-                <form method='post' action='{{url('new-action-plan')}}' onsubmit='show();' class="form-horizontal"  enctype="multipart/form-data" >
+                <form method="post" action="{{url('new-action-plan')}}" onsubmit='show();' class="form-horizontal"  enctype="multipart/form-data" >
                 <div class="modal-body">             
                     @csrf
                     <div class='row'>
