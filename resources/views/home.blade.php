@@ -171,7 +171,7 @@
                                         $department->action_plans
                                             ->where('action_plan', '!=', "N/A")
                                             ->where('status', 'Verified')
-                                            ->where('target_date', '<=', $generate_date)
+                                            ->where('target_date', '>=', $generate_date)
                                             ->count()
                                     }}
                                 </a>
@@ -185,6 +185,16 @@
                                         ->where('status', '=', 'Closed')
                                         ->where('date_completed', '<=', date('Y-m-d', strtotime($generate_date)))
                                         ->count() 
+                                    +
+                                    $department->action_plans
+                                        ->where('action_plan', '!=', "N/A")
+                                        ->where('status', '=', 'Verified')
+                                        ->count()
+                                    +
+                                    $department->action_plans
+                                        ->where('action_plan', '!=', "N/A")
+                                        ->where('status', '=', 'Delayed')
+                                        ->count()
                                 }}
                             </td>
                             <td>@php
