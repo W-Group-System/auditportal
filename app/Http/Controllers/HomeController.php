@@ -30,6 +30,8 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $date = $request->generate_date;
+        $target_date = $request->target_date;
+
         if($date == null)
         {
             $date = date('Y-m-d');
@@ -55,6 +57,7 @@ class HomeController extends Controller
             'groups' => $groups,
             'companies' => $companies,
             'generate_date' => $date,
+            'target_date' => $target_date,
         ));
     }
 
