@@ -141,7 +141,24 @@
                         <tr>
                             <td>{{$department->code}}</td>
                             <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal" target='_blank'  href="{{url('action-plans?department='.$department->id.'&status_report=Closed')}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('date_completed','<=',date('Y-m-d',strtotime($generate_date)))->where('status','Closed'))}}</a></td>
-                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  target='_blank'  href="{{url('action-plans?department='.$department->id.'&status_report=Delayed')}}"   @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',$generate_date))}}</td>
+                            <td>
+                                <a 
+                                    @if(auth()->user()->role != "Auditee") 
+                                        data-toggle="modal" 
+                                        target="_blank"  
+                                        href="{{ url('action-plans?department=' . $department->id . '&status_report=Delayed&generated_date=' . $generate_date) }}"  
+                                    @endif
+                                >
+                                    {{
+                                        $department->action_plans
+                                            ->where('action_plan', '!=', "N/A")
+                                            ->where('status', 'Verified')
+                                            ->where('target_date', '>=', $generate_date)
+                                            ->count()
+                                    }}
+                                </a>
+                            </td>
+                            <!-- <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  target='_blank'  href="{{url('action-plans?department='.$department->id.'&status_report=Delayed')}}"   @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',$generate_date))}}</td> -->
                             <td>
                                 <a 
                                     @if(auth()->user()->role != "Auditee") 
@@ -154,7 +171,7 @@
                                         $department->action_plans
                                             ->where('action_plan', '!=', "N/A")
                                             ->where('status', 'Verified')
-                                            ->where('target_date', '>=', $generate_date)
+                                            ->where('target_date', '<=', $generate_date)
                                             ->count()
                                     }}
                                 </a>
