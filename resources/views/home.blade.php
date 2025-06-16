@@ -142,7 +142,24 @@
                             <td>{{$department->code}}</td>
                             <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal" target='_blank'  href="{{url('action-plans?department='.$department->id.'&status_report=Closed')}}" @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('date_completed','<=',date('Y-m-d',strtotime($generate_date)))->where('status','Closed'))}}</a></td>
                             <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"  target='_blank'  href="{{url('action-plans?department='.$department->id.'&status_report=Delayed')}}"   @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',$generate_date))}}</td>
-                            <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"   target='_blank'  href="{{url('action-plans?department='.$department->id.'&status_report=Open')}}"   @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',$generate_date))+count(($department->action_plans)->where('action_plan','!=',"N/A")->where('update_at','>',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('status','Closed'))}}</a></td>
+                            <td>
+                                <a 
+                                    @if(auth()->user()->role != "Auditee") 
+                                        data-toggle="modal" 
+                                        target="_blank"  
+                                        href="{{ url('action-plans?department=' . $department->id . '&status_report=Open&generated_date=' . $generate_date) }}"  
+                                    @endif
+                                >
+                                    {{
+                                        $department->action_plans
+                                            ->where('action_plan', '!=', "N/A")
+                                            ->where('status', 'Verified')
+                                            ->where('target_date', '>=', $generate_date)
+                                            ->count()
+                                    }}
+                                </a>
+                            </td>
+                            <!-- <td><a @if(auth()->user()->role != "Auditee") data-toggle="modal"   target='_blank'  href="{{url('action-plans?department='.$department->id.'&status_report=Open')}}"   @endif>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','>=',$generate_date))+count(($department->action_plans)->where('action_plan','!=',"N/A")->where('update_at','>',date('Y-m-d 23:59:59',strtotime($generate_date)))->where('status','Closed'))}}</a></td> -->
                             <!-- <td>{{count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','!=','For Approval'))}}</td> -->
                             <td>
                                 {{
