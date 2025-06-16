@@ -151,25 +151,25 @@ class ActionPlanController extends Controller
             ->where('action_plan','!=','N/A')
             ->where('department_id',$dept);
         }
-        else if($status_report == "Open") 
-        {
-            $query->where('status', 'Verified')
-                ->where('action_plan', '!=', 'N/A')
-                ->where('department_id', $dept);
-
-            if ($generated_date) {
-                $query->where('target_date', '>=', $generated_date);
-            }
-        }
-        // else if($status_report == "Open")
+        // else if($status_report == "Open") 
         // {
-        //     $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user'])
-        //     ->where('action_plan','!=',"N/A")->where('status','Verified')
-        //     ->where('department_id',$dept);
+        //     $query->where('status', 'Verified')
+        //         ->where('action_plan', '!=', 'N/A')
+        //         ->where('department_id', $dept);
+
         //     if ($generated_date) {
         //         $query->where('target_date', '>=', $generated_date);
         //     }
         // }
+        else if($status_report == "Open")
+        {
+            $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user'])
+            ->where('action_plan','!=',"N/A")->where('status','Verified')
+            ->where('department_id',$dept);
+            if ($generated_date) {
+                $query->where('target_date', '>=', $generated_date);
+            }
+        }
         if($dept)
         {
            

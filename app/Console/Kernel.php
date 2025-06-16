@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Console\Commands\getReport;
+use App\Console\Commands\send_email;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        getReport::class,
+        send_email::class,
     ];
 
     /**
@@ -28,7 +31,7 @@ class Kernel extends ConsoleKernel
         //          ->hourly();
 
         $schedule->command('command:get_reports')->everyMinute();
-        $schedule->command('command:actionplan_report')->monthlyOn(22, '08:00');
+        $schedule->command('command:actionplan_report')->monthlyOn(22, '8:00');
     }
 
     /**
