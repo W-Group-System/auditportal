@@ -153,7 +153,7 @@
                                         $department->action_plans
                                             ->where('action_plan', '!=', "N/A")
                                             ->where('status', 'Verified')
-                                            ->where('target_date', '>=', $generate_date)
+                                            ->where('target_date', '<', $generate_date)
                                             ->count()
                                     }}
                                 </a>
