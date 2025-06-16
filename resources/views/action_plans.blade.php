@@ -138,7 +138,7 @@
                                                             @else
                                                             <li><a title='Closed Action Plan' href="#closed{{$action_plan->id}}" data-toggle="modal">Close Action Plan</a></li>
                                                             @endif -->
-                                                            @if($action_plan->files->isNotEmpty() && $action_plan->iad_status != "Returned")
+                                                            @if($action_plan->files->isNotEmpty() || $action_plan->attachment != null && $action_plan->iad_status != "Returned")
                                                                 <li><a title='Closed Action Plan' href="#closed{{$action_plan->id}}" data-toggle="modal">Close Action Plan</a></li>
                                                             @endif
                                                             <li><a title='View' href="#view_history{{$action_plan->id}}" data-toggle="modal">View</a></li>
