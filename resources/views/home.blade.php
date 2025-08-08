@@ -203,7 +203,8 @@
                                 $total = $closed + $delayed;
                                 if($closed+$delayed == 0)
                                 {
-                                    $percent = 1;
+                                    // $percent = 1;
+                                    $percent = 0;
                                 }
                                 else
                                 {
@@ -270,7 +271,8 @@
                             @php
                                 if($close_count+$delayed_count == 0)
                                 {
-                                    $percent = 1;
+                                    // $percent = 1;
+                                    $percent = 0;
                                 }
                                 else
                                 {
