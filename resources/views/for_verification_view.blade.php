@@ -104,8 +104,27 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='explanation' readonly>{{$observation->explanation->explanation}}</textarea></td>
-                                            <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='cause' readonly>{{$observation->explanation->cause}}</textarea></td>
+                                            <td style='width:50%'><textarea class='form-control'  rows="10" cols="100" name='explanation' readonly>{{$observation->explanation->explanation}}</textarea></td>
+                                            <!-- <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='cause' readonly>{{$observation->explanation->cause}}</textarea></td> -->
+                                            @if($observation->explanation->cause != NULL)
+                                                <td style='width:50%'><textarea class='form-control'  rows="6" cols="100" name='cause' readonly required>{{$observation->explanation->cause}}</textarea></td>
+                                            @else
+                                                <td style="display: flex" rows="6" cols="100">
+                                                    <label>People:</label>&nbsp;<p style="margin-left:36px">{{$observation->explanation->people}}</p>
+                                                </td>
+                                                <td style="display: flex" rows="6" cols="100">
+                                                    <label>Methods:</label>&nbsp;<p style="margin-left:25px">{{$observation->explanation->methods}}</p>
+                                                </td>
+                                                <td style="display: flex" rows="6" cols="100">
+                                                    <label>Machine:</label>&nbsp;<p style="margin-left:27px">{{$observation->explanation->machine}}</p>
+                                                </td>
+                                                <td style="display: flex" rows="6" cols="100">
+                                                    <label>Materials:</label>&nbsp;<p style="margin-left:22px">{{$observation->explanation->materials}}</p>
+                                                </td>
+                                                <td style="display: flex" rows="6" cols="100">
+                                                    <label>Environment:</label>&nbsp;<p>{{$observation->explanation->environment}}</p>
+                                                </td>
+                                            @endif
                                         </tr>
                                         <tr>
                                             <th colspan='2'>Correction or Immediate Action 
