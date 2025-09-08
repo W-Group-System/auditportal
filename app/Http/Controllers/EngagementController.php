@@ -20,6 +20,7 @@ use App\Notifications\ForVerification;
 use App\Notifications\Verified;
 use App\Notifications\Reply;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use PDF;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -128,11 +129,47 @@ class EngagementController extends Controller
      */
     public function store(Request $request,$id)
     {
+
+        $request->validate([
+            'people'      => 'nullable|string|not_in:N/A,None',
+            'methods'     => 'nullable|string|not_in:N/A,None',
+            'machine'     => 'nullable|string|not_in:N/A,None',
+            'materials'   => 'nullable|string|not_in:N/A,None',
+            'environment' => 'nullable|string|not_in:N/A,None',
+        ], [
+            'people.not_in'      => 'People field cannot be N/A or None.',
+            'methods.not_in'     => 'Methods field cannot be N/A or None.',
+            'machine.not_in'     => 'Machine field cannot be N/A or None.',
+            'materials.not_in'   => 'Materials field cannot be N/A or None.',
+            'environment.not_in' => 'Environment field cannot be N/A or None.',
+        ]);
+
+        // ✅ Custom check: at least 1 field must be filled (and valid)
+        if (
+            (empty($request->people) || in_array($request->people, ['N/A', 'None'])) &&
+            (empty($request->methods) || in_array($request->methods, ['N/A', 'None'])) &&
+            (empty($request->machine) || in_array($request->machine, ['N/A', 'None'])) &&
+            (empty($request->materials) || in_array($request->materials, ['N/A', 'None'])) &&
+            (empty($request->environment) || in_array($request->environment, ['N/A', 'None']))
+        ) {
+            return back()
+                ->withErrors([
+                    'at_least_one' => 'At least one field (People, Methods, Machine, Materials, or Environment) is required and cannot be blank, N/A, or None.'
+                ])
+                ->withInput()
+                ->with('open_modal', "view{$id}"); // 👈 pass modal ID
+        }
+
         $audit_plan = AuditPlanObservation::findOrfail($id);
         $new_explanation = new Explanation;
         $new_explanation->audit_plan_observation_id = $request->id;
         $new_explanation->explanation = $request->explanation;
         $new_explanation->cause = $request->cause;
+        $new_explanation->people = $request->people;
+        $new_explanation->methods = $request->methods;
+        $new_explanation->machine = $request->machine;
+        $new_explanation->materials = $request->materials;
+        $new_explanation->environment = $request->environment;
         $new_explanation->user_id = auth()->user()->id;
         $new_explanation->status = "For Approval";
         $new_explanation->department_id = auth()->user()->department_id;
@@ -205,8 +242,11 @@ class EngagementController extends Controller
         $user = User::findOrfail($audit_plan->created_by);
         $user->notify(new Reply($audit_plan));
         Alert::success('Successfully Submitted')->persistent('Dismiss');
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Record saved successfully!'
+        // ]);
         return back();
-
 
     //
     }

@@ -51,10 +51,23 @@
 @section('js')
 <script src="{{ asset('login_css/js/plugins/dataTables/datatables.min.js')}}"></script>
 <script src="{{ asset('login_css/js/plugins/chosen/chosen.jquery.js') }}"></script>
+@if ($errors->any() && session('open_modal'))
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var modalId = @json(session('open_modal'));
+      var el = document.getElementById(modalId);
+
+      // Handle Bootstrap 5 or 4/3
+      if (window.bootstrap && bootstrap.Modal) {
+        new bootstrap.Modal(el).show();
+      } else if (window.jQuery) {
+        jQuery(el).modal('show');
+      }
+    });
+  </script>
+@endif
 <script>
     $(document).ready(function(){
-        
-
         $('.cat').chosen({width: "100%"});
         $('.tables').DataTable({
             pageLength: 25,
@@ -79,8 +92,9 @@
             ]
 
         });
-
     });
+
+    
 
 </script>
 @endsection
