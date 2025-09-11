@@ -25,6 +25,15 @@
                             <input type="text" class="form-control-sm form-control "  value="{{$department->name}}"  name="name" required/>
                         </div>
                         <div class='col-md-12'>
+                            Company :
+                            <select name='company' class='form-control-sm form-control cat' required>
+                                <option value="" disabled selected>Select Company</option>
+                                <option value="Food Ingredients" @if($department->company == 'Food Ingredients') selected @endif>Food Ingredients</option>
+                                <option value="Real Estate" @if($department->company == 'Real Estate') selected @endif>Real Estate</option>
+                                <option value="Shared Services" @if($department->company == 'Shared Services') selected @endif>Shared Services</option>
+                            </select>
+                        </div>
+                        <div class='col-md-12'>
                             Department Head :
                             <select name='user_id' class='form-control-sm form-control cat' >
                                 <option value=""></option>
