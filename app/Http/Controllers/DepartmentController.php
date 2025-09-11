@@ -54,6 +54,7 @@ class DepartmentController extends Controller
         $department = new Department;
         $department->code = $request->code;
         $department->name = $request->name;
+        $department->company = $request->company;
         $department->save();
 
         $department_head = new DepartmentHead;
@@ -99,11 +100,12 @@ class DepartmentController extends Controller
         //
         $department = Department::findOrfail($id);
         $department->name = $request->name;
+        $department->company = $request->company;
         $department->save();
 
         $department_head = DepartmentHead::where('department_id',$id)->delete();
 
-         $department_head = new DepartmentHead;
+        $department_head = new DepartmentHead;
         $department_head->user_id = $request->user_id;
         $department_head->department_id = $department->id;
         $department_head->save();
