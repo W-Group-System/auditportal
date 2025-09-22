@@ -200,7 +200,7 @@
                             <td>@php
                                 $closed = count(($department->action_plans)->where('date_completed','<=',date('Y-m-d',strtotime($generate_date)))->where('action_plan','!=',"N/A")->where('status','Closed'));
                                 $delayed = count(($department->action_plans)->where('action_plan','!=',"N/A")->where('status','Verified')->where('target_date','<',$generate_date));
-                                $total = $closed + $delayed;
+                                $total = $closed+$delayed;
                                 if($closed+$delayed == 0)
                                 {
                                     // $percent = 1;
