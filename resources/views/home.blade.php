@@ -211,9 +211,7 @@
                                     // $percent = $closed/($closed+$delayed);
                                     $percent = $closed/($total);
                                 }
-                                
                             @endphp
-                         
                                 {{number_format($percent*100,2)}} %
                            </td>
                         </tr>
