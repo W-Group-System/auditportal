@@ -267,6 +267,7 @@
                            </td>
                            <td>
                             @php
+                            $total_count = $close_count + $delayed_count;
                                 if($close_count+$delayed_count == 0)
                                 {
                                     // $percent = 1;
@@ -274,10 +275,9 @@
                                 }
                                 else
                                 {
-                                    $percent = $close_count/($close_count+$delayed_count);
+                                    $percent = $close_count/($total_count);
                                 }
                             @endphp
-                           
                                 {{number_format($percent*100,2)}} % 
                            </td>
                         </tr>
