@@ -10,6 +10,7 @@ use App\ActionPlanAttachments;
 use App\AuditPlanObservation;
 use App\Notifications\SubmitProof;
 use App\Notifications\ActionPlanNotif;
+use App\Notifications\ActionPlanAuditee;
 use App\Notifications\ChangeTargetDate;
 use App\Notifications\ReturnActionPlan;
 use App\Notifications\CloseActionPlan;
@@ -278,14 +279,102 @@ class ActionPlanController extends Controller
     //     return back();
     // }
 
+    // public function new_action_plan(Request $request)
+    // {
+    //     try {
+    //         $files = $request->hasFile('file') ? $request->file('file') : [];
+
+    //         // Loop over each auditee to create an action plan
+    //         foreach ($request->auditee as $auditee) {
+    //             $user = User::findOrFail($auditee);
+    //             $action_plan = new ActionPlan;
+    //             $action_plan->audit_plan_id = $request->audit_plan;
+    //             $action_plan->audit_plan_observation_id = $request->acr;
+    //             $action_plan->action_plan = $request->action_plan;
+    //             $action_plan->findings = $request->findings;
+    //             $action_plan->status = $request->status;
+    //             $action_plan->department_id = $user->department_id;
+                
+    //             // Optionally assign a main attachment if needed (e.g., first file)
+    //             if (!empty($files)) {
+    //                 $firstFile = $files[0];
+    //                 if ($firstFile->isValid()) {
+    //                     $name = time() . '_' . $firstFile->getClientOriginalName();
+    //                     $firstFile->move(public_path('action_plan_attachments'), $name);
+    //                     $action_plan->attachment = '/action_plan_attachments/' . $name;
+    //                 }
+    //             }
+                
+    //             if ($request->status == "Closed") {
+    //                 $action_plan->iad_status = "Closed";
+    //             }
+    //             $action_plan->user_id = $auditee;
+    //             if ($request->type == "Correction or Immediate Action") {
+    //                 $action_plan->immediate = 1;
+    //             }
+    //             $action_plan->target_date = $request->target_date;
+    //             $action_plan->auditor = $request->auditor;
+                
+    //             // Check for duplicate action plan for this auditee
+    //             $ac = ActionPlan::where('action_plan', $request->action_plan)
+    //                 ->where('user_id', $auditee)
+    //                 ->first();
+    //             if ($ac == null) {
+    //                 $action_plan->save();
+
+    //                 // Now, attach all uploaded files for this action plan
+    //                 if (!empty($files)) {
+    //                     foreach ($files as $file) {
+    //                         if ($file->isValid()) {
+    //                             $actionFile = new ActionPlanAttachments();
+    //                             $actionFile->action_plan_id = $action_plan->id;
+
+    //                             $name = time() . '_' . $file->getClientOriginalName();
+    //                             // Store file in the 'action_plan_attachments' folder in public
+    //                             $file->move(public_path('action_plan_attachments'), $name);
+    //                             $actionFile->attachment = '/action_plan_attachments/' . $name;
+    //                             $actionFile->save();
+    //                         }
+    //                     }
+    //                 }
+    //             }
+                
+    //             if($ac->count() > 0)
+    //             {
+    //                 $user->notify(new ActionPlanAuditee($action_plan));
+    //             }
+    //         }
+            
+    //         Alert::success('Successfully Created')->persistent('Dismiss');
+    //         return back();
+    //     } catch (\Throwable $th) {
+    //         //throw $th;
+    //         dd($th->getMessage());
+    //     }
+    // }
+
     public function new_action_plan(Request $request)
     {
         try {
-            $files = $request->hasFile('file') ? $request->file('file') : [];
 
-            // Loop over each auditee to create an action plan
+            $files = $request->hasFile('file') ? $request->file('file') : [];
+            $attachments = [];
+
             foreach ($request->auditee as $auditee) {
+
                 $user = User::findOrFail($auditee);
+
+                // Check duplicate
+                $ac = ActionPlan::where('action_plan', $request->action_plan)
+                                ->where('user_id', $auditee)
+                                ->first();
+                
+                if ($ac) {
+                    // Already exists → send notification
+                    $user->notify(new ActionPlanAuditee($ac));
+                    continue;
+                }
+
                 $action_plan = new ActionPlan;
                 $action_plan->audit_plan_id = $request->audit_plan;
                 $action_plan->audit_plan_observation_id = $request->acr;
@@ -293,61 +382,48 @@ class ActionPlanController extends Controller
                 $action_plan->findings = $request->findings;
                 $action_plan->status = $request->status;
                 $action_plan->department_id = $user->department_id;
-                
-                // Optionally assign a main attachment if needed (e.g., first file)
-                if (!empty($files)) {
-                    $firstFile = $files[0];
-                    if ($firstFile->isValid()) {
-                        $name = time() . '_' . $firstFile->getClientOriginalName();
-                        $firstFile->move(public_path('action_plan_attachments'), $name);
-                        $action_plan->attachment = '/action_plan_attachments/' . $name;
-                    }
-                }
-                
+                $action_plan->user_id = $auditee;
+                $action_plan->target_date = $request->target_date;
+                $action_plan->auditor = $request->auditor;
+
                 if ($request->status == "Closed") {
                     $action_plan->iad_status = "Closed";
                 }
-                $action_plan->user_id = $auditee;
                 if ($request->type == "Correction or Immediate Action") {
                     $action_plan->immediate = 1;
                 }
-                $action_plan->target_date = $request->target_date;
-                $action_plan->auditor = $request->auditor;
-                
-                // Check for duplicate action plan for this auditee
-                $ac = ActionPlan::where('action_plan', $request->action_plan)
-                    ->where('user_id', $auditee)
-                    ->first();
-                if ($ac == null) {
-                    $action_plan->save();
+                // dd($action_plan);
+                $action_plan->save();
 
-                    // Now, attach all uploaded files for this action plan
-                    if (!empty($files)) {
-                        foreach ($files as $file) {
-                            if ($file->isValid()) {
-                                $actionFile = new ActionPlanAttachments();
-                                $actionFile->action_plan_id = $action_plan->id;
+                $attachments = [];
+                foreach ($files as $file) {
+                    if ($file->isValid()) {
+                        $name = time() . '_' . $file->getClientOriginalName();
+                        $file->move(public_path('action_plan_attachments'), $name);
 
-                                $name = time() . '_' . $file->getClientOriginalName();
-                                // Store file in the 'action_plan_attachments' folder in public
-                                $file->move(public_path('action_plan_attachments'), $name);
-                                $actionFile->attachment = '/action_plan_attachments/' . $name;
-                                $actionFile->save();
-                            }
-                        }
+                        $path = '/action_plan_attachments/' . $name;
+
+                        ActionPlanAttachments::create([
+                            'action_plan_id' => $action_plan->id,
+                            'attachment' => $path,
+                        ]);
+
+                        $attachments[] = $path;
                     }
                 }
+
+                // Send notification
+                $user->notify(new ActionPlanAuditee($action_plan, $attachments));
             }
-            
+
             Alert::success('Successfully Created')->persistent('Dismiss');
             return back();
+
         } catch (\Throwable $th) {
-            //throw $th;
             dd($th->getMessage());
         }
-        // Get the uploaded files (if any)
-        
     }
+
 
     public function upload_proof_close(Request $request,$id)
     {
