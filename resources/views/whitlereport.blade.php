@@ -25,6 +25,7 @@
                                         <th>Date of Incident</th>
                                         <th>Name of Whistleblower</th>
                                         <th>Proof</th>
+                                        <th>Date Reported</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -42,6 +43,7 @@
                                            {{$key+1}}. <a href='{{url($attachment->file_name)}}' target='_blank'>Attachment</a><br>
                                             @endforeach
                                         </td>
+                                        <td>{{date('Y-m-d', strtotime($list->created_at))}}</td>
                                     </tr>
                                 
                                     @endforeach
