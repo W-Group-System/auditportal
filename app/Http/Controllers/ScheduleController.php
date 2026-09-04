@@ -617,7 +617,7 @@ class ScheduleController extends Controller
         $likelihood = explode("-",$request->likelihood);
         
         $risk = $likelihood[0]*$consequence[0];
-        $risks = Matrix::where("from","<",$risk)->orderBy('id','desc')->first();
+        $risks = Matrix::where("from","<=",$risk)->orderBy('id','desc')->first();
         $user = User::findOrfail($request->auditee);
         $auditPlanObservation = AuditPlanObservation::findOrfail($id);
         $auditPlanObservation->observation = $request->observation;
