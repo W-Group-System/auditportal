@@ -633,13 +633,28 @@ class ActionPlanController extends Controller
             {
 
                 // $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('status','Closed')->get();
-                $action_plans = ActionPlan::where('department_id',auth()->user()->department_id)->where('status','Closed')->get();
+                // $action_plans = ActionPlan::where('department_id',auth()->user()->department_id)->where('status','Closed')->get();
+
+                $departmentId = auth()->user()->department_id;
+
+                $departmentIds = auth()->user()->departments
+                    ->pluck('department_id')
+                    ->push($departmentId)
+                    ->unique();
+                $action_plans = ActionPlan::whereIn('department_id', $departmentIds)->where('status','Closed')->get();
             }
             else
             {
                 
                 // $action_plans = ActionPlan::where('user_id',auth()->user()->id)->where('audit_plan_id',$request->code)->where('status','Closed')->get();
-                $action_plans = ActionPlan::where('department_id',auth()->user()->department_id)->where('audit_plan_id',$request->code)->where('status','Closed')->get();
+                // $action_plans = ActionPlan::where('department_id',auth()->user()->department_id)->where('audit_plan_id',$request->code)->where('status','Closed')->get();
+                $departmentId = auth()->user()->department_id;
+
+                $departmentIds = auth()->user()->departments
+                    ->pluck('department_id')
+                    ->push($departmentId)
+                    ->unique();
+                $action_plans = ActionPlan::whereIn('department_id', $departmentIds)->where('audit_plan_id',$request->code)->where('status','Closed')->get();
             }
 
         }
