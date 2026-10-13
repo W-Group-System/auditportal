@@ -31,7 +31,14 @@ class Kernel extends ConsoleKernel
         //          ->hourly();
 
         $schedule->command('command:get_reports')->everyMinute();
-        $schedule->command('command:actionplan_report')->monthlyOn(22, '8:00');
+        # Run the comman every 15th and last monday of the month
+        // $schedule->command('command:actionplan_report')->monthlyOn(22, '8:00');
+        $schedule->command('command:actionplan_report')->monthlyOn(15, '8:00');
+        $schedule->command('command:actionplan_report')
+         ->weeklyOn(1, '8:00')
+         ->when(function () {
+             return now()->addWeek()->month !== now()->month;
+         });
     }
 
     /**
