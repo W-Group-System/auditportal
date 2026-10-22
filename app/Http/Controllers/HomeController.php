@@ -44,7 +44,9 @@ class HomeController extends Controller
         $reports = AuditPlanObservation::get();
         $results = $this->get_risks();
         $departments = Department::with(['action_plans' => function($q) use ($date) {
-            $q->whereDate('created_at','<=',$date);
+            $q->whereDate('created_at','<=',$date)
+            ->where('action_plan', '!=', 'N/A');
+            $this->excludeFullyClosedAuditPlans($q);
         }])->where('status',null)->get();
         return view('home',
         array(
@@ -59,6 +61,27 @@ class HomeController extends Controller
             'generate_date' => $date,
             'target_date' => $target_date,
         ));
+    }
+
+    private function excludeFullyClosedAuditPlans($query)
+    {
+        return $query->whereDoesntHave('audit_plan', function ($auditQuery) {
+            $auditQuery->whereHas('action_plans', function ($actionQuery) {
+                $actionQuery->where('action_plan', '!=', 'N/A');
+            })
+            ->whereDoesntHave('action_plans', function ($actionQuery) {
+                $actionQuery->where('action_plan', '!=', 'N/A')
+                    ->where(function ($q) {
+                        $q->whereNull('status')
+                        ->orWhere('status', '!=', 'Closed');
+                    });
+            })
+            ->whereDoesntHave('action_plans', function ($actionQuery) {
+                $actionQuery->where('action_plan', '!=', 'N/A')
+                    ->where('status', 'Closed')
+                    ->whereYear('updated_at', date('Y'));
+            });
+        });
     }
 
     public function get_risks()

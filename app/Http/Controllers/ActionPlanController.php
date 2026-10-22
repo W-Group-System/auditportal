@@ -65,6 +65,7 @@ class ActionPlanController extends Controller
         $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user', 'files'])
             ->where('status', 'Verified')
             ->where('action_plan', '!=', 'N/A');
+        $this->excludeFullyClosedAuditPlans($query);
         
         // User role checks
         if (auth()->user()->role == "Auditee" || auth()->user()->role == "Department Head") {
@@ -142,9 +143,10 @@ class ActionPlanController extends Controller
         if($status_report == "Closed")
         {
             $query = ActionPlan::with(['audit_plan', 'user', 'observation.created_by_user'])
-            ->where('action_plan','!=',"N/A")->where('status','Closed')
-            ->where('action_plan','!=','N/A')
+            ->where('action_plan','!=',"N/A")
+            ->where('status','Closed')
             ->whereIn('department_id',$deptArray);
+            $this->excludeFullyClosedAuditPlans($query);
         }
         else if($status_report == "Delayed")
         {
@@ -195,6 +197,27 @@ class ActionPlanController extends Controller
         $users = User::whereNull('status')->get();
     
         return view('action_plans', compact('action_plans', 'audit_plans', 'acrs', 'users', 'done_code', 'status','searchTerm','dept','default','status_report'));
+    }
+
+    private function excludeFullyClosedAuditPlans($query)
+    {
+        return $query->whereDoesntHave('audit_plan', function ($auditQuery) {
+            $auditQuery->whereHas('action_plans', function ($actionQuery) {
+                $actionQuery->where('action_plan', '!=', 'N/A');
+            })
+            ->whereDoesntHave('action_plans', function ($actionQuery) {
+                $actionQuery->where('action_plan', '!=', 'N/A')
+                            ->where(function ($q) {
+                                $q->whereNull('status')
+                                ->orWhere('status', '!=', 'Closed');
+                            });
+            })
+            ->whereDoesntHave('action_plans', function ($actionQuery) {
+                $actionQuery->where('action_plan', '!=', 'N/A')
+                    ->where('status', 'Closed')
+                    ->whereYear('updated_at', date('Y'));
+            });
+        });
     }
 
     public function email(Request $request)
