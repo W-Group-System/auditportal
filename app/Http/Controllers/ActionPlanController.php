@@ -146,7 +146,7 @@ class ActionPlanController extends Controller
             ->where('action_plan','!=',"N/A")
             ->where('status','Closed')
             ->whereIn('department_id',$deptArray);
-            $this->excludeFullyClosedAuditPlans($query);
+            $query = $this->excludeFullyClosedAuditPlans($query);
         }
         else if($status_report == "Delayed")
         {
@@ -201,21 +201,23 @@ class ActionPlanController extends Controller
 
     private function excludeFullyClosedAuditPlans($query)
     {
-        return $query->whereDoesntHave('audit_plan', function ($auditQuery) {
+        $cutoffDate = date('Y') . '-01-07';
+        return $query->whereDoesntHave('audit_plan', function ($auditQuery) use ($cutoffDate){
             $auditQuery->whereHas('action_plans', function ($actionQuery) {
-                $actionQuery->where('action_plan', '!=', 'N/A');
+                $actionQuery->whereNotIn('action_plan', ['N/A', 'Done']);
             })
             ->whereDoesntHave('action_plans', function ($actionQuery) {
-                $actionQuery->where('action_plan', '!=', 'N/A')
+                $actionQuery->whereNotIn('action_plan', ['N/A', 'Done'])
                             ->where(function ($q) {
                                 $q->whereNull('status')
                                 ->orWhere('status', '!=', 'Closed');
                             });
             })
-            ->whereDoesntHave('action_plans', function ($actionQuery) {
-                $actionQuery->where('action_plan', '!=', 'N/A')
+            ->whereDoesntHave('action_plans', function ($actionQuery)  use ($cutoffDate) {
+                $actionQuery->whereNotIn('action_plan', ['N/A', 'Done'])
                     ->where('status', 'Closed')
-                    ->whereYear('updated_at', date('Y'));
+                    ->whereDate('updated_at', '>', $cutoffDate);
+                    // ->whereYear('updated_at', date('Y'));
             });
         });
     }

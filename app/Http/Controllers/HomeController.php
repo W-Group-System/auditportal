@@ -65,7 +65,8 @@ class HomeController extends Controller
 
     private function excludeFullyClosedAuditPlans($query)
     {
-        return $query->whereDoesntHave('audit_plan', function ($auditQuery) {
+        $cutoffDate = date('Y') . '-01-07';
+        return $query->whereDoesntHave('audit_plan', function ($auditQuery) use ($cutoffDate) {
             $auditQuery->whereHas('action_plans', function ($actionQuery) {
                 $actionQuery->where('action_plan', '!=', 'N/A');
             })
@@ -76,10 +77,11 @@ class HomeController extends Controller
                         ->orWhere('status', '!=', 'Closed');
                     });
             })
-            ->whereDoesntHave('action_plans', function ($actionQuery) {
+            ->whereDoesntHave('action_plans', function ($actionQuery) use ($cutoffDate) {
                 $actionQuery->where('action_plan', '!=', 'N/A')
                     ->where('status', 'Closed')
-                    ->whereYear('updated_at', date('Y'));
+                    ->whereDate('updated_at', '>', $cutoffDate);
+                    // ->whereYear('updated_at', date('Y'));
             });
         });
     }
