@@ -68,17 +68,17 @@ class HomeController extends Controller
         $cutoffDate = date('Y') . '-01-07';
         return $query->whereDoesntHave('audit_plan', function ($auditQuery) use ($cutoffDate) {
             $auditQuery->whereHas('action_plans', function ($actionQuery) {
-                $actionQuery->where('action_plan', '!=', 'N/A');
+                $actionQuery->whereNotIn('action_plan', ['N/A', 'Done']);
             })
             ->whereDoesntHave('action_plans', function ($actionQuery) {
-                $actionQuery->where('action_plan', '!=', 'N/A')
+                $actionQuery->whereNotIn('action_plan', ['N/A', 'Done'])
                     ->where(function ($q) {
                         $q->whereNull('status')
                         ->orWhere('status', '!=', 'Closed');
                     });
             })
             ->whereDoesntHave('action_plans', function ($actionQuery) use ($cutoffDate) {
-                $actionQuery->where('action_plan', '!=', 'N/A')
+                $actionQuery->whereNotIn('action_plan', ['N/A', 'Done'])
                     ->where('status', 'Closed')
                     ->whereDate('updated_at', '>', $cutoffDate);
                     // ->whereYear('updated_at', date('Y'));
